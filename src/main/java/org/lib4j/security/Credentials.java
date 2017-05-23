@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.safris.commons.security;
+package org.lib4j.security;
 
 import java.io.Serializable;
 
