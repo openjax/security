@@ -18,11 +18,11 @@ package org.lib4j.security;
 
 import java.io.Serializable;
 
-public final class Credentials implements Serializable {
+public class Credentials implements Serializable {
   private static final long serialVersionUID = -8959414770636711960L;
 
-  public final String username;
-  public final String password;
+  private final String username;
+  private final String password;
 
   public Credentials(final String username, final String password) {
     this.username = username;
@@ -32,6 +32,14 @@ public final class Credentials implements Serializable {
     this.password = password;
     if (password == null)
       throw new NullPointerException("password == null");
+  }
+
+  public String getUsername() {
+    return this.username;
+  }
+
+  public String getPassword() {
+    return this.password;
   }
 
   @Override
