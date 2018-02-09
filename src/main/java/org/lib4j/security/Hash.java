@@ -28,10 +28,10 @@ public enum Hash {
   SHA384("SHA-384"),
   SHA512("SHA-512");
 
-  private ThreadLocal<MessageDigest> messageDigest = null;
+  private final ThreadLocal<MessageDigest> messageDigest;
 
   Hash(final String algorithm) {
-    messageDigest = new ThreadLocal<MessageDigest>() {
+    this.messageDigest = new ThreadLocal<MessageDigest>() {
       @Override
       protected MessageDigest initialValue() {
         try {
