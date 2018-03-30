@@ -44,8 +44,12 @@ public enum Hash {
     };
   }
 
-  public byte[] encode(final String string) {
-    messageDigest.get().update(string.getBytes());
+  public byte[] encode(final byte[] bytes) {
+    messageDigest.get().update(bytes);
     return messageDigest.get().digest();
+  }
+
+  public byte[] encode(final String string) {
+    return encode(string.getBytes());
   }
 }
