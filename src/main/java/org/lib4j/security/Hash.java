@@ -31,7 +31,7 @@ public enum Hash {
   private final ThreadLocal<MessageDigest> messageDigest;
 
   Hash(final String algorithm) {
-    this.messageDigest = new ThreadLocal<MessageDigest>() {
+    this.messageDigest = new ThreadLocal<>() {
       @Override
       protected MessageDigest initialValue() {
         try {
