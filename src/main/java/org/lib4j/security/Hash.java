@@ -38,7 +38,7 @@ public enum Hash {
           return MessageDigest.getInstance(algorithm);
         }
         catch (final NoSuchAlgorithmException e) {
-          throw new ExceptionInInitializerError(e);
+          throw new UnsupportedOperationException(e);
         }
       }
     };
