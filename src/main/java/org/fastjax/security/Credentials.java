@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.lib4j.security;
+package org.fastjax.security;
 
 import java.io.Serializable;
 
