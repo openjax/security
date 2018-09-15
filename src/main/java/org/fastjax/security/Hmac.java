@@ -30,7 +30,7 @@ public enum Hmac {
   private final ThreadLocal<Mac> mac;
 
   private Hmac(final String algorithm) {
-    this.mac = new ThreadLocal<>() {
+    this.mac = new ThreadLocal<Mac>() {
       @Override
       protected Mac initialValue() {
         try {
