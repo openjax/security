@@ -22,7 +22,7 @@
   <parent>
     <groupId>org</groupId>
     <artifactId>fastjax</artifactId>
-    <version>3.2.3-SNAPSHOT</version>
+    <version>0.11.15-SNAPSHOT</version>
   </parent>
   <groupId>org.fastjax</groupId>
   <artifactId>fastjax-security</artifactId>
