@@ -16,11 +16,10 @@
 
 package org.fastjax.security;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 public enum Hmac {
   HmacSHA1("HmacSHA1"),
@@ -29,7 +28,7 @@ public enum Hmac {
 
   private final ThreadLocal<Mac> mac;
 
-  private Hmac(final String algorithm) {
+  Hmac(final String algorithm) {
     this.mac = new ThreadLocal<Mac>() {
       @Override
       protected Mac initialValue() {
