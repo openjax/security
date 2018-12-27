@@ -27,6 +27,7 @@
   <artifactId>security</artifactId>
   <version>0.2.1-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
+  <url>https://security.fastjax.org/</url>
   <description>
     Wrappers for common security patterns.
   </description>
