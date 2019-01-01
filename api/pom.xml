@@ -20,17 +20,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.openjax.classic</groupId>
-    <artifactId>classic</artifactId>
-    <version>1.11.15-SNAPSHOT</version>
+    <groupId>org.openjax.classic.security</groupId>
+    <artifactId>security</artifactId>
+    <version>0.1.1-SNAPSHOT</version>
   </parent>
-  <groupId>org.openjax.classic.security</groupId>
-  <artifactId>security</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <artifactId>security-api</artifactId>
+  <version>0.2.1-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
-  <modules>
-    <module>api</module>
-    <module>otp</module>
-  </modules>
 </project>

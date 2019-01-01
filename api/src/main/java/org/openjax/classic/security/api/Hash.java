@@ -1,4 +1,4 @@
-/* Copyright (c) 2009 FastJAX
+/* Copyright (c) 2009 OpenJAX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.fastjax.security;
+package org.openjax.classic.security.api;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
