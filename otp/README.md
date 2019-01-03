@@ -1,4 +1,4 @@
-# OpenJAX Classic Security OTP
+# OpenJAX Standard Security OTP
 
 **Simple API to create and validate _One Time Password_ strings, such as [GAuth][gauth]**
 
@@ -6,7 +6,7 @@
 
 ### JavaDocs
 
-JavaDocs are available [here](https://classic.openjax.org/security/apidocs/).
+JavaDocs are available [here](https://standard.openjax.org/security/apidocs/).
 
 ## Contributing
 

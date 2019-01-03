@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.classic.security.api;
+package org.openjax.standard.security.api;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

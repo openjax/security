@@ -20,7 +20,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.openjax.classic.security</groupId>
+    <groupId>org.openjax.standard.security</groupId>
     <artifactId>security</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
@@ -30,30 +30,30 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.openjax.classic.xml</groupId>
+        <groupId>org.openjax.standard.xml</groupId>
         <artifactId>xml-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.openjax.classic</groupId>
-      <artifactId>classic-util</artifactId>
+      <groupId>org.openjax.standard</groupId>
+      <artifactId>standard-util</artifactId>
       <version>0.7.9-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.classic.security</groupId>
+      <groupId>org.openjax.standard.security</groupId>
       <artifactId>security-api</artifactId>
       <version>0.2.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.classic</groupId>
-      <artifactId>classic-math</artifactId>
+      <groupId>org.openjax.standard</groupId>
+      <artifactId>standard-math</artifactId>
       <version>0.6.4-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.classic</groupId>
-      <artifactId>classic-test</artifactId>
+      <groupId>org.openjax.standard</groupId>
+      <artifactId>standard-test</artifactId>
       <version>0.6.9-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>

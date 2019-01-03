@@ -14,15 +14,15 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.classic.security.otp;
+package org.openjax.standard.security.otp;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 
-import org.openjax.classic.security.api.Hmac;
-import org.openjax.classic.util.Base32;
-import org.openjax.classic.util.Hexadecimal;
+import org.openjax.standard.security.api.Hmac;
+import org.openjax.standard.util.Base32;
+import org.openjax.standard.util.Hexadecimal;
 
 public final class GAuth {
   private static final SecureRandom random = new SecureRandom();
