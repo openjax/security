@@ -30,6 +30,9 @@ script:
    [ "$TRAVIS_PULL_REQUEST" = "false" ] &&
    mvn -Dmaven.rtest.skip clean deploy -P deploy ||
    mvn -Dmaven.rtest.skip clean install'
+cache:
+  directories:
+    - ~/.m2/repository
 env:
   global:
     secure: Xjg3v7nJAvyGSi9lTGgAtNIfVCUgHUq5My7fMXWsT6C6fe8sz0Wc2bHHCXmwz/E36QQAmbBs3dm6ITOfMOmWkFvcPDUoW+O7yuDu5V1EheADaOTjmsubGpVD7ElPuKrds2ioc+K0/yNQx9aOZZTV7pLqsp/N6O/d1XwhWg3bZ6qH7bxtUSUc5TqjU8lUb6E2Nh6k21LpDCIjkDWixpwsdhkg7zXFIVDNah25s6FXYy3acpPEU+iLvCvp8vNhTr5yIQH/dgUgw3Cq5qnkRB6Zgvh4mKdJge2AoKpRCchouOZwWe4EnM9UMm74a9B152SaG4qdsi/M/U4vL+kzieoTHr/h1g5B9uwWDxHVxytr7qz+EsxfaRaChDpX8OaShRfkNVWJNmxuP8OfOcsq+lEXm9/AwmI3VfioCsfHaBaBwMxM9VRGx2RehcUXq00AQIeRXtUL8i7IV2GQlUWICH3Ep6/e+KaR8brg50Q/9/ikQC/uemdj3sQ+FH1p4y1vSmemgFndjMHQ8vIkOK9nmRvxjZYxWR+micj60Qu5rrj/NO9YP3HLHLWnoHV9cV9WfWdK2rVRIwKpWYq6Ev821DEewkcahvgGU1brYp9Bi9+qF3XlNVe1neiSePXa++B/KoTZsGBygbw7IkbTqJQgoFLhYphJf8w19q57/dBtc/QzJQA=
