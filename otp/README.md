@@ -1,6 +1,8 @@
 # OpenJAX Standard Security OTP
 
-**Simple API to create and validate _One Time Password_ strings, such as [GAuth][gauth]**
+> Simple API to create and validate _One Time Password_ strings, such as [GAuth][gauth]
+
+[![Build Status](https://travis-ci.org/openjax/standard-security.png)](https://travis-ci.org/openjax/standard-security)
 
 ### Introduction
 
