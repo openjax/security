@@ -17,6 +17,7 @@
 package org.openjax.standard.security.api;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Credentials implements Serializable {
   private static final long serialVersionUID = -8959414770636711960L;
@@ -25,13 +26,8 @@ public class Credentials implements Serializable {
   private final String password;
 
   public Credentials(final String username, final String password) {
-    this.username = username;
-    if (username == null)
-      throw new IllegalArgumentException("username == null");
-
-    this.password = password;
-    if (password == null)
-      throw new IllegalArgumentException("password == null");
+    this.username = Objects.requireNonNull(username);
+    this.password = Objects.requireNonNull(password);
   }
 
   public String getUsername() {
