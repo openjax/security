@@ -19,7 +19,6 @@ package org.openjax.standard.security.otp;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.openjax.standard.security.otp.GAuth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

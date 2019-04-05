@@ -24,7 +24,6 @@ import java.util.TimeZone;
 import org.junit.Test;
 import org.openjax.standard.security.api.Hmac;
 import org.openjax.standard.util.Strings;
-import org.openjax.standard.security.otp.TOTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
