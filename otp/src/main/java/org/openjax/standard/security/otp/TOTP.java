@@ -50,7 +50,7 @@ public final class TOTP {
     }
 
     Hexadecimal.decode(time, data, start);
-    final byte[] hash = hmac.generate(Hexadecimal.decode(key), data);
+    final byte[] hash = hmac.generateCode(Hexadecimal.decode(key), data);
 
     final int offset = hash[hash.length - 1] & 0xf;
     final int binary = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16) | ((hash[offset + 2] & 0xff) << 8) | (hash[offset + 3] & 0xff);

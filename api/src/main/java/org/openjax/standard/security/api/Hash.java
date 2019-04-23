@@ -19,6 +19,9 @@ package org.openjax.standard.security.api;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * An enum of common hash functions.
+ */
 public enum Hash {
   MD2("MD2"),
   MD5("MD5"),
@@ -44,11 +47,26 @@ public enum Hash {
     };
   }
 
+  /**
+   * Encodes the specified byte array with this hash function.
+   *
+   * @param bytes The byte array.
+   * @return The product of applying this hash function to the specified byte
+   *         array.
+   * @throws NullPointerException If the specified byte array is null.
+   */
   public byte[] encode(final byte[] bytes) {
     messageDigest.get().update(bytes);
     return messageDigest.get().digest();
   }
 
+  /**
+   * Encodes the specified string with this hash function.
+   *
+   * @param string The string.
+   * @return The product of applying this hash function to the specified string.
+   * @throws NullPointerException If the specified string is null.
+   */
   public byte[] encode(final String string) {
     return encode(string.getBytes());
   }

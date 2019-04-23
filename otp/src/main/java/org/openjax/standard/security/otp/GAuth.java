@@ -75,7 +75,7 @@ public final class GAuth {
     final byte[] bytes = Base32.decode(normalizedKey);
     final long time = System.currentTimeMillis() / 1000 / 30;
     final String hexTime = Long.toHexString(time);
-    return TOTP.generateTOTP(Hexadecimal.encode(bytes), hexTime, 6, Hmac.HmacSHA1);
+    return TOTP.generateTOTP(Hexadecimal.encode(bytes), hexTime, 6, Hmac.SHA1);
   }
 
   private GAuth() {

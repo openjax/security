@@ -56,9 +56,9 @@ public class TOTPTest {
 
       final String fmtTime = String.format("%1$-11s", times[i]);
       final String utcTime = dateFormat.format(new Date(times[i] * 1000));
-      logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed, steps, 8, Hmac.HmacSHA1) + "| SHA1   |");
-      logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed32, steps, 8, Hmac.HmacSHA256) + "| SHA256 |");
-      logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed64, steps, 8, Hmac.HmacSHA512) + "| SHA512 |");
+      logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed, steps, 8, Hmac.SHA1) + "| SHA1   |");
+      logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed32, steps, 8, Hmac.SHA256) + "| SHA256 |");
+      logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed64, steps, 8, Hmac.SHA512) + "| SHA512 |");
       logger.info("+---------------+-----------------------+------------------+--------+--------+");
     }
   }

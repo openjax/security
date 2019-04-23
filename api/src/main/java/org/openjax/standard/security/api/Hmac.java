@@ -19,15 +19,21 @@ package org.openjax.standard.security.api;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * An enum of common Hashed Message Authentication Code algorithms.
+ */
 public enum Hmac {
-  HmacSHA1("HmacSHA1"),
-  HmacSHA256("HmacSHA256"),
-  HmacSHA512("HmacSHA512");
+  SHA1("HmacSHA1"),
+  SHA256("HmacSHA256"),
+  SHA512("HmacSHA512");
 
   private final ThreadLocal<Mac> mac;
+  private final ThreadLocal<KeyGenerator> keyGenerator;
 
   Hmac(final String algorithm) {
     this.mac = new ThreadLocal<Mac>() {
@@ -41,6 +47,28 @@ public enum Hmac {
         }
       }
     };
+    this.keyGenerator = new ThreadLocal<KeyGenerator>() {
+      @Override
+      protected KeyGenerator initialValue() {
+        try {
+          return KeyGenerator.getInstance(algorithm);
+        }
+        catch (final NoSuchAlgorithmException e) {
+          throw new UnsupportedOperationException(e);
+        }
+      }
+    };
+  }
+
+  /**
+   * Generates a secret key with this Hmac algorithm.
+   * <p>
+   * This method uses JCE to provide the crypto algorithm.
+   *
+   * @return A new secret key.
+   */
+  public SecretKey generateKey() {
+    return keyGenerator.get().generateKey();
   }
 
   /**
@@ -54,11 +82,12 @@ public enum Hmac {
    * @return The Hashed Message Authentication Code.
    * @throws IllegalArgumentException If {@code key} is invalid.
    */
-  public byte[] generate(final byte[] key, final byte[] data) {
+  public byte[] generateCode(final byte[] key, final byte[] data) {
     try {
       final SecretKeySpec secretKey = new SecretKeySpec(key, "RAW");
-      mac.get().init(secretKey);
-      return mac.get().doFinal(data);
+      final Mac mac = this.mac.get();
+      mac.init(secretKey);
+      return mac.doFinal(data);
     }
     catch (final InvalidKeyException e) {
       throw new IllegalArgumentException(e);
