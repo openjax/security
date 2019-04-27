@@ -1,11 +1,11 @@
-# OpenJAX Standard Security OTP
+# OpenJAX Extensions Security OTP
 
 > Simple API to create and validate _One Time Password_ strings, such as [GAuth][gauth]
 
-[![Build Status](https://travis-ci.org/openjax/standard-security.png)](https://travis-ci.org/openjax/standard-security)
-[![Coverage Status](https://coveralls.io/repos/github/openjax/standard-security/badge.svg)](https://coveralls.io/github/openjax/standard-security)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax.standard.security/otp.svg)](https://www.javadoc.io/doc/org.openjax.standard.security/otp)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax.standard.security/otp.svg)](https://mvnrepository.com/artifact/org.openjax.standard.security/otp)
+[![Build Status](https://travis-ci.org/openjax/ext-security.png)](https://travis-ci.org/openjax/ext-security)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/ext-security/badge.svg)](https://coveralls.io/github/openjax/ext-security)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.ext.security/otp.svg)](https://www.javadoc.io/doc/org.openjax.ext.security/otp)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.ext.security/otp.svg)](https://mvnrepository.com/artifact/org.openjax.ext.security/otp)
 
 ### Introduction
 

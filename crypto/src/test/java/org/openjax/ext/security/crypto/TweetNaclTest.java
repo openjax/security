@@ -14,18 +14,14 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.standard.security.crypto;
+package org.openjax.ext.security.crypto;
 
 import static org.junit.Assert.*;
-import static org.openjax.standard.security.crypto.TweetNacl.Box.*;
+import static org.openjax.ext.security.crypto.TweetNacl.Box.*;
 
 import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
-import org.openjax.standard.security.crypto.KeyPair;
-import org.openjax.standard.security.crypto.Hash;
-import org.openjax.standard.security.crypto.TweetNacl;
-import org.openjax.standard.security.crypto.TweetNaclFast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

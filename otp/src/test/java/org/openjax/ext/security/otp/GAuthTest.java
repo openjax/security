@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.standard.security.otp;
+package org.openjax.ext.security.otp;
 
 import static org.junit.Assert.*;
 

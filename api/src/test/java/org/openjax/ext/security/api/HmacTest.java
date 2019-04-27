@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.standard.security.api;
+package org.openjax.ext.security.api;
 
 import java.math.BigInteger;
 

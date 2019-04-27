@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.standard.security.crypto;
+package org.openjax.ext.security.crypto;
 
 public class KeyPair {
   private final byte[] publicKey;
