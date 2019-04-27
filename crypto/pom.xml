@@ -27,4 +27,12 @@
   <artifactId>crypto</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.openjax.standard</groupId>
+      <artifactId>test</artifactId>
+      <version>0.6.9-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
