@@ -26,5 +26,8 @@
   </parent>
   <artifactId>api</artifactId>
   <version>0.2.1-SNAPSHOT</version>
-  <name>${project.groupId}:${project.artifactId}</name>
+  <name>OpenJAX Extensions Security API</name>
+  <description>
+    An API for common functions and abstractions related to security.
+  </description>
 </project>

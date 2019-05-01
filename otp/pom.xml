@@ -26,7 +26,10 @@
   </parent>
   <artifactId>otp</artifactId>
   <version>0.3.1-SNAPSHOT</version>
-  <name>${project.groupId}:${project.artifactId}</name>
+  <name>OpenJAX Extensions Security OTP</name>
+  <description>
+    Common functions and abstractions related to One-Time-Passwords.
+  </description>
   <build>
     <plugins>
       <plugin>
