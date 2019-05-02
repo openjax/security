@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.ext.security.crypto;
+package org.openjax.security.crypto;
 
 /**
  * Port of Andrew Moon's Poly1305-donna-16. Public domain.

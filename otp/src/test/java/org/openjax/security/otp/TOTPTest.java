@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.ext.security.otp;
+package org.openjax.security.otp;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,8 +22,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.junit.Test;
-import org.openjax.ext.security.api.Hmac;
-import org.openjax.ext.util.Strings;
+import org.openjax.security.api.Hmac;
+import org.openjax.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

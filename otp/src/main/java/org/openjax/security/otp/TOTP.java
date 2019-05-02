@@ -14,12 +14,12 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.ext.security.otp;
+package org.openjax.security.otp;
 
-import org.openjax.ext.math.FastMath;
-import org.openjax.ext.security.api.Hmac;
-import org.openjax.ext.util.Hexadecimal;
-import org.openjax.ext.util.Strings;
+import org.openjax.math.FastMath;
+import org.openjax.security.api.Hmac;
+import org.openjax.util.Hexadecimal;
+import org.openjax.util.Strings;
 
 public final class TOTP {
   /**

@@ -20,42 +20,42 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.openjax.ext.security</groupId>
+    <groupId>org.openjax.security</groupId>
     <artifactId>security</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>otp</artifactId>
   <version>0.3.1-SNAPSHOT</version>
-  <name>OpenJAX Extensions Security OTP</name>
+  <name>OpenJAX Security OTP</name>
   <description>
     Common functions and abstractions related to One-Time-Passwords.
   </description>
   <build>
     <plugins>
       <plugin>
-        <groupId>org.openjax.ext.xml</groupId>
+        <groupId>org.openjax.xml</groupId>
         <artifactId>xml-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.openjax.ext</groupId>
+      <groupId>org.openjax</groupId>
       <artifactId>util</artifactId>
       <version>0.7.9-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.ext.security</groupId>
+      <groupId>org.openjax.security</groupId>
       <artifactId>api</artifactId>
       <version>0.2.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.ext</groupId>
+      <groupId>org.openjax</groupId>
       <artifactId>math</artifactId>
       <version>0.6.4-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.ext</groupId>
+      <groupId>org.openjax</groupId>
       <artifactId>test</artifactId>
       <version>0.6.9-SNAPSHOT</version>
       <scope>test</scope>

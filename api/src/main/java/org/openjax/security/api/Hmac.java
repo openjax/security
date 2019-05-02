@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.ext.security.api;
+package org.openjax.security.api;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;

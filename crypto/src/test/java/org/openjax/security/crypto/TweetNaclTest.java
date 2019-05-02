@@ -14,10 +14,10 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.ext.security.crypto;
+package org.openjax.security.crypto;
 
 import static org.junit.Assert.*;
-import static org.openjax.ext.security.crypto.TweetNacl.Box.*;
+import static org.openjax.security.crypto.TweetNacl.Box.*;
 
 import java.io.UnsupportedEncodingException;
 

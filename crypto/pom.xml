@@ -20,19 +20,19 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.openjax.ext.security</groupId>
+    <groupId>org.openjax.security</groupId>
     <artifactId>security</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>crypto</artifactId>
   <version>0.1.0-SNAPSHOT</version>
-  <name>OpenJAX Extensions Security Crypto</name>
+  <name>OpenJAX Security Crypto</name>
   <description>
     Common functions and abstractions related to cryptography.
   </description>
   <dependencies>
     <dependency>
-      <groupId>org.openjax.ext</groupId>
+      <groupId>org.openjax</groupId>
       <artifactId>test</artifactId>
       <version>0.6.9-SNAPSHOT</version>
       <scope>test</scope>

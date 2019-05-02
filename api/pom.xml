@@ -20,13 +20,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.openjax.ext.security</groupId>
+    <groupId>org.openjax.security</groupId>
     <artifactId>security</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>api</artifactId>
   <version>0.2.1-SNAPSHOT</version>
-  <name>OpenJAX Extensions Security API</name>
+  <name>OpenJAX Security API</name>
   <description>
     An API for common functions and abstractions related to security.
   </description>
