@@ -16,10 +16,10 @@
 
 package org.openjax.security.otp;
 
-import org.openjax.math.FastMath;
+import org.libj.math.FastMath;
 import org.openjax.security.api.Hmac;
-import org.openjax.util.Hexadecimal;
-import org.openjax.util.Strings;
+import org.libj.util.Hexadecimal;
+import org.libj.util.Strings;
 
 public final class TOTP {
   /**
