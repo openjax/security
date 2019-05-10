@@ -30,7 +30,7 @@
   <packaging>pom</packaging>
   <name>OpenJAX Security</name>
   <description>
-    A collection of modules that specialize in structures and functions related to security.
+    Modules that provide convenient APIs of structures and functions related to security.
   </description>
   <modules>
     <module>api</module>
