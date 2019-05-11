@@ -20,9 +20,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 
-import org.openjax.security.api.Hmac;
 import org.libj.util.Base32;
 import org.libj.util.Hexadecimal;
+import org.openjax.security.crypto.Hmac;
 
 public final class GAuth {
   private static final SecureRandom random = new SecureRandom();

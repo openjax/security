@@ -17,9 +17,9 @@
 package org.openjax.security.otp;
 
 import org.libj.math.FastMath;
-import org.openjax.security.api.Hmac;
 import org.libj.util.Hexadecimal;
 import org.libj.util.Strings;
+import org.openjax.security.crypto.Hmac;
 
 public final class TOTP {
   /**
