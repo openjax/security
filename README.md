@@ -1,11 +1,11 @@
-# OpenJAX JAXB
+# OpenJAX Security
 
 > APIs, patterns, and algorithms related to information security.
 
 [![Build Status](https://travis-ci.org/openjax/security.png)](https://travis-ci.org/openjax/security)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/security/badge.svg)](https://coveralls.io/github/openjax/security)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax.security/security-maven-plugin.svg)](https://www.javadoc.io/doc/org.openjax.security/security-maven-plugin)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax.security/security-maven-plugin.svg)](https://mvnrepository.com/artifact/org.openjax.security/security-maven-plugin)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.security/security.svg)](https://www.javadoc.io/doc/org.openjax.security/security)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.security/security.svg)](https://mvnrepository.com/artifact/org.openjax.security/security)
 
 ## Introduction
 
