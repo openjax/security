@@ -22,10 +22,9 @@
   <parent>
     <groupId>org.openjax.security</groupId>
     <artifactId>security</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
   </parent>
   <artifactId>crypto</artifactId>
-  <version>0.2.1</version>
   <name>OpenJAX Security Crypto</name>
   <description>
     Cryptography API and algorithms.

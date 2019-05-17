@@ -26,7 +26,7 @@
   </parent>
   <groupId>org.openjax.security</groupId>
   <artifactId>security</artifactId>
-  <version>0.1.2-SNAPSHOT</version>
+  <version>0.3.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>OpenJAX Security</name>
   <description>

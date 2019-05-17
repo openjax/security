@@ -22,10 +22,9 @@
   <parent>
     <groupId>org.openjax.security</groupId>
     <artifactId>security</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
   </parent>
   <artifactId>otp</artifactId>
-  <version>0.3.1</version>
   <name>OpenJAX Security OTP</name>
   <description>
     Common functions and abstractions related to One-Time-Passwords.

@@ -22,10 +22,9 @@
   <parent>
     <groupId>org.openjax.security</groupId>
     <artifactId>security</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
   </parent>
   <artifactId>nacl</artifactId>
-  <version>0.1.0</version>
   <name>OpenJAX Security NaCl</name>
   <description>
     NaCl (pronounced "salt") is a new easy-to-use high-speed software library for network
