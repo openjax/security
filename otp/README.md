@@ -1,4 +1,4 @@
-# OpenJAX Security OTP
+# Security OTP
 
 [![Build Status](https://travis-ci.org/openjax/security.png)](https://travis-ci.org/openjax/security)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/security/badge.svg)](https://coveralls.io/github/openjax/security)
