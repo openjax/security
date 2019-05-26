@@ -87,14 +87,14 @@ public final class TweetNaclFast {
     }
 
     public byte[] box(final byte[] message, final int moff) {
-      if (!(message != null && message.length > moff))
+      if (message == null || message.length <= moff)
         return null;
 
       return box(message, moff, message.length - moff);
     }
 
     public byte[] box(final byte[] message, final int moff, final int mlen) {
-      if (!(message != null && message.length >= (moff + mlen)))
+      if (message == null || message.length < moff + mlen)
         return null;
 
       // prepare shared key
@@ -119,14 +119,14 @@ public final class TweetNaclFast {
     }
 
     public byte[] box(final byte[] message, final int moff, final byte[] nonce) {
-      if (!(message != null && message.length > moff))
+      if (message == null || message.length <= moff)
         return null;
 
       return box(message, moff, message.length - moff, nonce);
     }
 
     public byte[] box(final byte[] message, final int moff, final int mlen, final byte[] nonce) {
-      if (!(message != null && message.length >= (moff + mlen) && nonce != null && nonce.length == nonceLength))
+      if (message == null || message.length < moff + mlen || nonce == null || nonce.length != nonceLength)
         return null;
 
       // prepare shared key
@@ -155,7 +155,7 @@ public final class TweetNaclFast {
     }
 
     public byte[] open(final byte[] box, final int boxoff) {
-      if (!(box != null && box.length > boxoff))
+      if (box == null || box.length <= boxoff)
         return null;
 
       // prepare shared key
@@ -166,7 +166,7 @@ public final class TweetNaclFast {
     }
 
     public byte[] open(final byte[] box, final int boxoff, final int boxlen) {
-      if (!(box != null && box.length >= (boxoff + boxlen)))
+      if (box == null || box.length < boxoff + boxlen)
         return null;
 
       // prepare shared key
@@ -185,7 +185,7 @@ public final class TweetNaclFast {
      * @return The original message, or null if authentication fails.
      */
     public byte[] open(final byte[] box, final byte[] nonce) {
-      if (!(box != null && nonce != null && nonce.length == nonceLength))
+      if (box == null || nonce == null || nonce.length != nonceLength)
         return null;
 
       // prepare shared key
@@ -196,7 +196,7 @@ public final class TweetNaclFast {
     }
 
     public byte[] open(final byte[] box, final int boxoff, final byte[] nonce) {
-      if (!(box != null && box.length > boxoff && nonce != null && nonce.length == nonceLength))
+      if (box == null || box.length <= boxoff || nonce == null || nonce.length != nonceLength)
         return null;
 
       // prepare shared key
@@ -207,7 +207,7 @@ public final class TweetNaclFast {
     }
 
     public byte[] open(final byte[] box, final int boxoff, final int boxlen, final byte[] nonce) {
-      if (!(box != null && box.length >= (boxoff + boxlen) && nonce != null && nonce.length == nonceLength))
+      if (box == null || box.length < boxoff + boxlen || nonce == null || nonce.length != nonceLength)
         return null;
 
       // prepare shared key
