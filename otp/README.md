@@ -1,9 +1,9 @@
 # Security OTP
 
-[![Build Status](https://travis-ci.org/openjax/security.png)](https://travis-ci.org/openjax/security)
-[![Coverage Status](https://coveralls.io/repos/github/openjax/security/badge.svg)](https://coveralls.io/github/openjax/security)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax.security/otp.svg)](https://www.javadoc.io/doc/org.openjax.security/otp)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax.security/otp.svg)](https://mvnrepository.com/artifact/org.openjax.security/otp)
+[![Build Status](https://travis-ci.org/openjax/security.svg?1)](https://travis-ci.org/openjax/security)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/security/badge.svg?1)](https://coveralls.io/github/openjax/security)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.security/otp.svg?1)](https://www.javadoc.io/doc/org.openjax.security/otp)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.security/otp.svg?1)](https://mvnrepository.com/artifact/org.openjax.security/otp)
 
 ## Introduction
 
