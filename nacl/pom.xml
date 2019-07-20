@@ -31,12 +31,4 @@
     communication, encryption, decryption, signatures, etc. NaCl's goal is to provide all
     of the core operations needed to build higher-level cryptographic tools.
   </description>
-  <dependencies>
-    <dependency>
-      <groupId>org.libj</groupId>
-      <artifactId>test</artifactId>
-      <version>0.7.0-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 </project>
