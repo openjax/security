@@ -24,12 +24,13 @@ import org.libj.util.Base32;
 import org.libj.util.Hexadecimal;
 import org.openjax.security.crypto.Hmac;
 
+/**
+ * Utility functions for Google Authenticator OTP (One Time Password).
+ */
 public final class GAuth {
   private static final SecureRandom random = new SecureRandom();
 
   /**
-   * Returns a random 20 byte Base32 encoded secret key.
-   *
    * @return A random 20 byte Base32 encoded secret key.
    */
   public static String generateRandomSecretKey() {
@@ -43,13 +44,16 @@ public final class GAuth {
    *
    * @param key Base32 encoded secret key (will be converted to upper-case, and
    *          allows whitespace, which will be removed).
-   * @param account The user's account name (e.g. an email address or a username).
+   * @param account The user's account name (e.g. an email address or a
+   *          username).
    * @param issuer The organization managing this account.
    * @return The Google Authenticator barcode otpauth string.
+   * @throws UnsupportedOperationException If UTF-8 encoding is not supported.
+   * @throws NullPointerException If {@code key} or {@code issuer} is null.
    * @see <a href=
    *      "https://github.com/google/google-authenticator/wiki/Key-Uri-Format">Key-Uri-Format</a>
    */
-  public static String getGoogleAuthenticatorBarCode(final String key, final String account, final String issuer) {
+  public static String getBarCode(final String key, final String account, final String issuer) {
     final String normalizedBase32Key = key.replace(" ", "").toUpperCase();
     try {
       return "otpauth://totp/" + URLEncoder.encode(issuer + ":" + account, "UTF8").replace("+", "%20") + "?secret=" + URLEncoder.encode(normalizedBase32Key, "UTF8").replace("+", "%20") + "&issuer=" + URLEncoder.encode(issuer, "UTF8").replace("+", "%20");
@@ -69,6 +73,7 @@ public final class GAuth {
    * @param key Base32 encoded secret key (will be converted to upper-case, and
    *          allows whitespace, which will be removed).
    * @return The TOTP code for the secret key.
+   * @throws NullPointerException If {@code key} is null.
    */
   public static String getTOTPCode(final String key) {
     final String normalizedKey = key.replace(" ", "").toUpperCase();
