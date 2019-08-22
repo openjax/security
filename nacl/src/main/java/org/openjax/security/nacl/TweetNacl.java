@@ -61,7 +61,6 @@ public final class TweetNacl {
     private byte[] generateNonce() {
       // generate nonce
       final long nonce = this.nonce.get();
-
       final byte[] n = new byte[nonceLength];
       for (int i = 0; i < nonceLength; i += 8) {
         n[i + 0] = (byte)(nonce >>> 0);
@@ -689,14 +688,15 @@ public final class TweetNacl {
   private static final long[] I = {0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478, 0xad2f, 0x1806, 0x2f43, 0xd7a7, 0x3dfb, 0x0099, 0x2b4d, 0xdf0b, 0x4fc1, 0x2480, 0x2b83};
 
   private static int L32(final int x, final int c) {
-    return (x << c) | ((x & 0xffffffff) >>> (32 - c));
+    return (x << c) | (x >>> (32 - c));
   }
 
   private static int ld32(final byte[] x, final int xoff, final int xlen) {
     int u = (x[3 + xoff] & 0xff);
     u = (u << 8) | (x[2 + xoff] & 0xff);
     u = (u << 8) | (x[1 + xoff] & 0xff);
-    return (u << 8) | (x[0 + xoff] & 0xff);
+    u = (u << 8) | (x[0 + xoff] & 0xff);
+    return u;
   }
 
   private static void st32(final byte[] x, final int xoff, final int xlen, int u) {
@@ -949,7 +949,7 @@ public final class TweetNacl {
   }
 
   private static void sel25519(final long[] p, final int poff, final int plen, final long[] q, final int qoff, final int qlen, final int b) {
-    long t, c = ~(b - 1);
+    long t, c = -b;
     for (int i = 0; i < 16; ++i) {
       t = c & (p[i + poff] ^ q[i + qoff]);
       p[i + poff] ^= t;
@@ -1283,7 +1283,7 @@ public final class TweetNacl {
     return 0;
   }
 
-  private static final long L[] = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10};
+  private static final long[] L = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10};
 
   private static void modL(final byte[] r, final int roff, final int rlen, final long[] x) {
     long carry;

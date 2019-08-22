@@ -844,95 +844,95 @@ public final class TweetNaclFast {
 
     int x0 = j0, x1 = j1, x2 = j2, x3 = j3, x4 = j4, x5 = j5, x6 = j6, x7 = j7, x8 = j8, x9 = j9, x10 = j10, x11 = j11, x12 = j12, x13 = j13, x14 = j14, x15 = j15, u;
     for (int i = 0; i < 20; i += 2) {
-      u = x0 + x12 | 0;
+      u = x0 + x12;
       x4 ^= u << 7 | u >>> (32 - 7);
-      u = x4 + x0 | 0;
+      u = x4 + x0;
       x8 ^= u << 9 | u >>> (32 - 9);
-      u = x8 + x4 | 0;
+      u = x8 + x4;
       x12 ^= u << 13 | u >>> (32 - 13);
-      u = x12 + x8 | 0;
+      u = x12 + x8;
       x0 ^= u << 18 | u >>> (32 - 18);
 
-      u = x5 + x1 | 0;
+      u = x5 + x1;
       x9 ^= u << 7 | u >>> (32 - 7);
-      u = x9 + x5 | 0;
+      u = x9 + x5;
       x13 ^= u << 9 | u >>> (32 - 9);
-      u = x13 + x9 | 0;
+      u = x13 + x9;
       x1 ^= u << 13 | u >>> (32 - 13);
-      u = x1 + x13 | 0;
+      u = x1 + x13;
       x5 ^= u << 18 | u >>> (32 - 18);
 
-      u = x10 + x6 | 0;
+      u = x10 + x6;
       x14 ^= u << 7 | u >>> (32 - 7);
-      u = x14 + x10 | 0;
+      u = x14 + x10;
       x2 ^= u << 9 | u >>> (32 - 9);
-      u = x2 + x14 | 0;
+      u = x2 + x14;
       x6 ^= u << 13 | u >>> (32 - 13);
-      u = x6 + x2 | 0;
+      u = x6 + x2;
       x10 ^= u << 18 | u >>> (32 - 18);
 
-      u = x15 + x11 | 0;
+      u = x15 + x11;
       x3 ^= u << 7 | u >>> (32 - 7);
-      u = x3 + x15 | 0;
+      u = x3 + x15;
       x7 ^= u << 9 | u >>> (32 - 9);
-      u = x7 + x3 | 0;
+      u = x7 + x3;
       x11 ^= u << 13 | u >>> (32 - 13);
-      u = x11 + x7 | 0;
+      u = x11 + x7;
       x15 ^= u << 18 | u >>> (32 - 18);
 
-      u = x0 + x3 | 0;
+      u = x0 + x3;
       x1 ^= u << 7 | u >>> (32 - 7);
-      u = x1 + x0 | 0;
+      u = x1 + x0;
       x2 ^= u << 9 | u >>> (32 - 9);
-      u = x2 + x1 | 0;
+      u = x2 + x1;
       x3 ^= u << 13 | u >>> (32 - 13);
-      u = x3 + x2 | 0;
+      u = x3 + x2;
       x0 ^= u << 18 | u >>> (32 - 18);
 
-      u = x5 + x4 | 0;
+      u = x5 + x4;
       x6 ^= u << 7 | u >>> (32 - 7);
-      u = x6 + x5 | 0;
+      u = x6 + x5;
       x7 ^= u << 9 | u >>> (32 - 9);
-      u = x7 + x6 | 0;
+      u = x7 + x6;
       x4 ^= u << 13 | u >>> (32 - 13);
-      u = x4 + x7 | 0;
+      u = x4 + x7;
       x5 ^= u << 18 | u >>> (32 - 18);
 
-      u = x10 + x9 | 0;
+      u = x10 + x9;
       x11 ^= u << 7 | u >>> (32 - 7);
-      u = x11 + x10 | 0;
+      u = x11 + x10;
       x8 ^= u << 9 | u >>> (32 - 9);
-      u = x8 + x11 | 0;
+      u = x8 + x11;
       x9 ^= u << 13 | u >>> (32 - 13);
-      u = x9 + x8 | 0;
+      u = x9 + x8;
       x10 ^= u << 18 | u >>> (32 - 18);
 
-      u = x15 + x14 | 0;
+      u = x15 + x14;
       x12 ^= u << 7 | u >>> (32 - 7);
-      u = x12 + x15 | 0;
+      u = x12 + x15;
       x13 ^= u << 9 | u >>> (32 - 9);
-      u = x13 + x12 | 0;
+      u = x13 + x12;
       x14 ^= u << 13 | u >>> (32 - 13);
-      u = x14 + x13 | 0;
+      u = x14 + x13;
       x15 ^= u << 18 | u >>> (32 - 18);
     }
 
-    x0 = x0 + j0 | 0;
-    x1 = x1 + j1 | 0;
-    x2 = x2 + j2 | 0;
-    x3 = x3 + j3 | 0;
-    x4 = x4 + j4 | 0;
-    x5 = x5 + j5 | 0;
-    x6 = x6 + j6 | 0;
-    x7 = x7 + j7 | 0;
-    x8 = x8 + j8 | 0;
-    x9 = x9 + j9 | 0;
-    x10 = x10 + j10 | 0;
-    x11 = x11 + j11 | 0;
-    x12 = x12 + j12 | 0;
-    x13 = x13 + j13 | 0;
-    x14 = x14 + j14 | 0;
-    x15 = x15 + j15 | 0;
+    x0 = x0 + j0;
+    x1 = x1 + j1;
+    x2 = x2 + j2;
+    x3 = x3 + j3;
+    x4 = x4 + j4;
+    x5 = x5 + j5;
+    x6 = x6 + j6;
+    x7 = x7 + j7;
+    x8 = x8 + j8;
+    x9 = x9 + j9;
+    x10 = x10 + j10;
+    x11 = x11 + j11;
+    x12 = x12 + j12;
+    x13 = x13 + j13;
+    x14 = x14 + j14;
+    x15 = x15 + j15;
 
     o[0] = (byte)(x0 >>> 0 & 0xff);
     o[1] = (byte)(x0 >>> 8 & 0xff);
@@ -1041,76 +1041,76 @@ public final class TweetNaclFast {
     int x0 = j0, x1 = j1, x2 = j2, x3 = j3, x4 = j4, x5 = j5, x6 = j6, x7 = j7, x8 = j8, x9 = j9, x10 = j10, x11 = j11, x12 = j12, x13 = j13, x14 = j14, x15 = j15, u;
 
     for (int i = 0; i < 20; i += 2) {
-      u = x0 + x12 | 0;
+      u = x0 + x12;
       x4 ^= u << 7 | u >>> (32 - 7);
-      u = x4 + x0 | 0;
+      u = x4 + x0;
       x8 ^= u << 9 | u >>> (32 - 9);
-      u = x8 + x4 | 0;
+      u = x8 + x4;
       x12 ^= u << 13 | u >>> (32 - 13);
-      u = x12 + x8 | 0;
+      u = x12 + x8;
       x0 ^= u << 18 | u >>> (32 - 18);
 
-      u = x5 + x1 | 0;
+      u = x5 + x1;
       x9 ^= u << 7 | u >>> (32 - 7);
-      u = x9 + x5 | 0;
+      u = x9 + x5;
       x13 ^= u << 9 | u >>> (32 - 9);
-      u = x13 + x9 | 0;
+      u = x13 + x9;
       x1 ^= u << 13 | u >>> (32 - 13);
-      u = x1 + x13 | 0;
+      u = x1 + x13;
       x5 ^= u << 18 | u >>> (32 - 18);
 
-      u = x10 + x6 | 0;
+      u = x10 + x6;
       x14 ^= u << 7 | u >>> (32 - 7);
-      u = x14 + x10 | 0;
+      u = x14 + x10;
       x2 ^= u << 9 | u >>> (32 - 9);
-      u = x2 + x14 | 0;
+      u = x2 + x14;
       x6 ^= u << 13 | u >>> (32 - 13);
-      u = x6 + x2 | 0;
+      u = x6 + x2;
       x10 ^= u << 18 | u >>> (32 - 18);
 
-      u = x15 + x11 | 0;
+      u = x15 + x11;
       x3 ^= u << 7 | u >>> (32 - 7);
-      u = x3 + x15 | 0;
+      u = x3 + x15;
       x7 ^= u << 9 | u >>> (32 - 9);
-      u = x7 + x3 | 0;
+      u = x7 + x3;
       x11 ^= u << 13 | u >>> (32 - 13);
-      u = x11 + x7 | 0;
+      u = x11 + x7;
       x15 ^= u << 18 | u >>> (32 - 18);
 
-      u = x0 + x3 | 0;
+      u = x0 + x3;
       x1 ^= u << 7 | u >>> (32 - 7);
-      u = x1 + x0 | 0;
+      u = x1 + x0;
       x2 ^= u << 9 | u >>> (32 - 9);
-      u = x2 + x1 | 0;
+      u = x2 + x1;
       x3 ^= u << 13 | u >>> (32 - 13);
-      u = x3 + x2 | 0;
+      u = x3 + x2;
       x0 ^= u << 18 | u >>> (32 - 18);
 
-      u = x5 + x4 | 0;
+      u = x5 + x4;
       x6 ^= u << 7 | u >>> (32 - 7);
-      u = x6 + x5 | 0;
+      u = x6 + x5;
       x7 ^= u << 9 | u >>> (32 - 9);
-      u = x7 + x6 | 0;
+      u = x7 + x6;
       x4 ^= u << 13 | u >>> (32 - 13);
-      u = x4 + x7 | 0;
+      u = x4 + x7;
       x5 ^= u << 18 | u >>> (32 - 18);
 
-      u = x10 + x9 | 0;
+      u = x10 + x9;
       x11 ^= u << 7 | u >>> (32 - 7);
-      u = x11 + x10 | 0;
+      u = x11 + x10;
       x8 ^= u << 9 | u >>> (32 - 9);
-      u = x8 + x11 | 0;
+      u = x8 + x11;
       x9 ^= u << 13 | u >>> (32 - 13);
-      u = x9 + x8 | 0;
+      u = x9 + x8;
       x10 ^= u << 18 | u >>> (32 - 18);
 
-      u = x15 + x14 | 0;
+      u = x15 + x14;
       x12 ^= u << 7 | u >>> (32 - 7);
-      u = x12 + x15 | 0;
+      u = x12 + x15;
       x13 ^= u << 9 | u >>> (32 - 9);
-      u = x13 + x12 | 0;
+      u = x13 + x12;
       x14 ^= u << 13 | u >>> (32 - 13);
-      u = x14 + x13 | 0;
+      u = x14 + x13;
       x15 ^= u << 18 | u >>> (32 - 18);
     }
 
@@ -1189,7 +1189,7 @@ public final class TweetNaclFast {
 
       u = 1;
       for (i = 8; i < 16; ++i) {
-        u = u + (z[i] & 0xff) | 0;
+        u = u + (z[i] & 0xff);
         z[i] = (byte)(u & 0xff);
         u >>>= 8;
       }
@@ -1224,7 +1224,7 @@ public final class TweetNaclFast {
 
       u = 1;
       for (i = 8; i < 16; ++i) {
-        u = u + (z[i] & 0xff) | 0;
+        u = u + (z[i] & 0xff);
         z[i] = (byte)(u & 0xff);
         u >>>= 8;
       }
@@ -1330,7 +1330,7 @@ public final class TweetNaclFast {
   }
 
   private static void sel25519(final long[] p, final int poff, final long[] q, final int qoff, final int b) {
-    long t, c = ~(b - 1);
+    long t, c = -b;
     for (int i = 0; i < 16; ++i) {
       t = c & (p[i + poff] ^ q[i + qoff]);
       p[i + poff] ^= t;
@@ -1976,7 +1976,7 @@ public final class TweetNaclFast {
     return cryptoBoxOpenAfterNm(m, c, d, n, k);
   }
 
-  private static void add(final long[] p[], final long[] q[]) {
+  private static void add(final long[][] p, final long[][] q) {
     final long[] a = new long[16];
     final long[] b = new long[16];
     final long[] c = new long[16];
@@ -2019,12 +2019,12 @@ public final class TweetNaclFast {
     M(p3, 0, e, 0, h, 0);
   }
 
-  private static void cswap(final long[] p[], final long[] q[], final byte b) {
+  private static void cswap(final long[][] p, final long[][] q, final byte b) {
     for (int i = 0; i < 4; ++i)
       sel25519(p[i], 0, q[i], 0, b);
   }
 
-  private static void pack(final byte[] r, final long[] p[]) {
+  private static void pack(final byte[] r, final long[][] p) {
     final long[] tx = new long[16];
     final long[] ty = new long[16];
     final long[] zi = new long[16];
@@ -2039,7 +2039,7 @@ public final class TweetNaclFast {
     r[31] ^= par25519(tx, 0) << 7;
   }
 
-  private static void scalarmult(final long[] p[], final long[] q[], final byte[] s, final int soff) {
+  private static void scalarmult(final long[][] p, final long[][] q, final byte[] s, final int soff) {
     set25519(p[0], gf0);
     set25519(p[1], gf1);
     set25519(p[2], gf1);
@@ -2055,7 +2055,7 @@ public final class TweetNaclFast {
     }
   }
 
-  private static void scalarbase(final long[] p[], final byte[] s, final int soff) {
+  private static void scalarbase(final long[][] p, final byte[] s, final int soff) {
     final long[][] q = new long[4][];
 
     q[0] = new long[16];
@@ -2096,9 +2096,9 @@ public final class TweetNaclFast {
     return 0;
   }
 
-  private static final long L[] = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10};
+  private static final long[] L = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10};
 
-  private static void modL(final byte[] r, final int roff, final long x[]) {
+  private static void modL(final byte[] r, final int roff, final long[] x) {
     long carry;
     int i, j;
     for (i = 63; i >= 32; --i) {
@@ -2187,7 +2187,7 @@ public final class TweetNaclFast {
     return 0;
   }
 
-  private static int unpackneg(final long[] r[], final byte p[]) {
+  private static int unpackneg(final long[][] r, final byte[] p) {
     final long[] t = new long[16];
     final long[] chk = new long[16];
     final long[] num = new long[16];

@@ -38,7 +38,7 @@ public class Poly1305 {
 
     int t0, t1, t2, t3, t4, t5, t6, t7;
     t0 = key[0] & 0xff | (key[1] & 0xff) << 8;
-    this.r[0] = (t0) & 0x1fff;
+    this.r[0] = t0 & 0x1fff;
     t1 = key[2] & 0xff | (key[3] & 0xff) << 8;
     this.r[1] = ((t0 >>> 13) | (t1 << 3)) & 0x1fff;
     t2 = key[4] & 0xff | (key[5] & 0xff) << 8;
@@ -74,7 +74,7 @@ public class Poly1305 {
     int r0 = this.r[0], r1 = this.r[1], r2 = this.r[2], r3 = this.r[3], r4 = this.r[4], r5 = this.r[5], r6 = this.r[6], r7 = this.r[7], r8 = this.r[8], r9 = this.r[9];
     while (bytes >= 16) {
       t0 = m[mpos + 0] & 0xff | (m[mpos + 1] & 0xff) << 8;
-      h0 += (t0) & 0x1fff;
+      h0 += t0 & 0x1fff;
       t1 = m[mpos + 2] & 0xff | (m[mpos + 3] & 0xff) << 8;
       h1 += ((t0 >>> 13) | (t1 << 3)) & 0x1fff;
       t2 = m[mpos + 4] & 0xff | (m[mpos + 5] & 0xff) << 8;
@@ -100,14 +100,14 @@ public class Poly1305 {
       d0 += h2 * (5 * r8);
       d0 += h3 * (5 * r7);
       d0 += h4 * (5 * r6);
-      c = (d0 >>> 13);
+      c = d0 >>> 13;
       d0 &= 0x1fff;
       d0 += h5 * (5 * r5);
       d0 += h6 * (5 * r4);
       d0 += h7 * (5 * r3);
       d0 += h8 * (5 * r2);
       d0 += h9 * (5 * r1);
-      c += (d0 >>> 13);
+      c += d0 >>> 13;
       d0 &= 0x1fff;
 
       d1 = c;
@@ -116,14 +116,14 @@ public class Poly1305 {
       d1 += h2 * (5 * r9);
       d1 += h3 * (5 * r8);
       d1 += h4 * (5 * r7);
-      c = (d1 >>> 13);
+      c = d1 >>> 13;
       d1 &= 0x1fff;
       d1 += h5 * (5 * r6);
       d1 += h6 * (5 * r5);
       d1 += h7 * (5 * r4);
       d1 += h8 * (5 * r3);
       d1 += h9 * (5 * r2);
-      c += (d1 >>> 13);
+      c += d1 >>> 13;
       d1 &= 0x1fff;
 
       d2 = c;
@@ -132,14 +132,14 @@ public class Poly1305 {
       d2 += h2 * r0;
       d2 += h3 * (5 * r9);
       d2 += h4 * (5 * r8);
-      c = (d2 >>> 13);
+      c = d2 >>> 13;
       d2 &= 0x1fff;
       d2 += h5 * (5 * r7);
       d2 += h6 * (5 * r6);
       d2 += h7 * (5 * r5);
       d2 += h8 * (5 * r4);
       d2 += h9 * (5 * r3);
-      c += (d2 >>> 13);
+      c += d2 >>> 13;
       d2 &= 0x1fff;
 
       d3 = c;
@@ -148,14 +148,14 @@ public class Poly1305 {
       d3 += h2 * r1;
       d3 += h3 * r0;
       d3 += h4 * (5 * r9);
-      c = (d3 >>> 13);
+      c = d3 >>> 13;
       d3 &= 0x1fff;
       d3 += h5 * (5 * r8);
       d3 += h6 * (5 * r7);
       d3 += h7 * (5 * r6);
       d3 += h8 * (5 * r5);
       d3 += h9 * (5 * r4);
-      c += (d3 >>> 13);
+      c += d3 >>> 13;
       d3 &= 0x1fff;
 
       d4 = c;
@@ -164,14 +164,14 @@ public class Poly1305 {
       d4 += h2 * r2;
       d4 += h3 * r1;
       d4 += h4 * r0;
-      c = (d4 >>> 13);
+      c = d4 >>> 13;
       d4 &= 0x1fff;
       d4 += h5 * (5 * r9);
       d4 += h6 * (5 * r8);
       d4 += h7 * (5 * r7);
       d4 += h8 * (5 * r6);
       d4 += h9 * (5 * r5);
-      c += (d4 >>> 13);
+      c += d4 >>> 13;
       d4 &= 0x1fff;
 
       d5 = c;
@@ -180,14 +180,14 @@ public class Poly1305 {
       d5 += h2 * r3;
       d5 += h3 * r2;
       d5 += h4 * r1;
-      c = (d5 >>> 13);
+      c = d5 >>> 13;
       d5 &= 0x1fff;
       d5 += h5 * r0;
       d5 += h6 * (5 * r9);
       d5 += h7 * (5 * r8);
       d5 += h8 * (5 * r7);
       d5 += h9 * (5 * r6);
-      c += (d5 >>> 13);
+      c += d5 >>> 13;
       d5 &= 0x1fff;
 
       d6 = c;
@@ -196,14 +196,14 @@ public class Poly1305 {
       d6 += h2 * r4;
       d6 += h3 * r3;
       d6 += h4 * r2;
-      c = (d6 >>> 13);
+      c = d6 >>> 13;
       d6 &= 0x1fff;
       d6 += h5 * r1;
       d6 += h6 * r0;
       d6 += h7 * (5 * r9);
       d6 += h8 * (5 * r8);
       d6 += h9 * (5 * r7);
-      c += (d6 >>> 13);
+      c += d6 >>> 13;
       d6 &= 0x1fff;
 
       d7 = c;
@@ -212,14 +212,14 @@ public class Poly1305 {
       d7 += h2 * r5;
       d7 += h3 * r4;
       d7 += h4 * r3;
-      c = (d7 >>> 13);
+      c = d7 >>> 13;
       d7 &= 0x1fff;
       d7 += h5 * r2;
       d7 += h6 * r1;
       d7 += h7 * r0;
       d7 += h8 * (5 * r9);
       d7 += h9 * (5 * r8);
-      c += (d7 >>> 13);
+      c += d7 >>> 13;
       d7 &= 0x1fff;
 
       d8 = c;
@@ -228,14 +228,14 @@ public class Poly1305 {
       d8 += h2 * r6;
       d8 += h3 * r5;
       d8 += h4 * r4;
-      c = (d8 >>> 13);
+      c = d8 >>> 13;
       d8 &= 0x1fff;
       d8 += h5 * r3;
       d8 += h6 * r2;
       d8 += h7 * r1;
       d8 += h8 * r0;
       d8 += h9 * (5 * r9);
-      c += (d8 >>> 13);
+      c += d8 >>> 13;
       d8 &= 0x1fff;
 
       d9 = c;
@@ -244,20 +244,20 @@ public class Poly1305 {
       d9 += h2 * r7;
       d9 += h3 * r6;
       d9 += h4 * r5;
-      c = (d9 >>> 13);
+      c = d9 >>> 13;
       d9 &= 0x1fff;
       d9 += h5 * r4;
       d9 += h6 * r3;
       d9 += h7 * r2;
       d9 += h8 * r1;
       d9 += h9 * r0;
-      c += (d9 >>> 13);
+      c += d9 >>> 13;
       d9 &= 0x1fff;
 
-      c = (((c << 2) + c)) | 0;
-      c = (c + d0) | 0;
+      c += c << 2;
+      c += d0;
       d0 = c & 0x1fff;
-      c = (c >>> 13);
+      c = c >>> 13;
       d1 += c;
 
       h0 = d0;
@@ -311,7 +311,7 @@ public class Poly1305 {
       this.h[i] &= 0x1fff;
     }
 
-    this.h[0] += (c * 5);
+    this.h[0] += c * 5;
     c = this.h[0] >>> 13;
     this.h[0] &= 0x1fff;
     this.h[1] += c;
@@ -328,7 +328,7 @@ public class Poly1305 {
       g[i] &= 0x1fff;
     }
 
-    g[9] -= (1 << 13);
+    g[9] -= 1 << 13;
     g[9] &= 0xffff;
 
     /*
@@ -362,7 +362,7 @@ public class Poly1305 {
     f = this.h[0] + this.pad[0];
     this.h[0] = f & 0xffff;
     for (i = 1; i < 8; ++i) {
-      f = (((this.h[i] + this.pad[i]) | 0) + (f >>> 16)) | 0;
+      f = this.h[i] + this.pad[i] + (f >>> 16);
       this.h[i] = f & 0xffff;
     }
 

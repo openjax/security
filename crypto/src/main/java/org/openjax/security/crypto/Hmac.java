@@ -16,13 +16,12 @@
 
 package org.openjax.security.crypto;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * An enum of common Hashed Message Authentication Code algorithms.
@@ -36,28 +35,22 @@ public enum Hmac {
   private final ThreadLocal<KeyGenerator> keyGenerator;
 
   Hmac(final String algorithm) {
-    this.mac = new ThreadLocal<Mac>() {
-      @Override
-      protected Mac initialValue() {
-        try {
-          return Mac.getInstance(algorithm);
-        }
-        catch (final NoSuchAlgorithmException e) {
-          throw new UnsupportedOperationException(e);
-        }
+    this.mac = ThreadLocal.withInitial(() -> {
+      try {
+        return Mac.getInstance(algorithm);
       }
-    };
-    this.keyGenerator = new ThreadLocal<KeyGenerator>() {
-      @Override
-      protected KeyGenerator initialValue() {
-        try {
-          return KeyGenerator.getInstance(algorithm);
-        }
-        catch (final NoSuchAlgorithmException e) {
-          throw new UnsupportedOperationException(e);
-        }
+      catch (final NoSuchAlgorithmException e) {
+        throw new UnsupportedOperationException(e);
       }
-    };
+    });
+    this.keyGenerator = ThreadLocal.withInitial(() -> {
+      try {
+        return KeyGenerator.getInstance(algorithm);
+      }
+      catch (final NoSuchAlgorithmException e) {
+        throw new UnsupportedOperationException(e);
+      }
+    });
   }
 
   /**

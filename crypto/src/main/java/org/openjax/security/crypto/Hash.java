@@ -34,17 +34,14 @@ public enum Hash {
   private final ThreadLocal<MessageDigest> messageDigest;
 
   Hash(final String algorithm) {
-    this.messageDigest = new ThreadLocal<MessageDigest>() {
-      @Override
-      protected MessageDigest initialValue() {
-        try {
-          return MessageDigest.getInstance(algorithm);
-        }
-        catch (final NoSuchAlgorithmException e) {
-          throw new UnsupportedOperationException(e);
-        }
+    this.messageDigest = ThreadLocal.withInitial(() -> {
+      try {
+        return MessageDigest.getInstance(algorithm);
       }
-    };
+      catch (final NoSuchAlgorithmException e) {
+        throw new UnsupportedOperationException(e);
+      }
+    });
   }
 
   /**
