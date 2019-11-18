@@ -162,8 +162,10 @@ public class Hash {
   }
 
   /**
-   * @param message THe message.
-   * @return SHA-512 hash of the message.
+   * Returns the SHA-512 hash of the message.
+   *
+   * @param message The message.
+   * @return The SHA-512 hash of the message.
    */
   public static byte[] sha512(final byte[] message) {
     if (!(message != null && message.length > 0))

@@ -31,6 +31,8 @@ public final class GAuth {
   private static final SecureRandom random = new SecureRandom();
 
   /**
+   * Returns a random 20 byte Base32 encoded secret key.
+   *
    * @return A random 20 byte Base32 encoded secret key.
    */
   public static String generateRandomSecretKey() {

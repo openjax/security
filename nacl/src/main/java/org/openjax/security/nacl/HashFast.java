@@ -507,7 +507,9 @@ public class HashFast {
   }
 
   /**
-   * @param message THe message.
+   * Returns the SHA-512 hash of the message.
+   *
+   * @param message The message.
    * @return SHA-512 hash of the message.
    */
   public static byte[] sha512(final byte[] message) {

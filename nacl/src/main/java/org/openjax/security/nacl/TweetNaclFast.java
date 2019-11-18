@@ -218,6 +218,9 @@ public final class TweetNaclFast {
     }
 
     /**
+     * Returns a precomputed shared key which can be used in nacl.box.after and
+     * nacl.box.open.after.
+     *
      * @return A precomputed shared key which can be used in nacl.box.after and
      *         nacl.box.open.after.
      */
@@ -338,6 +341,9 @@ public final class TweetNaclFast {
     public static final int overheadLength = 16;
 
     /**
+     * Returns a new random key pair for box and returns it as an object with
+     * publicKey and secretKey members.
+     *
      * @return A new random key pair for box and returns it as an object with
      *         publicKey and secretKey members.
      */
