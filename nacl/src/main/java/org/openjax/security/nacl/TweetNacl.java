@@ -750,19 +750,19 @@ public final class TweetNacl {
       y[i] = x[i];
 
     for (i = 0; i < 20; ++i) {
-      for (j = 0; j < 4; j++) {
-        for (m = 0; m < 4; m++)
+      for (j = 0; j < 4; ++j) {
+        for (m = 0; m < 4; ++m)
           t[m] = x[(5 * j + 4 * m) % 16];
 
         t[1] ^= L32(t[0] + t[3], 7);
         t[2] ^= L32(t[1] + t[0], 9);
         t[3] ^= L32(t[2] + t[1], 13);
         t[0] ^= L32(t[3] + t[2], 18);
-        for (m = 0; m < 4; m++)
+        for (m = 0; m < 4; ++m)
           w[4 * j + (j + m) % 4] = t[m];
       }
 
-      for (m = 0; m < 16; m++)
+      for (m = 0; m < 16; ++m)
         x[m] = w[m];
     }
 
@@ -1028,7 +1028,7 @@ public final class TweetNacl {
       t[i] = 0;
 
     for (i = 0; i < 16; ++i)
-      for (j = 0; j < 16; j++)
+      for (j = 0; j < 16; ++j)
         t[i + j] += a[i + aoff] * b[j + boff];
 
     for (i = 0; i < 15; ++i)
@@ -1048,7 +1048,7 @@ public final class TweetNacl {
   private static void inv25519(final long[] o, final int ooff, final int olen, final long[] i, final int ioff, final int ilen) {
     final long[] c = new long[16];
     int a;
-    for (a = 0; a < 16; a++)
+    for (a = 0; a < 16; ++a)
       c[a] = i[a + ioff];
 
     for (a = 253; a >= 0; --a) {
@@ -1057,7 +1057,7 @@ public final class TweetNacl {
         M(c, 0, c.length, c, 0, c.length, i, ioff, ilen);
     }
 
-    for (a = 0; a < 16; a++)
+    for (a = 0; a < 16; ++a)
       o[a + ooff] = c[a];
   }
 
@@ -1377,7 +1377,7 @@ public final class TweetNacl {
       x[i] = r[i] & 0xff;
 
     for (i = 0; i < 32; ++i)
-      for (int j = 0; j < 32; j++)
+      for (int j = 0; j < 32; ++j)
         x[i + j] += (h[i] & 0xff) * (long)(d[j] & 0xff);
 
     modL(sm, 32, sm.length - 32, x);

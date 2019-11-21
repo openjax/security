@@ -1353,7 +1353,7 @@ public final class TweetNaclFast {
     car25519(t);
     car25519(t);
     car25519(t);
-    for (j = 0; j < 2; j++) {
+    for (j = 0; j < 2; ++j) {
       m[0] = t[0] - 0xffed;
       for (i = 1; i < 15; ++i) {
         m[i] = t[i] - 0xffff - ((m[i - 1] >> 16) & 1);
@@ -1851,7 +1851,7 @@ public final class TweetNaclFast {
   private static void inv25519(final long[] o, final int ooff, final long[] i, final int ioff) {
     final long[] c = new long[16];
     int a;
-    for (a = 0; a < 16; a++)
+    for (a = 0; a < 16; ++a)
       c[a] = i[a + ioff];
 
     for (a = 253; a >= 0; --a) {
@@ -1860,14 +1860,14 @@ public final class TweetNaclFast {
         M(c, 0, c, 0, i, ioff);
     }
 
-    for (a = 0; a < 16; a++)
+    for (a = 0; a < 16; ++a)
       o[a + ooff] = c[a];
   }
 
   private static void pow2523(final long[] o, final long[] i) {
     final long[] c = new long[16];
     int a;
-    for (a = 0; a < 16; a++)
+    for (a = 0; a < 16; ++a)
       c[a] = i[a];
 
     for (a = 250; a >= 0; --a) {
@@ -1876,7 +1876,7 @@ public final class TweetNaclFast {
         M(c, 0, c, 0, i, 0);
     }
 
-    for (a = 0; a < 16; a++)
+    for (a = 0; a < 16; ++a)
       o[a] = c[a];
   }
 
@@ -2119,13 +2119,13 @@ public final class TweetNaclFast {
     }
     carry = 0;
 
-    for (j = 0; j < 32; j++) {
+    for (j = 0; j < 32; ++j) {
       x[j] += carry - (x[31] >> 4) * L[j];
       carry = x[j] >> 8;
       x[j] &= 255;
     }
 
-    for (j = 0; j < 32; j++)
+    for (j = 0; j < 32; ++j)
       x[j] -= carry * L[j];
 
     for (i = 0; i < 32; ++i) {
@@ -2186,7 +2186,7 @@ public final class TweetNaclFast {
       x[i] = r[i] & 0xff;
 
     for (i = 0; i < 32; ++i)
-      for (int j = 0; j < 32; j++)
+      for (int j = 0; j < 32; ++j)
         x[i + j] += (h[i] & 0xff) * (long)(d[j] & 0xff);
 
     modL(sm, 32, x);
