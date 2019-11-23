@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * TweetNacl.c Java Port
  */
+@SuppressWarnings("unused")
 public final class TweetNaclFast {
   /**
    * Box algorithm, Public-key authenticated encryption

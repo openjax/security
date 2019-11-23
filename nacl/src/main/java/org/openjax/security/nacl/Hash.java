@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Hash algorithm, Implements SHA-512.
  */
+@SuppressWarnings("unused")
 public class Hash {
   /** Length of hash in bytes. */
   public static final int hashLength = 64;
