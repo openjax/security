@@ -79,7 +79,7 @@ public final class TweetNacl {
 
     /**
      * Encrypt and authenticates message using peer's public key, our secret
-     * key, final and the given nonce, which must be unique for each distinct
+     * key, and the given nonce, which must be unique for each distinct
      * message for a key pair.
      *
      * @param message The message.
@@ -128,7 +128,7 @@ public final class TweetNacl {
      * secret key, and the given nonce.
      *
      * @param box The box.
-     * @return The original message, or null if authentication fails.
+     * @return The original message, or {@code null} if authentication fails.
      */
     public byte[] open(final byte[] box) {
       return open(box, generateNonce());
@@ -140,7 +140,7 @@ public final class TweetNacl {
      *
      * @param box The box.
      * @param nonce The nonce.
-     * @return The original message, or null if authentication fails.
+     * @return The original message, or {@code null} if authentication fails.
      */
     public byte[] open(final byte[] box, final byte[] nonce) {
       // check message
@@ -229,7 +229,7 @@ public final class TweetNacl {
      * nacl.box.before.
      *
      * @param box The box.
-     * @return The original message, or null if authentication fails.
+     * @return The original message, or {@code null} if authentication fails.
      */
     public byte[] openAfter(final byte[] box) {
       return openAfter(box, generateNonce());
@@ -241,7 +241,7 @@ public final class TweetNacl {
      *
      * @param box The box.
      * @param nonce The nonce.
-     * @return The original message, or null if authentication fails.
+     * @return The original message, or {@code null} if authentication fails.
      */
     public byte[] openAfter(final byte[] box, final byte[] nonce) {
       // check message
@@ -409,7 +409,7 @@ public final class TweetNacl {
      * nonce.
      *
      * @param box The box.
-     * @return The original message, or null if authentication fails.
+     * @return The original message, or {@code null} if authentication fails.
      */
     public byte[] open(final byte[] box) {
       return open(box, generateNonce());
@@ -421,7 +421,7 @@ public final class TweetNacl {
      *
      * @param box The box.
      * @param nonce The nonce.
-     * @return The original message, or null if authentication fails.
+     * @return The original message, or {@code null} if authentication fails.
      */
     public byte[] open(final byte[] box, final byte[] nonce) {
       // check message
@@ -533,7 +533,8 @@ public final class TweetNacl {
      * Verifies the signed message.
      *
      * @param signedMessage The signed message.
-     * @return The message without signature, or null if verification fails.
+     * @return The message without signature, or {@code null} if verification
+     *         fails.
      */
     public byte[] open(final byte[] signedMessage) {
       // check sm length
@@ -867,13 +868,13 @@ public final class TweetNacl {
    * add1305(int [] h,int [] c) { int j; int u = 0; for (j = 0; j < 17; j ++) {
    * u = (u + ((h[j] + c[j]) | 0)) | 0; h[j] = u & 255; u >>>= 8; } } private
    * static final int minusp[] = { 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   * 0, 252 }; private static int crypto_onetimeauth(final  byte[] out,final int
-   * outoff,final int outlen, final byte[] m,final int moff,final int mlen, long n,
+   * 0, 252 }; private static int crypto_onetimeauth( byte[] out,final int
+   * outoff,final int outlen, byte[] m,final int moff,final int mlen, long n,
    * byte [] k) { int i,j; int s,u; int [] x = new int[17], r = new int [17], h
    * = new int[17], c = new int [17], g = new int[17]; for (j = 0; j < 17; j ++)
    * r[j] = h[j] = 0; for (j = 0; j < 16; j ++) r[j] = k[j] & 0xff; r[3]&=15;
    * r[4]&=252; r[7]&=15; r[8]&=252; r[11]&=15; r[12]&=252; r[15]&=15; int
-   * moffset = moff; while (final n > 0) { for (j = 0; j < 17; j ++) c[j] = 0; for (j
+   * moffset = moff; while (n > 0) { for (j = 0; j < 17; j ++) c[j] = 0; for (j
    * = 0;(j < 16) && (j < n);++j) c[j] = m[j+moffset] & 0xff; c[j] = 1; moffset
    * += j; n -= j; add1305(h,c); for (i = 0; i < 17; i ++) { x[i] = 0; for (j =
    * 0; j < 17; j ++) x[i] += h[j] * ((j <= i) ? r[i - j] : 320 * r[i + 17 -
