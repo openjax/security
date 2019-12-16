@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.junit.Test;
-import org.libj.util.Strings;
+import org.libj.lang.Strings;
 import org.openjax.security.crypto.Hmac;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
