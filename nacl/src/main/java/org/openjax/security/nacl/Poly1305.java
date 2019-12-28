@@ -36,7 +36,14 @@ public class Poly1305 {
     this.leftover = 0;
     this.fin = 0;
 
-    int t0, t1, t2, t3, t4, t5, t6, t7;
+    final int t0;
+    final int t1;
+    final int t2;
+    final int t3;
+    final int t4;
+    final int t5;
+    final int t6;
+    final int t7;
     t0 = key[0] & 0xff | (key[1] & 0xff) << 8;
     this.r[0] = t0 & 0x1fff;
     t1 = key[2] & 0xff | (key[3] & 0xff) << 8;
@@ -67,11 +74,20 @@ public class Poly1305 {
   }
 
   public Poly1305 blocks(final byte[] m, int mpos, int bytes) {
-    int hibit = this.fin != 0 ? 0 : (1 << 11);
+    final int hibit = this.fin != 0 ? 0 : (1 << 11);
     int t0, t1, t2, t3, t4, t5, t6, t7, c;
     int d0, d1, d2, d3, d4, d5, d6, d7, d8, d9;
     int h0 = this.h[0], h1 = this.h[1], h2 = this.h[2], h3 = this.h[3], h4 = this.h[4], h5 = this.h[5], h6 = this.h[6], h7 = this.h[7], h8 = this.h[8], h9 = this.h[9];
-    int r0 = this.r[0], r1 = this.r[1], r2 = this.r[2], r3 = this.r[3], r4 = this.r[4], r5 = this.r[5], r6 = this.r[6], r7 = this.r[7], r8 = this.r[8], r9 = this.r[9];
+    final int r0 = this.r[0];
+    final int r1 = this.r[1];
+    final int r2 = this.r[2];
+    final int r3 = this.r[3];
+    final int r4 = this.r[4];
+    final int r5 = this.r[5];
+    final int r6 = this.r[6];
+    final int r7 = this.r[7];
+    final int r8 = this.r[8];
+    final int r9 = this.r[9];
     while (bytes >= 16) {
       t0 = m[mpos + 0] & 0xff | (m[mpos + 1] & 0xff) << 8;
       h0 += t0 & 0x1fff;
@@ -257,7 +273,7 @@ public class Poly1305 {
       c += c << 2;
       c += d0;
       d0 = c & 0x1fff;
-      c = c >>> 13;
+      c >>>= 13;
       d1 += c;
 
       h0 = d0;
@@ -366,21 +382,21 @@ public class Poly1305 {
       this.h[i] = f & 0xffff;
     }
 
-    mac[macpos + 0] = (byte)((this.h[0] >>> 0) & 0xff);
+    mac[macpos + 0] = (byte)(this.h[0] & 0xff);
     mac[macpos + 1] = (byte)((this.h[0] >>> 8) & 0xff);
-    mac[macpos + 2] = (byte)((this.h[1] >>> 0) & 0xff);
+    mac[macpos + 2] = (byte)(this.h[1] & 0xff);
     mac[macpos + 3] = (byte)((this.h[1] >>> 8) & 0xff);
-    mac[macpos + 4] = (byte)((this.h[2] >>> 0) & 0xff);
+    mac[macpos + 4] = (byte)(this.h[2] & 0xff);
     mac[macpos + 5] = (byte)((this.h[2] >>> 8) & 0xff);
-    mac[macpos + 6] = (byte)((this.h[3] >>> 0) & 0xff);
+    mac[macpos + 6] = (byte)(this.h[3] & 0xff);
     mac[macpos + 7] = (byte)((this.h[3] >>> 8) & 0xff);
-    mac[macpos + 8] = (byte)((this.h[4] >>> 0) & 0xff);
+    mac[macpos + 8] = (byte)(this.h[4] & 0xff);
     mac[macpos + 9] = (byte)((this.h[4] >>> 8) & 0xff);
-    mac[macpos + 10] = (byte)((this.h[5] >>> 0) & 0xff);
+    mac[macpos + 10] = (byte)(this.h[5] & 0xff);
     mac[macpos + 11] = (byte)((this.h[5] >>> 8) & 0xff);
-    mac[macpos + 12] = (byte)((this.h[6] >>> 0) & 0xff);
+    mac[macpos + 12] = (byte)(this.h[6] & 0xff);
     mac[macpos + 13] = (byte)((this.h[6] >>> 8) & 0xff);
-    mac[macpos + 14] = (byte)((this.h[7] >>> 0) & 0xff);
+    mac[macpos + 14] = (byte)(this.h[7] & 0xff);
     mac[macpos + 15] = (byte)((this.h[7] >>> 8) & 0xff);
 
     return this;

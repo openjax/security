@@ -24,6 +24,9 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @SuppressWarnings("unused")
 public final class TweetNaclFast {
+  private TweetNaclFast() {
+  }
+
   /**
    * Box algorithm, Public-key authenticated encryption
    */
@@ -61,7 +64,7 @@ public final class TweetNaclFast {
       final long nonce = this.nonce.get();
       final byte[] n = new byte[nonceLength];
       for (int i = 0; i < nonceLength; i += 8) {
-        n[i + 0] = (byte)(nonce >>> 0);
+        n[i + 0] = (byte)(nonce);
         n[i + 1] = (byte)(nonce >>> 8);
         n[i + 2] = (byte)(nonce >>> 16);
         n[i + 3] = (byte)(nonce >>> 24);
@@ -269,15 +272,14 @@ public final class TweetNaclFast {
       // cipher buffer
       final byte[] c = new byte[m.length];
 
-      for (int i = 0; i < mlen; ++i)
-        m[i + zerobytesLength] = message[i + moff];
+      if (mlen >= 0)
+        System.arraycopy(message, 0 + moff, m, 32, mlen);
 
       if (0 != cryptoBoxAfterNm(c, m, m.length, nonce, sharedKey))
         return null;
 
       final byte[] ret = new byte[c.length - boxzerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = c[i + boxzerobytesLength];
+      System.arraycopy(c, 16, ret, 0, ret.length);
 
       return ret;
     }
@@ -307,15 +309,13 @@ public final class TweetNaclFast {
       // message buffer
       final byte[] m = new byte[c.length];
 
-      for (int i = 0; i < boxlen; ++i)
-        c[i + boxzerobytesLength] = box[i + boxoff];
+      System.arraycopy(box, 0 + boxoff, c, 16, boxlen);
 
       if (cryptoBoxOpenAfterNm(m, c, c.length, nonce, sharedKey) != 0)
         return null;
 
       final byte[] ret = new byte[m.length - zerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = m[i + zerobytesLength];
+      System.arraycopy(m, 32, ret, 0, ret.length);
 
       return ret;
     }
@@ -360,8 +360,7 @@ public final class TweetNaclFast {
       final byte[] pk = kp.getPublicKey();
 
       // copy sk
-      for (int i = 0; i < sk.length; ++i)
-        sk[i] = secretKey[i];
+      System.arraycopy(secretKey, 0, sk, 0, sk.length);
 
       cryptoScalarMultBase(pk, sk);
       return kp;
@@ -403,7 +402,7 @@ public final class TweetNaclFast {
       final long nonce = this.nonce.get();
       final byte[] n = new byte[nonceLength];
       for (int i = 0; i < nonceLength; i += 8) {
-        n[i + 0] = (byte)(nonce >>> 0);
+        n[i + 0] = (byte)(nonce);
         n[i + 1] = (byte)(nonce >>> 8);
         n[i + 2] = (byte)(nonce >>> 16);
         n[i + 3] = (byte)(nonce >>> 24);
@@ -468,16 +467,15 @@ public final class TweetNaclFast {
       // cipher buffer
       final byte[] c = new byte[m.length];
 
-      for (int i = 0; i < mlen; ++i)
-        m[i + zerobytesLength] = message[i + moff];
+      if (mlen >= 0)
+        System.arraycopy(message, 0 + moff, m, 32, mlen);
 
       if (0 != cryptoSecretBox(c, m, m.length, nonce, key))
         return null;
 
       // TBD optimizing ...
       final byte[] ret = new byte[c.length - boxzerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = c[i + boxzerobytesLength];
+      System.arraycopy(c, 16, ret, 0, ret.length);
 
       return ret;
     }
@@ -533,15 +531,13 @@ public final class TweetNaclFast {
       // message buffer
       final byte[] m = new byte[c.length];
 
-      for (int i = 0; i < boxlen; ++i)
-        c[i + boxzerobytesLength] = box[i + boxoff];
+      System.arraycopy(box, 0 + boxoff, c, 16, boxlen);
 
       if (0 != cryptoSecretBoxOpen(m, c, c.length, nonce, key))
         return null;
 
       final byte[] ret = new byte[m.length - zerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = m[i + zerobytesLength];
+      System.arraycopy(m, 32, ret, 0, ret.length);
 
       return ret;
     }
@@ -566,6 +562,9 @@ public final class TweetNaclFast {
    * Scalar multiplication, Implements curve25519.
    */
   public static final class ScalarMult {
+    private ScalarMult() {
+    }
+
     /**
      * Multiplies an integer n by a group element p.
      *
@@ -589,7 +588,7 @@ public final class TweetNaclFast {
      * @return The resulting group element.
      */
     public static byte[] scalseMultBase(final byte[] n) {
-      if (!(n.length == scalarLength))
+      if (n.length != scalarLength)
         return null;
 
       final byte[] q = new byte[scalarLength];
@@ -612,8 +611,8 @@ public final class TweetNaclFast {
    * Signature algorithm, Implements ed25519.
    */
   public static final class Signature {
-    private byte[] theirPublicKey;
-    private byte[] mySecretKey;
+    private final byte[] theirPublicKey;
+    private final byte[] mySecretKey;
 
     public Signature(final byte[] theirPublicKey, final byte[] mySecretKey) {
       this.theirPublicKey = theirPublicKey;
@@ -693,8 +692,7 @@ public final class TweetNaclFast {
     public byte[] detached(final byte[] message) {
       final byte[] signedMsg = this.sign(message);
       final byte[] sig = new byte[signatureLength];
-      for (int i = 0; i < sig.length; ++i)
-        sig[i] = signedMsg[i];
+      System.arraycopy(signedMsg, 0, sig, 0, sig.length);
 
       return sig;
     }
@@ -716,11 +714,9 @@ public final class TweetNaclFast {
 
       final byte[] sm = new byte[signatureLength + message.length];
       final byte[] m = new byte[signatureLength + message.length];
-      for (int i = 0; i < signatureLength; ++i)
-        sm[i] = signature[i];
+      System.arraycopy(signature, 0, sm, 0, signatureLength);
 
-      for (int i = 0; i < message.length; ++i)
-        sm[i + signatureLength] = message[i];
+      System.arraycopy(message, 0, sm, 64, message.length);
 
       return (cryptoSignOpen(m, -1, sm, 0, sm.length, theirPublicKey) >= 0);
     }
@@ -742,12 +738,11 @@ public final class TweetNaclFast {
       final byte[] sk = kp.getSecretKey();
 
       // copy sk
-      for (int i = 0; i < kp.getSecretKey().length; ++i)
-        sk[i] = secretKey[i];
+      System.arraycopy(secretKey, 0, sk, 0, kp.getSecretKey().length);
 
       // copy pk from sk
-      for (int i = 0; i < kp.getPublicKey().length; ++i)
-        pk[i] = secretKey[32 + i]; // hard-copy
+      // hard-copy
+      System.arraycopy(secretKey, 32, pk, 0, kp.getPublicKey().length);
 
       return kp;
     }
@@ -758,8 +753,7 @@ public final class TweetNaclFast {
       final byte[] sk = kp.getSecretKey();
 
       // copy sk
-      for (int i = 0; i < seedLength; ++i)
-        sk[i] = seed[i];
+      System.arraycopy(seed, 0, sk, 0, seedLength);
 
       // generate pk from sk
       cryptoSignKeyPair(pk, sk, true);
@@ -832,22 +826,22 @@ public final class TweetNaclFast {
   }
 
   private static void coreSalsa20(final byte[] o, final byte[] p, final byte[] k, final byte[] c) {
-    int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24,
-        j1 = k[0] & 0xff | (k[1] & 0xff) << 8 | (k[2] & 0xff) << 16 | (k[3] & 0xff) << 24,
-        j2 = k[4] & 0xff | (k[5] & 0xff) << 8 | (k[6] & 0xff) << 16 | (k[7] & 0xff) << 24,
-        j3 = k[8] & 0xff | (k[9] & 0xff) << 8 | (k[10] & 0xff) << 16 | (k[11] & 0xff) << 24,
-        j4 = k[12] & 0xff | (k[13] & 0xff) << 8 | (k[14] & 0xff) << 16 | (k[15] & 0xff) << 24,
-        j5 = c[4] & 0xff | (c[5] & 0xff) << 8 | (c[6] & 0xff) << 16 | (c[7] & 0xff) << 24,
-        j6 = p[0] & 0xff | (p[1] & 0xff) << 8 | (p[2] & 0xff) << 16 | (p[3] & 0xff) << 24,
-        j7 = p[4] & 0xff | (p[5] & 0xff) << 8 | (p[6] & 0xff) << 16 | (p[7] & 0xff) << 24,
-        j8 = p[8] & 0xff | (p[9] & 0xff) << 8 | (p[10] & 0xff) << 16 | (p[11] & 0xff) << 24,
-        j9 = p[12] & 0xff | (p[13] & 0xff) << 8 | (p[14] & 0xff) << 16 | (p[15] & 0xff) << 24,
-        j10 = c[8] & 0xff | (c[9] & 0xff) << 8 | (c[10] & 0xff) << 16 | (c[11] & 0xff) << 24,
-        j11 = k[16] & 0xff | (k[17] & 0xff) << 8 | (k[18] & 0xff) << 16 | (k[19] & 0xff) << 24,
-        j12 = k[20] & 0xff | (k[21] & 0xff) << 8 | (k[22] & 0xff) << 16 | (k[23] & 0xff) << 24,
-        j13 = k[24] & 0xff | (k[25] & 0xff) << 8 | (k[26] & 0xff) << 16 | (k[27] & 0xff) << 24,
-        j14 = k[28] & 0xff | (k[29] & 0xff) << 8 | (k[30] & 0xff) << 16 | (k[31] & 0xff) << 24,
-        j15 = c[12] & 0xff | (c[13] & 0xff) << 8 | (c[14] & 0xff) << 16 | (c[15] & 0xff) << 24;
+    final int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24;
+    final int j1 = k[0] & 0xff | (k[1] & 0xff) << 8 | (k[2] & 0xff) << 16 | (k[3] & 0xff) << 24;
+    final int j2 = k[4] & 0xff | (k[5] & 0xff) << 8 | (k[6] & 0xff) << 16 | (k[7] & 0xff) << 24;
+    final int j3 = k[8] & 0xff | (k[9] & 0xff) << 8 | (k[10] & 0xff) << 16 | (k[11] & 0xff) << 24;
+    final int j4 = k[12] & 0xff | (k[13] & 0xff) << 8 | (k[14] & 0xff) << 16 | (k[15] & 0xff) << 24;
+    final int j5 = c[4] & 0xff | (c[5] & 0xff) << 8 | (c[6] & 0xff) << 16 | (c[7] & 0xff) << 24;
+    final int j6 = p[0] & 0xff | (p[1] & 0xff) << 8 | (p[2] & 0xff) << 16 | (p[3] & 0xff) << 24;
+    final int j7 = p[4] & 0xff | (p[5] & 0xff) << 8 | (p[6] & 0xff) << 16 | (p[7] & 0xff) << 24;
+    final int j8 = p[8] & 0xff | (p[9] & 0xff) << 8 | (p[10] & 0xff) << 16 | (p[11] & 0xff) << 24;
+    final int j9 = p[12] & 0xff | (p[13] & 0xff) << 8 | (p[14] & 0xff) << 16 | (p[15] & 0xff) << 24;
+    final int j10 = c[8] & 0xff | (c[9] & 0xff) << 8 | (c[10] & 0xff) << 16 | (c[11] & 0xff) << 24;
+    final int j11 = k[16] & 0xff | (k[17] & 0xff) << 8 | (k[18] & 0xff) << 16 | (k[19] & 0xff) << 24;
+    final int j12 = k[20] & 0xff | (k[21] & 0xff) << 8 | (k[22] & 0xff) << 16 | (k[23] & 0xff) << 24;
+    final int j13 = k[24] & 0xff | (k[25] & 0xff) << 8 | (k[26] & 0xff) << 16 | (k[27] & 0xff) << 24;
+    final int j14 = k[28] & 0xff | (k[29] & 0xff) << 8 | (k[30] & 0xff) << 16 | (k[31] & 0xff) << 24;
+    final int j15 = c[12] & 0xff | (c[13] & 0xff) << 8 | (c[14] & 0xff) << 16 | (c[15] & 0xff) << 24;
 
     int x0 = j0, x1 = j1, x2 = j2, x3 = j3, x4 = j4, x5 = j5, x6 = j6, x7 = j7, x8 = j8, x9 = j9, x10 = j10, x11 = j11, x12 = j12, x13 = j13, x14 = j14, x15 = j15, u;
     for (int i = 0; i < 20; i += 2) {
@@ -924,99 +918,99 @@ public final class TweetNaclFast {
       x15 ^= u << 18 | u >>> (32 - 18);
     }
 
-    x0 = x0 + j0;
-    x1 = x1 + j1;
-    x2 = x2 + j2;
-    x3 = x3 + j3;
-    x4 = x4 + j4;
-    x5 = x5 + j5;
-    x6 = x6 + j6;
-    x7 = x7 + j7;
-    x8 = x8 + j8;
-    x9 = x9 + j9;
-    x10 = x10 + j10;
-    x11 = x11 + j11;
-    x12 = x12 + j12;
-    x13 = x13 + j13;
-    x14 = x14 + j14;
-    x15 = x15 + j15;
+    x0 += j0;
+    x1 += j1;
+    x2 += j2;
+    x3 += j3;
+    x4 += j4;
+    x5 += j5;
+    x6 += j6;
+    x7 += j7;
+    x8 += j8;
+    x9 += j9;
+    x10 += j10;
+    x11 += j11;
+    x12 += j12;
+    x13 += j13;
+    x14 += j14;
+    x15 += j15;
 
-    o[0] = (byte)(x0 >>> 0 & 0xff);
+    o[0] = (byte)(x0 & 0xff);
     o[1] = (byte)(x0 >>> 8 & 0xff);
     o[2] = (byte)(x0 >>> 16 & 0xff);
     o[3] = (byte)(x0 >>> 24 & 0xff);
 
-    o[4] = (byte)(x1 >>> 0 & 0xff);
+    o[4] = (byte)(x1 & 0xff);
     o[5] = (byte)(x1 >>> 8 & 0xff);
     o[6] = (byte)(x1 >>> 16 & 0xff);
     o[7] = (byte)(x1 >>> 24 & 0xff);
 
-    o[8] = (byte)(x2 >>> 0 & 0xff);
+    o[8] = (byte)(x2 & 0xff);
     o[9] = (byte)(x2 >>> 8 & 0xff);
     o[10] = (byte)(x2 >>> 16 & 0xff);
     o[11] = (byte)(x2 >>> 24 & 0xff);
 
-    o[12] = (byte)(x3 >>> 0 & 0xff);
+    o[12] = (byte)(x3 & 0xff);
     o[13] = (byte)(x3 >>> 8 & 0xff);
     o[14] = (byte)(x3 >>> 16 & 0xff);
     o[15] = (byte)(x3 >>> 24 & 0xff);
 
-    o[16] = (byte)(x4 >>> 0 & 0xff);
+    o[16] = (byte)(x4 & 0xff);
     o[17] = (byte)(x4 >>> 8 & 0xff);
     o[18] = (byte)(x4 >>> 16 & 0xff);
     o[19] = (byte)(x4 >>> 24 & 0xff);
 
-    o[20] = (byte)(x5 >>> 0 & 0xff);
+    o[20] = (byte)(x5 & 0xff);
     o[21] = (byte)(x5 >>> 8 & 0xff);
     o[22] = (byte)(x5 >>> 16 & 0xff);
     o[23] = (byte)(x5 >>> 24 & 0xff);
 
-    o[24] = (byte)(x6 >>> 0 & 0xff);
+    o[24] = (byte)(x6 & 0xff);
     o[25] = (byte)(x6 >>> 8 & 0xff);
     o[26] = (byte)(x6 >>> 16 & 0xff);
     o[27] = (byte)(x6 >>> 24 & 0xff);
 
-    o[28] = (byte)(x7 >>> 0 & 0xff);
+    o[28] = (byte)(x7 & 0xff);
     o[29] = (byte)(x7 >>> 8 & 0xff);
     o[30] = (byte)(x7 >>> 16 & 0xff);
     o[31] = (byte)(x7 >>> 24 & 0xff);
 
-    o[32] = (byte)(x8 >>> 0 & 0xff);
+    o[32] = (byte)(x8 & 0xff);
     o[33] = (byte)(x8 >>> 8 & 0xff);
     o[34] = (byte)(x8 >>> 16 & 0xff);
     o[35] = (byte)(x8 >>> 24 & 0xff);
 
-    o[36] = (byte)(x9 >>> 0 & 0xff);
+    o[36] = (byte)(x9 & 0xff);
     o[37] = (byte)(x9 >>> 8 & 0xff);
     o[38] = (byte)(x9 >>> 16 & 0xff);
     o[39] = (byte)(x9 >>> 24 & 0xff);
 
-    o[40] = (byte)(x10 >>> 0 & 0xff);
+    o[40] = (byte)(x10 & 0xff);
     o[41] = (byte)(x10 >>> 8 & 0xff);
     o[42] = (byte)(x10 >>> 16 & 0xff);
     o[43] = (byte)(x10 >>> 24 & 0xff);
 
-    o[44] = (byte)(x11 >>> 0 & 0xff);
+    o[44] = (byte)(x11 & 0xff);
     o[45] = (byte)(x11 >>> 8 & 0xff);
     o[46] = (byte)(x11 >>> 16 & 0xff);
     o[47] = (byte)(x11 >>> 24 & 0xff);
 
-    o[48] = (byte)(x12 >>> 0 & 0xff);
+    o[48] = (byte)(x12 & 0xff);
     o[49] = (byte)(x12 >>> 8 & 0xff);
     o[50] = (byte)(x12 >>> 16 & 0xff);
     o[51] = (byte)(x12 >>> 24 & 0xff);
 
-    o[52] = (byte)(x13 >>> 0 & 0xff);
+    o[52] = (byte)(x13 & 0xff);
     o[53] = (byte)(x13 >>> 8 & 0xff);
     o[54] = (byte)(x13 >>> 16 & 0xff);
     o[55] = (byte)(x13 >>> 24 & 0xff);
 
-    o[56] = (byte)(x14 >>> 0 & 0xff);
+    o[56] = (byte)(x14 & 0xff);
     o[57] = (byte)(x14 >>> 8 & 0xff);
     o[58] = (byte)(x14 >>> 16 & 0xff);
     o[59] = (byte)(x14 >>> 24 & 0xff);
 
-    o[60] = (byte)(x15 >>> 0 & 0xff);
+    o[60] = (byte)(x15 & 0xff);
     o[61] = (byte)(x15 >>> 8 & 0xff);
     o[62] = (byte)(x15 >>> 16 & 0xff);
     o[63] = (byte)(x15 >>> 24 & 0xff);
@@ -1028,22 +1022,22 @@ public final class TweetNaclFast {
   }
 
   private static void coreHsalsa20(final byte[] o, final byte[] p, final byte[] k, final byte[] c) {
-    int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24,
-        j1 = k[0] & 0xff | (k[1] & 0xff) << 8 | (k[2] & 0xff) << 16 | (k[3] & 0xff) << 24,
-        j2 = k[4] & 0xff | (k[5] & 0xff) << 8 | (k[6] & 0xff) << 16 | (k[7] & 0xff) << 24,
-        j3 = k[8] & 0xff | (k[9] & 0xff) << 8 | (k[10] & 0xff) << 16 | (k[11] & 0xff) << 24,
-        j4 = k[12] & 0xff | (k[13] & 0xff) << 8 | (k[14] & 0xff) << 16 | (k[15] & 0xff) << 24,
-        j5 = c[4] & 0xff | (c[5] & 0xff) << 8 | (c[6] & 0xff) << 16 | (c[7] & 0xff) << 24,
-        j6 = p[0] & 0xff | (p[1] & 0xff) << 8 | (p[2] & 0xff) << 16 | (p[3] & 0xff) << 24,
-        j7 = p[4] & 0xff | (p[5] & 0xff) << 8 | (p[6] & 0xff) << 16 | (p[7] & 0xff) << 24,
-        j8 = p[8] & 0xff | (p[9] & 0xff) << 8 | (p[10] & 0xff) << 16 | (p[11] & 0xff) << 24,
-        j9 = p[12] & 0xff | (p[13] & 0xff) << 8 | (p[14] & 0xff) << 16 | (p[15] & 0xff) << 24,
-        j10 = c[8] & 0xff | (c[9] & 0xff) << 8 | (c[10] & 0xff) << 16 | (c[11] & 0xff) << 24,
-        j11 = k[16] & 0xff | (k[17] & 0xff) << 8 | (k[18] & 0xff) << 16 | (k[19] & 0xff) << 24,
-        j12 = k[20] & 0xff | (k[21] & 0xff) << 8 | (k[22] & 0xff) << 16 | (k[23] & 0xff) << 24,
-        j13 = k[24] & 0xff | (k[25] & 0xff) << 8 | (k[26] & 0xff) << 16 | (k[27] & 0xff) << 24,
-        j14 = k[28] & 0xff | (k[29] & 0xff) << 8 | (k[30] & 0xff) << 16 | (k[31] & 0xff) << 24,
-        j15 = c[12] & 0xff | (c[13] & 0xff) << 8 | (c[14] & 0xff) << 16 | (c[15] & 0xff) << 24;
+    int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24;
+    final int j1 = k[0] & 0xff | (k[1] & 0xff) << 8 | (k[2] & 0xff) << 16 | (k[3] & 0xff) << 24;
+    final int j2 = k[4] & 0xff | (k[5] & 0xff) << 8 | (k[6] & 0xff) << 16 | (k[7] & 0xff) << 24;
+    final int j3 = k[8] & 0xff | (k[9] & 0xff) << 8 | (k[10] & 0xff) << 16 | (k[11] & 0xff) << 24;
+    final int j4 = k[12] & 0xff | (k[13] & 0xff) << 8 | (k[14] & 0xff) << 16 | (k[15] & 0xff) << 24;
+    final int j5 = c[4] & 0xff | (c[5] & 0xff) << 8 | (c[6] & 0xff) << 16 | (c[7] & 0xff) << 24;
+    final int j6 = p[0] & 0xff | (p[1] & 0xff) << 8 | (p[2] & 0xff) << 16 | (p[3] & 0xff) << 24;
+    final int j7 = p[4] & 0xff | (p[5] & 0xff) << 8 | (p[6] & 0xff) << 16 | (p[7] & 0xff) << 24;
+    final int j8 = p[8] & 0xff | (p[9] & 0xff) << 8 | (p[10] & 0xff) << 16 | (p[11] & 0xff) << 24;
+    final int j9 = p[12] & 0xff | (p[13] & 0xff) << 8 | (p[14] & 0xff) << 16 | (p[15] & 0xff) << 24;
+    final int j10 = c[8] & 0xff | (c[9] & 0xff) << 8 | (c[10] & 0xff) << 16 | (c[11] & 0xff) << 24;
+    final int j11 = k[16] & 0xff | (k[17] & 0xff) << 8 | (k[18] & 0xff) << 16 | (k[19] & 0xff) << 24;
+    final int j12 = k[20] & 0xff | (k[21] & 0xff) << 8 | (k[22] & 0xff) << 16 | (k[23] & 0xff) << 24;
+    final int j13 = k[24] & 0xff | (k[25] & 0xff) << 8 | (k[26] & 0xff) << 16 | (k[27] & 0xff) << 24;
+    final int j14 = k[28] & 0xff | (k[29] & 0xff) << 8 | (k[30] & 0xff) << 16 | (k[31] & 0xff) << 24;
+    final int j15 = c[12] & 0xff | (c[13] & 0xff) << 8 | (c[14] & 0xff) << 16 | (c[15] & 0xff) << 24;
 
     int x0 = j0, x1 = j1, x2 = j2, x3 = j3, x4 = j4, x5 = j5, x6 = j6, x7 = j7, x8 = j8, x9 = j9, x10 = j10, x11 = j11, x12 = j12, x13 = j13, x14 = j14, x15 = j15, u;
 
@@ -1121,42 +1115,42 @@ public final class TweetNaclFast {
       x15 ^= u << 18 | u >>> (32 - 18);
     }
 
-    o[0] = (byte)(x0 >>> 0 & 0xff);
+    o[0] = (byte)(x0 & 0xff);
     o[1] = (byte)(x0 >>> 8 & 0xff);
     o[2] = (byte)(x0 >>> 16 & 0xff);
     o[3] = (byte)(x0 >>> 24 & 0xff);
 
-    o[4] = (byte)(x5 >>> 0 & 0xff);
+    o[4] = (byte)(x5 & 0xff);
     o[5] = (byte)(x5 >>> 8 & 0xff);
     o[6] = (byte)(x5 >>> 16 & 0xff);
     o[7] = (byte)(x5 >>> 24 & 0xff);
 
-    o[8] = (byte)(x10 >>> 0 & 0xff);
+    o[8] = (byte)(x10 & 0xff);
     o[9] = (byte)(x10 >>> 8 & 0xff);
     o[10] = (byte)(x10 >>> 16 & 0xff);
     o[11] = (byte)(x10 >>> 24 & 0xff);
 
-    o[12] = (byte)(x15 >>> 0 & 0xff);
+    o[12] = (byte)(x15 & 0xff);
     o[13] = (byte)(x15 >>> 8 & 0xff);
     o[14] = (byte)(x15 >>> 16 & 0xff);
     o[15] = (byte)(x15 >>> 24 & 0xff);
 
-    o[16] = (byte)(x6 >>> 0 & 0xff);
+    o[16] = (byte)(x6 & 0xff);
     o[17] = (byte)(x6 >>> 8 & 0xff);
     o[18] = (byte)(x6 >>> 16 & 0xff);
     o[19] = (byte)(x6 >>> 24 & 0xff);
 
-    o[20] = (byte)(x7 >>> 0 & 0xff);
+    o[20] = (byte)(x7 & 0xff);
     o[21] = (byte)(x7 >>> 8 & 0xff);
     o[22] = (byte)(x7 >>> 16 & 0xff);
     o[23] = (byte)(x7 >>> 24 & 0xff);
 
-    o[24] = (byte)(x8 >>> 0 & 0xff);
+    o[24] = (byte)(x8 & 0xff);
     o[25] = (byte)(x8 >>> 8 & 0xff);
     o[26] = (byte)(x8 >>> 16 & 0xff);
     o[27] = (byte)(x8 >>> 24 & 0xff);
 
-    o[28] = (byte)(x9 >>> 0 & 0xff);
+    o[28] = (byte)(x9 & 0xff);
     o[29] = (byte)(x9 >>> 8 & 0xff);
     o[30] = (byte)(x9 >>> 16 & 0xff);
     o[31] = (byte)(x9 >>> 24 & 0xff);
@@ -1180,8 +1174,9 @@ public final class TweetNaclFast {
   // "expand 32-byte k"
   private static final byte[] sigma = {101, 120, 112, 97, 110, 100, 32, 51, 50, 45, 98, 121, 116, 101, 32, 107};
 
-  private static int cryptoStreamSalsa20Xor(final byte[] c, int cpos, byte[] m, int mpos, long b, final byte[] n, final byte[] k) {
-    final byte[] z = new byte[16], x = new byte[64];
+  private static int cryptoStreamSalsa20Xor(final byte[] c, int cpos, final byte[] m, int mpos, long b, final byte[] n, final byte[] k) {
+    final byte[] z = new byte[16];
+    final byte[] x = new byte[64];
     int u, i;
     for (i = 0; i < 16; ++i)
       z[i] = 0;
@@ -1196,7 +1191,7 @@ public final class TweetNaclFast {
 
       u = 1;
       for (i = 8; i < 16; ++i) {
-        u = u + (z[i] & 0xff);
+        u += (z[i] & 0xff);
         z[i] = (byte)(u & 0xff);
         u >>>= 8;
       }
@@ -1216,7 +1211,8 @@ public final class TweetNaclFast {
   }
 
   public static int cryptoStreamSalsa20(final byte[] c, int cpos, long b, final byte[] n, final byte[] k) {
-    final byte[] z = new byte[16], x = new byte[64];
+    final byte[] z = new byte[16];
+    final byte[] x = new byte[64];
     int u, i;
     for (i = 0; i < 16; ++i)
       z[i] = 0;
@@ -1231,7 +1227,7 @@ public final class TweetNaclFast {
 
       u = 1;
       for (i = 8; i < 16; ++i) {
-        u = u + (z[i] & 0xff);
+        u += (z[i] & 0xff);
         z[i] = (byte)(u & 0xff);
         u >>>= 8;
       }
@@ -1253,8 +1249,7 @@ public final class TweetNaclFast {
     final byte[] s = new byte[32];
     cryptoCoreHsalsa20(s, n, k, sigma);
     final byte[] sn = new byte[8];
-    for (int i = 0; i < 8; ++i)
-      sn[i] = n[i + 16];
+    System.arraycopy(n, 16, sn, 0, 8);
 
     return cryptoStreamSalsa20(c, cpos, d, sn, s);
   }
@@ -1263,8 +1258,7 @@ public final class TweetNaclFast {
     final byte[] s = new byte[32];
     cryptoCoreHsalsa20(s, n, k, sigma);
     final byte[] sn = new byte[8];
-    for (int i = 0; i < 8; ++i)
-      sn[i] = n[i + 16];
+    System.arraycopy(n, 16, sn, 0, 8);
 
     return cryptoStreamSalsa20Xor(c, cpos, m, mpos, d, sn, s);
   }
@@ -1276,17 +1270,17 @@ public final class TweetNaclFast {
     return 0;
   }
 
-  public static int cryptoOneTimeAuth(final byte[] out, final byte[] m, int /* long */ n, byte[] k) {
+  public static int cryptoOneTimeAuth(final byte[] out, final byte[] m, final int /* long */ n, final byte[] k) {
     return cryptoOneTimeAuth(out, 0, m, 0, n, k);
   }
 
-  private static int cryptoOneTimeAuthVerify(final byte[] h, final int hoff, final byte[] m, final int moff, int /*long*/ n, final byte[] k) {
+  private static int cryptoOneTimeAuthVerify(final byte[] h, final int hoff, final byte[] m, final int moff, final int /*long*/ n, final byte[] k) {
     final byte[] x = new byte[16];
     cryptoOneTimeAuth(x, 0, m, moff, n, k);
     return cryptoVerify16(h, hoff, x, 0);
   }
 
-  public static int cryptoOneTimeAuthVerify(final byte[] h, final byte[] m, int /* long */ n, byte[] k) {
+  public static int cryptoOneTimeAuthVerify(final byte[] h, final byte[] m, final int /* long */ n, final byte[] k) {
     return cryptoOneTimeAuthVerify(h, 0, m, 0, n, k);
   }
 
@@ -1294,7 +1288,7 @@ public final class TweetNaclFast {
     return cryptoOneTimeAuthVerify(h, m, m != null ? m.length : 0, k);
   }
 
-  public static int cryptoSecretBox(final byte[] c, final byte[] m, int /* long */ d, byte[] n, byte[] k) {
+  public static int cryptoSecretBox(final byte[] c, final byte[] m, final int /* long */ d, final byte[] n, final byte[] k) {
     if (d < 32)
       return -1;
 
@@ -1303,7 +1297,7 @@ public final class TweetNaclFast {
     return 0;
   }
 
-  public static int cryptoSecretBoxOpen(final byte[] m, final byte[] c, int /* long */ d, byte[] n, byte[] k) {
+  public static int cryptoSecretBoxOpen(final byte[] m, final byte[] c, final int /* long */ d, final byte[] n, final byte[] k) {
     final byte[] x = new byte[32];
     if (d < 32)
       return -1;
@@ -1317,8 +1311,7 @@ public final class TweetNaclFast {
   }
 
   private static void set25519(final long[] r, final long[] a) {
-    for (int i = 0; i < 16; ++i)
-      r[i] = a[i];
+    System.arraycopy(a, 0, r, 0, 16);
   }
 
   private static void car25519(final long[] o) {
@@ -1337,7 +1330,8 @@ public final class TweetNaclFast {
   }
 
   private static void sel25519(final long[] p, final int poff, final long[] q, final int qoff, final int b) {
-    long t, c = -b;
+    long t;
+    final long c = -b;
     for (int i = 0; i < 16; ++i) {
       t = c & (p[i + poff] ^ q[i + qoff]);
       p[i + poff] ^= t;
@@ -1347,7 +1341,8 @@ public final class TweetNaclFast {
 
   private static void pack25519(final byte[] o, final long[] n, final int noff) {
     int i, j, b;
-    final long[] m = new long[16], t = new long[16];
+    final long[] m = new long[16];
+    final long[] t = new long[16];
     for (i = 0; i < 16; ++i)
       t[i] = n[i + noff];
 
@@ -1424,10 +1419,55 @@ public final class TweetNaclFast {
   }
 
   private static void M(final long[] o, final int ooff, final long[] a, final int aoff, final long[] b, final int boff) {
-    long v, c, t0 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0, t9 = 0, t10 = 0, t11 = 0, t12 = 0, t13 = 0, t14 = 0, t15 = 0, t16 = 0,
-        t17 = 0, t18 = 0, t19 = 0, t20 = 0, t21 = 0, t22 = 0, t23 = 0, t24 = 0, t25 = 0, t26 = 0, t27 = 0, t28 = 0, t29 = 0, t30 = 0, b0 = b[0 + boff],
-        b1 = b[1 + boff], b2 = b[2 + boff], b3 = b[3 + boff], b4 = b[4 + boff], b5 = b[5 + boff], b6 = b[6 + boff], b7 = b[7 + boff], b8 = b[8 + boff],
-        b9 = b[9 + boff], b10 = b[10 + boff], b11 = b[11 + boff], b12 = b[12 + boff], b13 = b[13 + boff], b14 = b[14 + boff], b15 = b[15 + boff];
+    long v;
+    long c;
+    long t0 = 0;
+    long t1 = 0;
+    long t2 = 0;
+    long t3 = 0;
+    long t4 = 0;
+    long t5 = 0;
+    long t6 = 0;
+    long t7 = 0;
+    long t8 = 0;
+    long t9 = 0;
+    long t10 = 0;
+    long t11 = 0;
+    long t12 = 0;
+    long t13 = 0;
+    long t14 = 0;
+    long t15 = 0;
+    long t16 = 0;
+    long t17 = 0;
+    long t18 = 0;
+    long t19 = 0;
+    long t20 = 0;
+    long t21 = 0;
+    long t22 = 0;
+    long t23 = 0;
+    long t24 = 0;
+    long t25 = 0;
+    long t26 = 0;
+    long t27 = 0;
+    long t28 = 0;
+    long t29 = 0;
+    long t30 = 0;
+    final long b0 = b[0 + boff];
+    final long b1 = b[1 + boff];
+    final long b2 = b[2 + boff];
+    final long b3 = b[3 + boff];
+    final long b4 = b[4 + boff];
+    final long b5 = b[5 + boff];
+    final long b6 = b[6 + boff];
+    final long b7 = b[7 + boff];
+    final long b8 = b[8 + boff];
+    final long b9 = b[9 + boff];
+    final long b10 = b[10 + boff];
+    final long b11 = b[11 + boff];
+    final long b12 = b[12 + boff];
+    final long b13 = b[13 + boff];
+    final long b14 = b[14 + boff];
+    final long b15 = b[15 + boff];
 
     v = a[0 + aoff];
     t0 += v * b0;
@@ -1885,7 +1925,12 @@ public final class TweetNaclFast {
     final byte[] z = new byte[32];
     final long[] x = new long[80];
     int r, i;
-    long[] a = new long[16], b = new long[16], c = new long[16], d = new long[16], e = new long[16], f = new long[16];
+    final long[] a = new long[16];
+    final long[] b = new long[16];
+    final long[] c = new long[16];
+    final long[] d = new long[16];
+    final long[] e = new long[16];
+    final long[] f = new long[16];
     for (i = 0; i < 31; ++i)
       z[i] = n[i];
 
@@ -1963,21 +2008,21 @@ public final class TweetNaclFast {
     return cryptoCoreHsalsa20(k, _0, s, sigma);
   }
 
-  public static int cryptoBoxAfterNm(final byte[] c, final byte[] m, int /* long */ d, byte[] n, byte[] k) {
+  public static int cryptoBoxAfterNm(final byte[] c, final byte[] m, final int /* long */ d, final byte[] n, final byte[] k) {
     return cryptoSecretBox(c, m, d, n, k);
   }
 
-  public static int cryptoBoxOpenAfterNm(final byte[] m, final byte[] c, int /* long */ d, byte[] n, byte[] k) {
+  public static int cryptoBoxOpenAfterNm(final byte[] m, final byte[] c, final int /* long */ d, final byte[] n, final byte[] k) {
     return cryptoSecretBoxOpen(m, c, d, n, k);
   }
 
-  public static int cryptoBox(final byte[] c, final byte[] m, int /* long */ d, byte[] n, byte[] y, byte[] x) {
+  public static int cryptoBox(final byte[] c, final byte[] m, final int /* long */ d, final byte[] n, final byte[] y, final byte[] x) {
     final byte[] k = new byte[32];
     cryptoBoxBeforeNm(k, y, x);
     return cryptoBoxAfterNm(c, m, d, n, k);
   }
 
-  public static int cryptoBoxOpen(final byte[] m, final byte[] c, int /* long */ d, byte[] n, byte[] y, byte[] x) {
+  public static int cryptoBoxOpen(final byte[] m, final byte[] c, final int /* long */ d, final byte[] n, final byte[] y, final byte[] x) {
     final byte[] k = new byte[32];
     cryptoBoxBeforeNm(k, y, x);
     return cryptoBoxOpenAfterNm(m, c, d, n, k);
@@ -2053,7 +2098,7 @@ public final class TweetNaclFast {
     set25519(p[3], gf0);
 
     for (int i = 255; i >= 0; --i) {
-      byte b = (byte)((s[i / 8 + soff] >>> (i & 7)) & 1);
+      final byte b = (byte)((s[i / 8 + soff] >>> (i & 7)) & 1);
 
       cswap(p, q, b);
       add(q, p);
@@ -2097,8 +2142,7 @@ public final class TweetNaclFast {
     scalarbase(p, d, 0);
     pack(pk, p);
 
-    for (int i = 0; i < 32; ++i)
-      sk[i + 32] = pk[i];
+    System.arraycopy(pk, 0, sk, 32, 32);
 
     return 0;
   }
@@ -2148,8 +2192,10 @@ public final class TweetNaclFast {
   }
 
   // TBD... 64bits of n
-  public static int cryptoSign(final byte[] sm, final long dummy /*smlen not used*/, final byte[] m, final int moff, int/*long*/ n, final byte[] sk) {
-    final byte[] d = new byte[64], h = new byte[64], r = new byte[64];
+  public static int cryptoSign(final byte[] sm, final long dummy /*smlen not used*/, final byte[] m, final int moff, final int/*long*/ n, final byte[] sk) {
+    final byte[] d = new byte[64];
+    final byte[] h = new byte[64];
+    final byte[] r = new byte[64];
     final long[] x = new long[64];
 
     final long[][] p = new long[4][];
@@ -2242,7 +2288,8 @@ public final class TweetNaclFast {
 
   // TBD 64bits of mlen
   public static int cryptoSignOpen(final byte[] m, final long dummy /*mlen not used*/, final byte[] sm, final int smoff, int/*long*/ n, final byte[] pk) {
-    final byte[] t = new byte[32], h = new byte[64];
+    final byte[] t = new byte[32];
+    final byte[] h = new byte[64];
 
     final long[][] p = new long[4][];
     p[0] = new long[16];

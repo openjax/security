@@ -17,19 +17,24 @@
 package org.openjax.security.nacl;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Hash algorithm, Implements SHA-512.
  */
 @SuppressWarnings("unused")
-public class Hash {
+public final class Hash {
   /** Length of hash in bytes. */
   public static final int hashLength = 64;
   private static final byte[] iv = {0x6a, 0x09, (byte)0xe6, 0x67, (byte)0xf3, (byte)0xbc, (byte)0xc9, 0x08, (byte)0xbb, 0x67, (byte)0xae, (byte)0x85, (byte)0x84, (byte)0xca, (byte)0xa7, 0x3b, 0x3c, 0x6e, (byte)0xf3, 0x72, (byte)0xfe, (byte)0x94, (byte)0xf8, 0x2b, (byte)0xa5, 0x4f, (byte)0xf5, 0x3a, 0x5f, 0x1d, 0x36, (byte)0xf1, 0x51, 0x0e, 0x52, 0x7f, (byte)0xad, (byte)0xe6, (byte)0x82, (byte)0xd1, (byte)0x9b, 0x05, 0x68, (byte)0x8c, 0x2b, 0x3e, 0x6c, 0x1f, 0x1f, (byte)0x83, (byte)0xd9, (byte)0xab, (byte)0xfb, 0x41, (byte)0xbd, 0x6b, 0x5b, (byte)0xe0, (byte)0xcd, 0x19, 0x13, 0x7e, 0x21, 0x79};
 
+  private Hash() {
+  }
+
   // TBD 64bits of n
   static int cryptoHash(final byte[] out, final byte[] m, final int moff, final int mlen, int n) {
-    final byte[] h = new byte[64], x = new byte[256];
+    final byte[] h = new byte[64];
+    final byte[] x = new byte[256];
     final long b = n;
     int i;
 
@@ -177,7 +182,7 @@ public class Hash {
     return out;
   }
 
-  public static byte[] sha512(final String message) throws UnsupportedEncodingException {
-    return sha512(message.getBytes("utf-8"));
+  public static byte[] sha512(final String message) {
+    return sha512(message.getBytes(StandardCharsets.UTF_8));
   }
 }

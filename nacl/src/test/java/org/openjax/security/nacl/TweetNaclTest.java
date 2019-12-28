@@ -19,7 +19,7 @@ package org.openjax.security.nacl;
 import static org.junit.Assert.*;
 import static org.openjax.security.nacl.TweetNacl.Box.*;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class TweetNaclTest {
   private static final String TAG = "TweetNaclTest";
 
   @Test
-  public void testBox() throws UnsupportedEncodingException {
+  public void testBox() {
     // keypair A
     final byte[] ska = new byte[32];
     for (int i = 0; i < 32; ++i)
@@ -38,15 +38,15 @@ public class TweetNaclTest {
 
     final KeyPair ka = TweetNacl.Box.keyPair(ska);
 
-    String skat = "";
+    final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; ++i)
-      skat += " " + ka.getSecretKey()[i];
+      skat.append(" ").append(ka.getSecretKey()[i]);
 
     logger.debug(TAG, "skat: " + skat);
 
-    String pkat = "";
+    final StringBuilder pkat = new StringBuilder();
     for (int i = 0; i < ka.getPublicKey().length; ++i)
-      pkat += " " + ka.getPublicKey()[i];
+      pkat.append(" ").append(ka.getPublicKey()[i]);
 
     logger.debug(TAG, "pkat: " + pkat);
 
@@ -57,15 +57,15 @@ public class TweetNaclTest {
 
     final KeyPair kb = TweetNacl.Box.keyPair(skb);
 
-    String skbt = "";
+    final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; ++i)
-      skbt += " " + kb.getSecretKey()[i];
+      skbt.append(" ").append(kb.getSecretKey()[i]);
 
     logger.debug(TAG, "skbt: " + skbt);
 
-    String pkbt = "";
+    final StringBuilder pkbt = new StringBuilder();
     for (int i = 0; i < kb.getPublicKey().length; ++i)
-      pkbt += " " + kb.getPublicKey()[i];
+      pkbt.append(" ").append(kb.getPublicKey()[i]);
 
     logger.debug(TAG, "pkbt: " + pkbt);
 
@@ -79,21 +79,21 @@ public class TweetNaclTest {
     String m0 = "Helloword, Am Tom ...";
 
     // cipher A -> B
-    final byte[] cab = pab.box(m0.getBytes("utf-8"));
-    String cabt = "";
+    final byte[] cab = pab.box(m0.getBytes(StandardCharsets.UTF_8));
+    final StringBuilder cabt = new StringBuilder();
     for (int i = 0; i < cab.length; ++i)
-      cabt += " " + cab[i];
+      cabt.append(" ").append(cab[i]);
 
     logger.debug(TAG, "cabt: " + cabt);
 
     final byte[] mba = pba.open(cab);
-    String mbat = "";
+    final StringBuilder mbat = new StringBuilder();
     for (int i = 0; i < mba.length; ++i)
-      mbat += " " + mba[i];
+      mbat.append(" ").append(mba[i]);
 
     logger.debug(TAG, "mbat: " + mbat);
 
-    final String nm0 = new String(mba, "utf-8");
+    final String nm0 = new String(mba, StandardCharsets.UTF_8);
     assertEquals("box/open string failed", nm0, nm0);
 
     // cipher B -> A
@@ -108,13 +108,13 @@ public class TweetNaclTest {
   }
 
   @Test
-  public void testBoxNonce() throws UnsupportedEncodingException {
+  public void testBoxNonce() {
     // explicit nonce
     final byte[] theNonce = new byte[nonceLength];
     TweetNacl.randombytes(theNonce, nonceLength);
-    String theNoncet = "";
+    final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; ++i)
-      theNoncet += " " + theNonce[i];
+      theNoncet.append(" ").append(theNonce[i]);
 
     logger.debug(TAG, "BoxNonce: " + theNoncet);
 
@@ -125,15 +125,15 @@ public class TweetNaclTest {
 
     final KeyPair ka = TweetNacl.Box.keyPair(ska);
 
-    String skat = "";
+    final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; ++i)
-      skat += " " + ka.getSecretKey()[i];
+      skat.append(" ").append(ka.getSecretKey()[i]);
 
     logger.debug(TAG, "skat: " + skat);
 
-    String pkat = "";
+    final StringBuilder pkat = new StringBuilder();
     for (int i = 0; i < ka.getPublicKey().length; ++i)
-      pkat += " " + ka.getPublicKey()[i];
+      pkat.append(" ").append(ka.getPublicKey()[i]);
 
     logger.debug(TAG, "pkat: " + pkat);
 
@@ -144,15 +144,15 @@ public class TweetNaclTest {
 
     final KeyPair kb = TweetNacl.Box.keyPair(skb);
 
-    String skbt = "";
+    final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; ++i)
-      skbt += " " + kb.getSecretKey()[i];
+      skbt.append(" ").append(kb.getSecretKey()[i]);
 
     logger.debug(TAG, "skbt: " + skbt);
 
-    String pkbt = "";
+    final StringBuilder pkbt = new StringBuilder();
     for (int i = 0; i < kb.getPublicKey().length; ++i)
-      pkbt += " " + kb.getPublicKey()[i];
+      pkbt.append(" ").append(kb.getPublicKey()[i]);
     logger.debug(TAG, "pkbt: " + pkbt);
 
     // peer A -> B
@@ -165,21 +165,21 @@ public class TweetNaclTest {
     final String m0 = "Helloword, Am Tom ...";
 
     // cipher A -> B
-    byte[] cab = pab.box(m0.getBytes("utf-8"), theNonce);
-    String cabt = "";
+    byte[] cab = pab.box(m0.getBytes(StandardCharsets.UTF_8), theNonce);
+    final StringBuilder cabt = new StringBuilder();
     for (int i = 0; i < cab.length; ++i)
-      cabt += " " + cab[i];
+      cabt.append(" ").append(cab[i]);
 
     logger.debug(TAG, "cabt: " + cabt);
 
     final byte[] mba = pba.open(cab, theNonce);
-    String mbat = "";
+    final StringBuilder mbat = new StringBuilder();
     for (int i = 0; i < mba.length; ++i)
-      mbat += " " + mba[i];
+      mbat.append(" ").append(mba[i]);
 
     logger.debug(TAG, "mbat: " + mbat);
 
-    String nm0 = new String(mba, "utf-8");
+    String nm0 = new String(mba, StandardCharsets.UTF_8);
     assertEquals("box/open string failed (with nonce)", nm0, m0);
 
     // cipher B -> A
@@ -194,7 +194,7 @@ public class TweetNaclTest {
   }
 
   @Test
-  public void testSecretBox() throws UnsupportedEncodingException {
+  public void testSecretBox() {
     // shared key
     final byte[] shk = new byte[TweetNacl.SecretBox.keyLength];
     for (int i = 0; i < shk.length; ++i)
@@ -213,7 +213,7 @@ public class TweetNaclTest {
     logger.debug(TAG, "stress on secret box@" + m0);
 
     for (int t = 0; t < 19; t++, m0 += m0) {
-      final byte[] mb0 = m0.getBytes("utf-8");
+      final byte[] mb0 = m0.getBytes(StandardCharsets.UTF_8);
       logger.debug(TAG, "\n\n\tstress/" + (mb0.length / 1000.0) + "kB: " + t + " times");
 
       /*
@@ -237,21 +237,21 @@ public class TweetNaclTest {
        * i ++) mbat += " "+mba[i]; logger.debug(TAG, mbat);
        */
 
-      final String nm0 = new String(mba, "utf-8");
+      final String nm0 = new String(mba, StandardCharsets.UTF_8);
       assertEquals("secret box/open failed", nm0, m0);
     }
   }
 
   @Test
-  public void testSecretBoxNonce() throws UnsupportedEncodingException {
+  public void testSecretBoxNonce() {
     // shared key plus explicit nonce
 
     // explicit nonce
     final byte[] theNonce = new byte[nonceLength];
     TweetNacl.randombytes(theNonce, nonceLength);
-    String theNoncet = "";
+    final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; ++i)
-      theNoncet += " " + theNonce[i];
+      theNoncet.append(" ").append(theNonce[i]);
 
     logger.debug(TAG, "SecretBoxNonce: " + theNoncet);
 
@@ -272,7 +272,7 @@ public class TweetNaclTest {
     logger.debug(TAG, "stress on secret box with explicit nonce@" + m0);
 
     for (int t = 0; t < 19; t++, m0 += m0) {
-      final byte[] mb0 = m0.getBytes("utf-8");
+      final byte[] mb0 = m0.getBytes(StandardCharsets.UTF_8);
       logger.debug(TAG, "\n\n\tstress/" + (mb0.length / 1000.0) + "kB: " + t + " times");
 
       /*
@@ -296,13 +296,13 @@ public class TweetNaclTest {
        * i ++) mbat += " "+mba[i]; logger.debug(TAG, mbat);
        */
 
-      final String nm0 = new String(mba, "utf-8");
+      final String nm0 = new String(mba, StandardCharsets.UTF_8);
       assertEquals("secret box/open failed (with nonce)", nm0, m0);
     }
   }
 
   @Test
-  public void testSign() throws UnsupportedEncodingException {
+  public void testSign() {
     // keypair A
     final KeyPair ka = TweetNacl.Signature.keyPair();
 
@@ -320,21 +320,21 @@ public class TweetNaclTest {
 
     // signature A -> B
     logger.debug(TAG, "\nsign...@" + System.currentTimeMillis());
-    final byte[] sab = pab.sign(m0.getBytes("utf-8"));
+    final byte[] sab = pab.sign(m0.getBytes(StandardCharsets.UTF_8));
     logger.debug(TAG, "...sign@" + System.currentTimeMillis());
 
-    String sgt = "sign@" + m0 + ": ";
+    final StringBuilder sgt = new StringBuilder("sign@" + m0 + ": ");
     for (int i = 0; i < TweetNacl.Signature.signatureLength; ++i)
-      sgt += " " + sab[i];
+      sgt.append(" ").append(sab[i]);
 
-    logger.debug(TAG, sgt);
+    logger.debug(TAG, sgt.toString());
 
     logger.debug(TAG, "verify...@" + System.currentTimeMillis());
     final byte[] oba = pba.open(sab);
     logger.debug(TAG, "...verify@" + System.currentTimeMillis());
 
     assertNotNull("verify failed", oba);
-    String nm0 = new String(oba, "utf-8");
+    String nm0 = new String(oba, StandardCharsets.UTF_8);
     assertEquals("sign failed", nm0, m0);
 
     // keypair C
@@ -344,15 +344,15 @@ public class TweetNaclTest {
 
     final KeyPair kc = TweetNacl.Signature.keyPairFromSeed(seed);
 
-    String skct = "";
+    final StringBuilder skct = new StringBuilder();
     for (int i = 0; i < kc.getSecretKey().length; ++i)
-      skct += " " + kc.getSecretKey()[i];
+      skct.append(" ").append(kc.getSecretKey()[i]);
 
     logger.debug(TAG, "skct: " + skct);
 
-    String pkct = "";
+    final StringBuilder pkct = new StringBuilder();
     for (int i = 0; i < kc.getPublicKey().length; ++i)
-      pkct += " " + kc.getPublicKey()[i];
+      pkct.append(" ").append(kc.getPublicKey()[i]);
 
     logger.debug(TAG, "pkct: " + pkct);
 
@@ -360,21 +360,21 @@ public class TweetNaclTest {
     final TweetNacl.Signature pcc = new TweetNacl.Signature(kc.getPublicKey(), kc.getSecretKey());
 
     logger.debug(TAG, "\nself-sign...@" + System.currentTimeMillis());
-    byte[] scc = pcc.sign(m0.getBytes("utf-8"));
+    byte[] scc = pcc.sign(m0.getBytes(StandardCharsets.UTF_8));
     logger.debug(TAG, "...self-sign@" + System.currentTimeMillis());
 
-    String ssc = "self-sign@" + m0 + ": ";
+    final StringBuilder ssc = new StringBuilder("self-sign@" + m0 + ": ");
     for (int i = 0; i < TweetNacl.Signature.signatureLength; ++i)
-      ssc += " " + scc[i];
+      ssc.append(" ").append(scc[i]);
 
-    logger.debug(TAG, ssc);
+    logger.debug(TAG, ssc.toString());
 
     logger.debug(TAG, "self-verify...@" + System.currentTimeMillis());
     final byte[] occ = pcc.open(scc);
     logger.debug(TAG, "...self-verify@" + System.currentTimeMillis());
 
     assertNotNull("self-verify failed", occ);
-    nm0 = new String(occ, "utf-8");
+    nm0 = new String(occ, StandardCharsets.UTF_8);
     assertEquals("self-sign failed", nm0, m0);
   }
 
@@ -382,19 +382,19 @@ public class TweetNaclTest {
    * SHA-512
    */
   @Test
-  public void testHash() throws UnsupportedEncodingException {
+  public void testHash() {
     final String m0 = "Helloword, Am Tom ...";
-    final byte[] b0 = m0.getBytes("utf-8");
+    final byte[] b0 = m0.getBytes(StandardCharsets.UTF_8);
 
     logger.debug(TAG, "\nsha512...@" + System.currentTimeMillis());
     final byte[] hash = Hash.sha512(b0);
     logger.debug(TAG, "...sha512@" + System.currentTimeMillis());
 
-    String hst = "sha512@" + m0 + "/" + b0.length + ": ";
+    final StringBuilder hst = new StringBuilder("sha512@" + m0 + "/" + b0.length + ": ");
     for (int i = 0; i < hash.length; ++i)
-      hst += " " + hash[i];
+      hst.append(" ").append(hash[i]);
 
-    logger.debug(TAG, hst);
+    logger.debug(TAG, hst.toString());
   }
 
   @Test

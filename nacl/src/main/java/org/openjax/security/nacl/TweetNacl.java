@@ -64,7 +64,7 @@ public final class TweetNacl {
       final long nonce = this.nonce.get();
       final byte[] n = new byte[nonceLength];
       for (int i = 0; i < nonceLength; i += 8) {
-        n[i + 0] = (byte)(nonce >>> 0);
+        n[i + 0] = (byte)(nonce);
         n[i + 1] = (byte)(nonce >>> 8);
         n[i + 2] = (byte)(nonce >>> 16);
         n[i + 3] = (byte)(nonce >>> 24);
@@ -110,15 +110,12 @@ public final class TweetNacl {
 
       // cipher buffer
       final byte[] c = new byte[m.length];
-      for (int i = 0; i < message.length; ++i)
-        m[i + zerobytesLength] = message[i];
-
+      System.arraycopy(message, 0, m, 32, message.length);
       if (cryptoBox(c, m, m.length, nonce, theirPublicKey, mySecretKey) != 0)
         return null;
 
       final byte[] ret = new byte[c.length - boxzerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = c[i + boxzerobytesLength];
+      System.arraycopy(c, 16, ret, 0, ret.length);
 
       return ret;
     }
@@ -152,15 +149,13 @@ public final class TweetNacl {
 
       // message buffer
       final byte[] m = new byte[c.length];
-      for (int i = 0; i < box.length; ++i)
-        c[i + boxzerobytesLength] = box[i];
+      System.arraycopy(box, 0, c, 16, box.length);
 
       if (cryptoBoxOpen(m, c, c.length, nonce, theirPublicKey, mySecretKey) != 0)
         return null;
 
       final byte[] ret = new byte[m.length - zerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = m[i + zerobytesLength];
+      System.arraycopy(m, 32, ret, 0, ret.length);
 
       return ret;
     }
@@ -211,15 +206,13 @@ public final class TweetNacl {
 
       // cipher buffer
       final byte[] c = new byte[m.length];
-      for (int i = 0; i < message.length; ++i)
-        m[i + zerobytesLength] = message[i];
+      System.arraycopy(message, 0, m, 32, message.length);
 
       if (cryptoBoxAfterNm(c, m, m.length, nonce, sharedKey) != 0)
         return null;
 
       final byte[] ret = new byte[c.length - boxzerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = c[i + boxzerobytesLength];
+      System.arraycopy(c, 16, ret, 0, ret.length);
 
       return ret;
     }
@@ -253,15 +246,13 @@ public final class TweetNacl {
 
       // message buffer
       final byte[] m = new byte[c.length];
-      for (int i = 0; i < box.length; ++i)
-        c[i + boxzerobytesLength] = box[i];
+      System.arraycopy(box, 0, c, 16, box.length);
 
       if (cryptoBoxOpenAfterNm(m, c, c.length, nonce, sharedKey) != 0)
         return null;
 
       final byte[] ret = new byte[m.length - zerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = m[i + zerobytesLength];
+      System.arraycopy(m, 32, ret, 0, ret.length);
 
       return ret;
     }
@@ -306,8 +297,7 @@ public final class TweetNacl {
       final byte[] pk = kp.getPublicKey();
 
       // copy sk
-      for (int i = 0; i < sk.length; ++i)
-        sk[i] = secretKey[i];
+      System.arraycopy(secretKey, 0, sk, 0, sk.length);
 
       cryptoScalarMultBase(pk, sk);
       return kp;
@@ -347,7 +337,7 @@ public final class TweetNacl {
       final long nonce = this.nonce.get();
       final byte[] n = new byte[nonceLength];
       for (int i = 0; i < nonceLength; i += 8) {
-        n[i + 0] = (byte)(nonce >>> 0);
+        n[i + 0] = (byte)(nonce);
         n[i + 1] = (byte)(nonce >>> 8);
         n[i + 2] = (byte)(nonce >>> 16);
         n[i + 3] = (byte)(nonce >>> 24);
@@ -391,15 +381,13 @@ public final class TweetNacl {
 
       // cipher buffer
       final byte[] c = new byte[m.length];
-      for (int i = 0; i < message.length; ++i)
-        m[i + zerobytesLength] = message[i];
+      System.arraycopy(message, 0, m, 32, message.length);
 
       if (cryptoSecretBox(c, m, m.length, nonce, key) != 0)
         return null;
 
       final byte[] ret = new byte[c.length - boxzerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = c[i + boxzerobytesLength];
+      System.arraycopy(c, 16, ret, 0, ret.length);
 
       return ret;
     }
@@ -433,15 +421,13 @@ public final class TweetNacl {
 
       // message buffer
       final byte[] m = new byte[c.length];
-      for (int i = 0; i < box.length; ++i)
-        c[i + boxzerobytesLength] = box[i];
+      System.arraycopy(box, 0, c, 16, box.length);
 
       if (cryptoSecretBoxOpen(m, c, c.length, nonce, key) != 0)
         return null;
 
       final byte[] ret = new byte[m.length - zerobytesLength];
-      for (int i = 0; i < ret.length; ++i)
-        ret[i] = m[i + zerobytesLength];
+      System.arraycopy(m, 32, ret, 0, ret.length);
 
       return ret;
     }
@@ -466,6 +452,9 @@ public final class TweetNacl {
    * Scalar multiplication, Implements curve25519.
    */
   public static final class ScalarMult {
+    private ScalarMult() {
+    }
+
     /**
      * Multiplies an integer n by a group element p.
      *
@@ -489,7 +478,7 @@ public final class TweetNacl {
      * @return The resulting group element.
      */
     public static byte[] scalseMult(final byte[] n) {
-      if (!(n.length == scalarLength))
+      if (n.length != scalarLength)
         return null;
 
       final byte[] q = new byte[scalarLength];
@@ -508,8 +497,8 @@ public final class TweetNacl {
    * Signature algorithm, Implements ed25519.
    */
   public static final class Signature {
-    private byte[] theirPublicKey;
-    private byte[] mySecretKey;
+    private final byte[] theirPublicKey;
+    private final byte[] mySecretKey;
 
     public Signature(final byte[] theirPublicKey, final byte[] mySecretKey) {
       this.theirPublicKey = theirPublicKey;
@@ -548,8 +537,7 @@ public final class TweetNacl {
 
       // message
       final byte[] msg = new byte[signedMessage.length - signatureLength];
-      for (int i = 0; i < msg.length; ++i)
-        msg[i] = signedMessage[i + signatureLength];
+      System.arraycopy(signedMessage, 64, msg, 0, msg.length);
 
       return msg;
     }
@@ -563,8 +551,7 @@ public final class TweetNacl {
     public byte[] detached(final byte[] message) {
       final byte[] signedMsg = this.sign(message);
       final byte[] sig = new byte[signatureLength];
-      for (int i = 0; i < sig.length; ++i)
-        sig[i] = signedMsg[i];
+      System.arraycopy(signedMsg, 0, sig, 0, sig.length);
 
       return sig;
     }
@@ -586,11 +573,9 @@ public final class TweetNacl {
 
       final byte[] sm = new byte[signatureLength + message.length];
       final byte[] m = new byte[signatureLength + message.length];
-      for (int i = 0; i < signatureLength; ++i)
-        sm[i] = signature[i];
+      System.arraycopy(signature, 0, sm, 0, signatureLength);
 
-      for (int i = 0; i < message.length; ++i)
-        sm[i + signatureLength] = message[i];
+      System.arraycopy(message, 0, sm, 64, message.length);
 
       return cryptoSignOpen(m, -1, sm, sm.length, theirPublicKey) >= 0;
     }
@@ -612,12 +597,11 @@ public final class TweetNacl {
       final byte[] sk = kp.getSecretKey();
 
       // copy sk
-      for (int i = 0; i < kp.getSecretKey().length; ++i)
-        sk[i] = secretKey[i];
+      System.arraycopy(secretKey, 0, sk, 0, kp.getSecretKey().length);
 
       // copy pk from sk
-      for (int i = 0; i < kp.getPublicKey().length; ++i)
-        pk[i] = secretKey[32 + i]; // hard-copy
+      // hard-copy
+      System.arraycopy(secretKey, 32, pk, 0, kp.getPublicKey().length);
 
       return kp;
     }
@@ -628,8 +612,7 @@ public final class TweetNacl {
       final byte[] sk = kp.getSecretKey();
 
       // copy sk
-      for (int i = 0; i < seedLength; ++i)
-        sk[i] = seed[i];
+      System.arraycopy(seed, 0, sk, 0, seedLength);
 
       // generate pk from sk
       cryptoSignKeyPair(pk, sk, true);
@@ -800,11 +783,12 @@ public final class TweetNacl {
   private static final byte[] sigma = {101, 120, 112, 97, 110, 100, 32, 51, 50, 45, 98, 121, 116, 101, 32, 107};
 
   private static int cryptoStreamSalsa20Xor(final byte[] c, final byte[] m, long b, final byte[] n, final int noff, final int nlen, final byte[] k) {
-    final byte[] z = new byte[16], x = new byte[64];
-    int u, i;
     if (0 == b)
       return 0;
 
+    final byte[] z = new byte[16];
+    final byte[] x = new byte[64];
+    int u, i;
     for (i = 0; i < 16; ++i)
       z[i] = 0;
     for (i = 0; i < 8; ++i)
@@ -942,8 +926,7 @@ public final class TweetNacl {
   }
 
   private static void set25519(final long[] r, final long[] a) {
-    for (int i = 0; i < 16; ++i)
-      r[i] = a[i];
+    System.arraycopy(a, 0, r, 0, 16);
   }
 
   private static void car25519(final long[] o, final int ooff, final int olen) {
@@ -957,7 +940,8 @@ public final class TweetNacl {
   }
 
   private static void sel25519(final long[] p, final int poff, final int plen, final long[] q, final int qoff, final int qlen, final int b) {
-    long t, c = -b;
+    long t;
+    final long c = -b;
     for (int i = 0; i < 16; ++i) {
       t = c & (p[i + poff] ^ q[i + qoff]);
       p[i + poff] ^= t;
@@ -967,7 +951,8 @@ public final class TweetNacl {
 
   private static void pack25519(final byte[] o, final long[] n, final int noff, final int nlen) {
     int i, j, b;
-    final long[] m = new long[16], t = new long[16];
+    final long[] m = new long[16];
+    final long[] t = new long[16];
     for (i = 0; i < 16; ++i)
       t[i] = n[i + noff];
 
@@ -994,7 +979,8 @@ public final class TweetNacl {
   }
 
   private static int neq25519(final long[] a, final long[] b) {
-    final byte[] c = new byte[32], d = new byte[32];
+    final byte[] c = new byte[32];
+    final byte[] d = new byte[32];
     pack25519(c, a, 0, a.length);
     pack25519(d, b, 0, b.length);
     return cryptoVerify32(c, 0, c.length, d, 0, d.length);
@@ -1243,7 +1229,7 @@ public final class TweetNacl {
     set25519(p[3], gf0);
 
     for (int i = 255; i >= 0; --i) {
-      byte b = (byte)((s[i / 8 + soff] >> (i & 7)) & 1);
+      final byte b = (byte)((s[i / 8 + soff] >> (i & 7)) & 1);
 
       cswap(p, q, b);
       add(q, p);
@@ -1285,8 +1271,7 @@ public final class TweetNacl {
 
     scalarbase(p, d, 0, d.length);
     pack(pk, p);
-    for (int i = 0; i < 32; ++i)
-      sk[i + 32] = pk[i];
+    System.arraycopy(pk, 0, sk, 32, 32);
 
     return 0;
   }
@@ -1338,12 +1323,14 @@ public final class TweetNacl {
   }
 
   // TBD... 64bits of n
-  public static int cryptoSign(final byte[] sm, final long dummy /*smlen not used*/, final byte[] m, int/* long*/ n, final byte[] sk) {
-    final byte[] d = new byte[64], h = new byte[64], r = new byte[64];
+  public static int cryptoSign(final byte[] sm, final long dummy /*smlen not used*/, final byte[] m, final int/* long*/ n, final byte[] sk) {
+    final byte[] d = new byte[64];
+    final byte[] h = new byte[64];
+    final byte[] r = new byte[64];
 
-    long[] x = new long[64];
+    final long[] x = new long[64];
 
-    long[][] p = new long[4][];
+    final long[][] p = new long[4][];
     p[0] = new long[16];
     p[1] = new long[16];
     p[2] = new long[16];
@@ -1433,7 +1420,8 @@ public final class TweetNacl {
 
   public static int cryptoSignOpen(final byte[] m, final long dummy /*mlen not used*/, final byte[] sm, int/*long*/ n, final byte[] pk) {
     int i;
-    final byte[] t = new byte[32], h = new byte[64];
+    final byte[] t = new byte[32];
+    final byte[] h = new byte[64];
 
     final long[][] p = new long[4][];
     p[0] = new long[16];
@@ -1480,12 +1468,12 @@ public final class TweetNacl {
   private static final SecureRandom random = new SecureRandom();
 
   public static void randombytes(final byte[] x, final int len) {
-    int ret = len % 8;
+    final int ret = len % 8;
     long rnd;
     for (int i = 0; i < len - ret; i += 8) {
       rnd = random.nextLong();
 
-      x[i + 0] = (byte)(rnd >>> 0);
+      x[i + 0] = (byte)(rnd);
       x[i + 1] = (byte)(rnd >>> 8);
       x[i + 2] = (byte)(rnd >>> 16);
       x[i + 3] = (byte)(rnd >>> 24);

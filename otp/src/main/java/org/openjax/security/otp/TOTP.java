@@ -17,7 +17,6 @@
 package org.openjax.security.otp;
 
 import org.libj.lang.Strings;
-import org.libj.math.FastMath;
 import org.libj.util.Hexadecimal;
 import org.openjax.security.crypto.Hmac;
 
@@ -29,9 +28,11 @@ public final class TOTP {
    * @param time A hex encoded value that reflects a time.
    * @param length The number of digits to return.
    * @param hmac The crypto function.
-   * @return A numeric String in base 10 that includes {@code length} number
-   *         of digits.
+   * @return A numeric String in base 10 that includes {@code length} number of
+   *         digits.
    * @throws IllegalArgumentException If {@code key} is invalid.
+   * @throws NullPointerException If {@code key}, {@code time}, or {@code hmac}
+   *           is null.
    */
   public static String generateTOTP(final String key, String time, final int length, final Hmac hmac) {
     if (time.length() % 2 == 1)
@@ -55,7 +56,7 @@ public final class TOTP {
     final int offset = hash[hash.length - 1] & 0xf;
     final int binary = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16) | ((hash[offset + 2] & 0xff) << 8) | (hash[offset + 3] & 0xff);
 
-    final String otp = Long.toString(binary % FastMath.pow(10, length));
+    final String otp = Long.toString(binary % (long)StrictMath.pow(10, length));
     return otp.length() < length ? Strings.repeat("0", length - otp.length()) + otp : otp;
   }
 
