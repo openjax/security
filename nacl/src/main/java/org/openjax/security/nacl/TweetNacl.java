@@ -29,7 +29,6 @@ public final class TweetNacl {
    */
   public static final class Box {
     private final AtomicLong nonce;
-
     private final byte[] theirPublicKey;
     private final byte[] mySecretKey;
     private byte[] sharedKey;
@@ -63,15 +62,15 @@ public final class TweetNacl {
       // generate nonce
       final long nonce = this.nonce.get();
       final byte[] n = new byte[nonceLength];
-      for (int i = 0; i < nonceLength; i += 8) {
-        n[i + 0] = (byte)(nonce);
-        n[i + 1] = (byte)(nonce >>> 8);
-        n[i + 2] = (byte)(nonce >>> 16);
-        n[i + 3] = (byte)(nonce >>> 24);
-        n[i + 4] = (byte)(nonce >>> 32);
-        n[i + 5] = (byte)(nonce >>> 40);
-        n[i + 6] = (byte)(nonce >>> 48);
-        n[i + 7] = (byte)(nonce >>> 56);
+      for (int i = 0; i < nonceLength;) {
+        n[i++] = (byte)(nonce);
+        n[i++] = (byte)(nonce >>> 8);
+        n[i++] = (byte)(nonce >>> 16);
+        n[i++] = (byte)(nonce >>> 24);
+        n[i++] = (byte)(nonce >>> 32);
+        n[i++] = (byte)(nonce >>> 40);
+        n[i++] = (byte)(nonce >>> 48);
+        n[i++] = (byte)(nonce >>> 56);
       }
 
       return n;
@@ -336,15 +335,15 @@ public final class TweetNacl {
       // generate nonce
       final long nonce = this.nonce.get();
       final byte[] n = new byte[nonceLength];
-      for (int i = 0; i < nonceLength; i += 8) {
-        n[i + 0] = (byte)(nonce);
-        n[i + 1] = (byte)(nonce >>> 8);
-        n[i + 2] = (byte)(nonce >>> 16);
-        n[i + 3] = (byte)(nonce >>> 24);
-        n[i + 4] = (byte)(nonce >>> 32);
-        n[i + 5] = (byte)(nonce >>> 40);
-        n[i + 6] = (byte)(nonce >>> 48);
-        n[i + 7] = (byte)(nonce >>> 56);
+      for (int i = 0; i < nonceLength;) {
+        n[i++] = (byte)(nonce);
+        n[i++] = (byte)(nonce >>> 8);
+        n[i++] = (byte)(nonce >>> 16);
+        n[i++] = (byte)(nonce >>> 24);
+        n[i++] = (byte)(nonce >>> 32);
+        n[i++] = (byte)(nonce >>> 40);
+        n[i++] = (byte)(nonce >>> 48);
+        n[i++] = (byte)(nonce >>> 56);
       }
 
       return n;
@@ -823,7 +822,7 @@ public final class TweetNacl {
     return 0;
   }
 
-  public static int cryptoStreamSalsa20Xor(final byte[] c, final byte[] m, final long b, final byte[] n, final byte[] k) {
+  private static int cryptoStreamSalsa20Xor(final byte[] c, final byte[] m, final long b, final byte[] n, final byte[] k) {
     return cryptoStreamSalsa20Xor(c, m, b, n, 0, n.length, k);
   }
 
@@ -831,17 +830,17 @@ public final class TweetNacl {
     return cryptoStreamSalsa20Xor(c, null, d, n, noff, nlen, k);
   }
 
-  public static int cryptoStreamSalsa20(final byte[] c, final long d, final byte[] n, final byte[] k) {
+  private static int cryptoStreamSalsa20(final byte[] c, final long d, final byte[] n, final byte[] k) {
     return cryptoStreamSalsa20(c, d, n, 0, n.length, k);
   }
 
-  public static int cryptoStream(final byte[] c, final long d, final byte[] n, final byte[] k) {
+  private static int cryptoStream(final byte[] c, final long d, final byte[] n, final byte[] k) {
     final byte[] s = new byte[32];
     cryptoCoreHsalsa20(s, n, k, sigma);
     return cryptoStreamSalsa20(c, d, n, 16, n.length - 16, s);
   }
 
-  public static int cryptoStreamXor(final byte[] c, final byte[] m, final long d, final byte[] n, final byte[] k) {
+  private static int cryptoStreamXor(final byte[] c, final byte[] m, final long d, final byte[] n, final byte[] k) {
     final byte[] s = new byte[32];
     cryptoCoreHsalsa20(s, n, k, sigma);
     return cryptoStreamSalsa20Xor(c, m, d, n, 16, n.length - 16, s);
@@ -1418,7 +1417,7 @@ public final class TweetNacl {
     return 0;
   }
 
-  public static int cryptoSignOpen(final byte[] m, final long dummy /*mlen not used*/, final byte[] sm, int/*long*/ n, final byte[] pk) {
+  private static int cryptoSignOpen(final byte[] m, final long dummy /*mlen not used*/, final byte[] sm, int/*long*/ n, final byte[] pk) {
     int i;
     final byte[] t = new byte[32];
     final byte[] h = new byte[64];
@@ -1470,17 +1469,17 @@ public final class TweetNacl {
   public static void randombytes(final byte[] x, final int len) {
     final int ret = len % 8;
     long rnd;
-    for (int i = 0; i < len - ret; i += 8) {
+    for (int i = 0; i < len - ret;) {
       rnd = random.nextLong();
 
-      x[i + 0] = (byte)(rnd);
-      x[i + 1] = (byte)(rnd >>> 8);
-      x[i + 2] = (byte)(rnd >>> 16);
-      x[i + 3] = (byte)(rnd >>> 24);
-      x[i + 4] = (byte)(rnd >>> 32);
-      x[i + 5] = (byte)(rnd >>> 40);
-      x[i + 6] = (byte)(rnd >>> 48);
-      x[i + 7] = (byte)(rnd >>> 56);
+      x[i++] = (byte)(rnd);
+      x[i++] = (byte)(rnd >>> 8);
+      x[i++] = (byte)(rnd >>> 16);
+      x[i++] = (byte)(rnd >>> 24);
+      x[i++] = (byte)(rnd >>> 32);
+      x[i++] = (byte)(rnd >>> 40);
+      x[i++] = (byte)(rnd >>> 48);
+      x[i++] = (byte)(rnd >>> 56);
     }
 
     if (ret > 0) {
