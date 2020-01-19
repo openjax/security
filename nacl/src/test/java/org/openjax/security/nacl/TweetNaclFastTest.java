@@ -106,13 +106,13 @@ public class TweetNaclFastTest {
 
     final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; i++)
-      skat.append(" ").append(ka.getSecretKey()[i]);
+      skat.append(' ').append(ka.getSecretKey()[i]);
 
     logger.debug(TAG, "skat: " + skat);
 
     final StringBuilder pkat = new StringBuilder();
     for (int i = 0; i < ka.getPublicKey().length; i++)
-      pkat.append(" ").append(ka.getPublicKey()[i]);
+      pkat.append(' ').append(ka.getPublicKey()[i]);
 
     logger.debug(TAG, "pkat: " + pkat);
 
@@ -125,13 +125,13 @@ public class TweetNaclFastTest {
 
     final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; i++)
-      skbt.append(" ").append(kb.getSecretKey()[i]);
+      skbt.append(' ').append(kb.getSecretKey()[i]);
 
     logger.debug(TAG, "skbt: " + skbt);
 
     final StringBuilder pkbt = new StringBuilder();
     for (int i = 0; i < kb.getPublicKey().length; i++)
-      pkbt.append(" ").append(kb.getPublicKey()[i]);
+      pkbt.append(' ').append(kb.getPublicKey()[i]);
 
     logger.debug(TAG, "pkbt: " + pkbt);
 
@@ -148,14 +148,14 @@ public class TweetNaclFastTest {
     final byte[] cab = pab.box(m0.getBytes(StandardCharsets.UTF_8));
     final StringBuilder cabt = new StringBuilder();
     for (int i = 0; i < cab.length; i++)
-      cabt.append(" ").append(cab[i]);
+      cabt.append(' ').append(cab[i]);
 
     logger.debug(TAG, "cabt: " + cabt);
 
     final byte[] mba = pba.open(cab);
     final StringBuilder mbat = new StringBuilder();
     for (int i = 0; i < mba.length; i++)
-      mbat.append(" ").append(mba[i]);
+      mbat.append(' ').append(mba[i]);
 
     logger.debug(TAG, "mbat: " + mbat);
 
@@ -183,7 +183,7 @@ public class TweetNaclFastTest {
     logger.debug(TAG, "BoxNonce Hex test Equal: \"" + java.util.Arrays.equals(theNonce, theNonce3) + "\"");
     final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; i++)
-      theNoncet.append(" ").append(theNonce[i]);
+      theNoncet.append(' ').append(theNonce[i]);
 
     logger.debug(TAG, "BoxNonce: " + theNoncet);
     logger.debug(TAG, "BoxNonce: \"" + TweetNaclFast.hexEncodeToString(theNonce) + "\"");
@@ -197,13 +197,13 @@ public class TweetNaclFastTest {
 
     final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; i++)
-      skat.append(" ").append(ka.getSecretKey()[i]);
+      skat.append(' ').append(ka.getSecretKey()[i]);
 
     logger.debug(TAG, "skat: " + skat);
 
     final StringBuilder pkat = new StringBuilder();
     for (int i = 0; i < ka.getPublicKey().length; i++)
-      pkat.append(" ").append(ka.getPublicKey()[i]);
+      pkat.append(' ').append(ka.getPublicKey()[i]);
 
     logger.debug(TAG, "pkat: " + pkat);
 
@@ -216,13 +216,13 @@ public class TweetNaclFastTest {
 
     final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; i++)
-      skbt.append(" ").append(kb.getSecretKey()[i]);
+      skbt.append(' ').append(kb.getSecretKey()[i]);
 
     logger.debug(TAG, "skbt: " + skbt);
 
     final StringBuilder pkbt = new StringBuilder();
     for (int i = 0; i < kb.getPublicKey().length; i++)
-      pkbt.append(" ").append(kb.getPublicKey()[i]);
+      pkbt.append(' ').append(kb.getPublicKey()[i]);
 
     logger.debug(TAG, "pkbt: " + pkbt);
 
@@ -239,14 +239,14 @@ public class TweetNaclFastTest {
     final byte[] cab = pab.box(m0.getBytes(StandardCharsets.UTF_8), theNonce);
     final StringBuilder cabt = new StringBuilder();
     for (int i = 0; i < cab.length; i++)
-      cabt.append(" ").append(cab[i]);
+      cabt.append(' ').append(cab[i]);
 
     logger.debug(TAG, "cabt: " + cabt);
 
     final byte[] mba = pba.open(cab, theNonce);
     final StringBuilder mbat = new StringBuilder();
     for (int i = 0; i < mba.length; i++)
-      mbat.append(" ").append(mba[i]);
+      mbat.append(' ').append(mba[i]);
 
     logger.debug(TAG, "mbat: " + mbat);
 
@@ -319,7 +319,7 @@ public class TweetNaclFastTest {
     final byte[] theNonce = TweetNaclFast.makeSecretBoxNonce();
     final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; i++)
-      theNoncet.append(" ").append(theNonce[i]);
+      theNoncet.append(' ').append(theNonce[i]);
 
     logger.debug(TAG, "SecretBoxNonce: " + theNoncet);
 
@@ -395,7 +395,7 @@ public class TweetNaclFastTest {
 
     final StringBuilder sgt = new StringBuilder("sign@" + m0 + ": ");
     for (int i = 0; i < TweetNaclFast.Signature.signatureLength; i++)
-      sgt.append(" ").append(sab[i]);
+      sgt.append(' ').append(sab[i]);
 
     logger.debug(TAG, sgt.toString());
 
@@ -416,13 +416,13 @@ public class TweetNaclFastTest {
 
     final StringBuilder skct = new StringBuilder();
     for (int i = 0; i < kc.getSecretKey().length; i++)
-      skct.append(" ").append(kc.getSecretKey()[i]);
+      skct.append(' ').append(kc.getSecretKey()[i]);
 
     logger.debug(TAG, "skct: " + skct);
 
     final StringBuilder pkct = new StringBuilder();
     for (int i = 0; i < kc.getPublicKey().length; i++)
-      pkct.append(" ").append(kc.getPublicKey()[i]);
+      pkct.append(' ').append(kc.getPublicKey()[i]);
 
     logger.debug(TAG, "pkct: " + pkct);
 
@@ -435,7 +435,7 @@ public class TweetNaclFastTest {
 
     final StringBuilder ssc = new StringBuilder("self-sign@" + m0 + ": ");
     for (int i = 0; i < TweetNaclFast.Signature.signatureLength; i++)
-      ssc.append(" ").append(scc[i]);
+      ssc.append(' ').append(scc[i]);
 
     logger.debug(TAG, ssc.toString());
 
@@ -462,7 +462,7 @@ public class TweetNaclFastTest {
 
     final StringBuilder hst = new StringBuilder("sha512@" + m0 + "/" + b0.length + ": ");
     for (int i = 0; i < hash.length; i++)
-      hst.append(" ").append(hash[i]);
+      hst.append(' ').append(hash[i]);
 
     logger.debug(TAG, hst.toString());
   }
@@ -477,7 +477,7 @@ public class TweetNaclFastTest {
     testSignDetached("e56f0eef73ade8f79bc1d16a99cbc5e4995afd8c14adb49410ecd957aecc8d02");
   }
 
-  private static void testSignDetached(String seedStr) {
+  private static void testSignDetached(final String seedStr) {
     logger.debug(TAG, "seed:@" + System.currentTimeMillis());
 
     final byte[] seed = TweetNaclFast.hexDecode(seedStr);
@@ -493,7 +493,7 @@ public class TweetNaclFastTest {
 
     final TweetNaclFast.Signature s2 = new TweetNaclFast.Signature(kp.getPublicKey(), null);
     logger.debug(TAG, "\nverify...@" + System.currentTimeMillis());
-    final boolean result = s2.detached_verify(bytes, signature);
+    final boolean result = s2.detachedVerify(bytes, signature);
     logger.debug(TAG, "...verify@" + System.currentTimeMillis());
 
     assertTrue("verify failed", result);

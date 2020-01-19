@@ -40,13 +40,13 @@ public class TweetNaclTest {
 
     final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; ++i)
-      skat.append(" ").append(ka.getSecretKey()[i]);
+      skat.append(' ').append(ka.getSecretKey()[i]);
 
     logger.debug(TAG, "skat: " + skat);
 
     final StringBuilder pkat = new StringBuilder();
     for (int i = 0; i < ka.getPublicKey().length; ++i)
-      pkat.append(" ").append(ka.getPublicKey()[i]);
+      pkat.append(' ').append(ka.getPublicKey()[i]);
 
     logger.debug(TAG, "pkat: " + pkat);
 
@@ -59,13 +59,13 @@ public class TweetNaclTest {
 
     final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; ++i)
-      skbt.append(" ").append(kb.getSecretKey()[i]);
+      skbt.append(' ').append(kb.getSecretKey()[i]);
 
     logger.debug(TAG, "skbt: " + skbt);
 
     final StringBuilder pkbt = new StringBuilder();
     for (int i = 0; i < kb.getPublicKey().length; ++i)
-      pkbt.append(" ").append(kb.getPublicKey()[i]);
+      pkbt.append(' ').append(kb.getPublicKey()[i]);
 
     logger.debug(TAG, "pkbt: " + pkbt);
 
@@ -82,14 +82,14 @@ public class TweetNaclTest {
     final byte[] cab = pab.box(m0.getBytes(StandardCharsets.UTF_8));
     final StringBuilder cabt = new StringBuilder();
     for (int i = 0; i < cab.length; ++i)
-      cabt.append(" ").append(cab[i]);
+      cabt.append(' ').append(cab[i]);
 
     logger.debug(TAG, "cabt: " + cabt);
 
     final byte[] mba = pba.open(cab);
     final StringBuilder mbat = new StringBuilder();
     for (int i = 0; i < mba.length; ++i)
-      mbat.append(" ").append(mba[i]);
+      mbat.append(' ').append(mba[i]);
 
     logger.debug(TAG, "mbat: " + mbat);
 
@@ -114,7 +114,7 @@ public class TweetNaclTest {
     TweetNacl.randombytes(theNonce, nonceLength);
     final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; ++i)
-      theNoncet.append(" ").append(theNonce[i]);
+      theNoncet.append(' ').append(theNonce[i]);
 
     logger.debug(TAG, "BoxNonce: " + theNoncet);
 
@@ -127,13 +127,13 @@ public class TweetNaclTest {
 
     final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; ++i)
-      skat.append(" ").append(ka.getSecretKey()[i]);
+      skat.append(' ').append(ka.getSecretKey()[i]);
 
     logger.debug(TAG, "skat: " + skat);
 
     final StringBuilder pkat = new StringBuilder();
     for (int i = 0; i < ka.getPublicKey().length; ++i)
-      pkat.append(" ").append(ka.getPublicKey()[i]);
+      pkat.append(' ').append(ka.getPublicKey()[i]);
 
     logger.debug(TAG, "pkat: " + pkat);
 
@@ -146,13 +146,13 @@ public class TweetNaclTest {
 
     final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; ++i)
-      skbt.append(" ").append(kb.getSecretKey()[i]);
+      skbt.append(' ').append(kb.getSecretKey()[i]);
 
     logger.debug(TAG, "skbt: " + skbt);
 
     final StringBuilder pkbt = new StringBuilder();
     for (int i = 0; i < kb.getPublicKey().length; ++i)
-      pkbt.append(" ").append(kb.getPublicKey()[i]);
+      pkbt.append(' ').append(kb.getPublicKey()[i]);
     logger.debug(TAG, "pkbt: " + pkbt);
 
     // peer A -> B
@@ -168,14 +168,14 @@ public class TweetNaclTest {
     byte[] cab = pab.box(m0.getBytes(StandardCharsets.UTF_8), theNonce);
     final StringBuilder cabt = new StringBuilder();
     for (int i = 0; i < cab.length; ++i)
-      cabt.append(" ").append(cab[i]);
+      cabt.append(' ').append(cab[i]);
 
     logger.debug(TAG, "cabt: " + cabt);
 
     final byte[] mba = pba.open(cab, theNonce);
     final StringBuilder mbat = new StringBuilder();
     for (int i = 0; i < mba.length; ++i)
-      mbat.append(" ").append(mba[i]);
+      mbat.append(' ').append(mba[i]);
 
     logger.debug(TAG, "mbat: " + mbat);
 
@@ -251,7 +251,7 @@ public class TweetNaclTest {
     TweetNacl.randombytes(theNonce, nonceLength);
     final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; ++i)
-      theNoncet.append(" ").append(theNonce[i]);
+      theNoncet.append(' ').append(theNonce[i]);
 
     logger.debug(TAG, "SecretBoxNonce: " + theNoncet);
 
@@ -325,7 +325,7 @@ public class TweetNaclTest {
 
     final StringBuilder sgt = new StringBuilder("sign@" + m0 + ": ");
     for (int i = 0; i < TweetNacl.Signature.signatureLength; ++i)
-      sgt.append(" ").append(sab[i]);
+      sgt.append(' ').append(sab[i]);
 
     logger.debug(TAG, sgt.toString());
 
@@ -346,13 +346,13 @@ public class TweetNaclTest {
 
     final StringBuilder skct = new StringBuilder();
     for (int i = 0; i < kc.getSecretKey().length; ++i)
-      skct.append(" ").append(kc.getSecretKey()[i]);
+      skct.append(' ').append(kc.getSecretKey()[i]);
 
     logger.debug(TAG, "skct: " + skct);
 
     final StringBuilder pkct = new StringBuilder();
     for (int i = 0; i < kc.getPublicKey().length; ++i)
-      pkct.append(" ").append(kc.getPublicKey()[i]);
+      pkct.append(' ').append(kc.getPublicKey()[i]);
 
     logger.debug(TAG, "pkct: " + pkct);
 
@@ -365,7 +365,7 @@ public class TweetNaclTest {
 
     final StringBuilder ssc = new StringBuilder("self-sign@" + m0 + ": ");
     for (int i = 0; i < TweetNacl.Signature.signatureLength; ++i)
-      ssc.append(" ").append(scc[i]);
+      ssc.append(' ').append(scc[i]);
 
     logger.debug(TAG, ssc.toString());
 
@@ -392,7 +392,7 @@ public class TweetNaclTest {
 
     final StringBuilder hst = new StringBuilder("sha512@" + m0 + "/" + b0.length + ": ");
     for (int i = 0; i < hash.length; ++i)
-      hst.append(" ").append(hash[i]);
+      hst.append(' ').append(hash[i]);
 
     logger.debug(TAG, hst.toString());
   }
