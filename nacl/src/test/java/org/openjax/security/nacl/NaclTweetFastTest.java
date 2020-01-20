@@ -19,14 +19,25 @@ package org.openjax.security.nacl;
 import static org.junit.Assert.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TweetNaclFastTest {
-  private static final Logger logger = LoggerFactory.getLogger(TweetNaclFastTest.class);
+public class NaclTweetFastTest {
+  private static final Logger logger = LoggerFactory.getLogger(NaclTweetFastTest.class);
   private static final String TAG = "TweetNaclFastTest";
+
+  private static final String HEXES = "0123456789ABCDEF";
+
+  private static String hexEncodeToString(final byte[] raw) {
+    final StringBuilder hex = new StringBuilder(2 * raw.length);
+    for (final byte b : raw)
+      hex.append(HEXES.charAt((b & 0xF0) >> 4)).append(HEXES.charAt((b & 0x0F)));
+
+    return hex.toString();
+  }
 
   /**
    * Curve25519 test vectors to help ensure correctness and interoperability
@@ -56,43 +67,43 @@ public class TweetNaclFastTest {
     logger.debug(TAG, "testBoxKalium: test vectors from Kalium project");
 
     // explicit nonce
-    final byte[] theNonce = TweetNaclFast.hexDecode(BOX_NONCE);
-    logger.debug(TAG, "BOX_NONCE: \"" + TweetNaclFast.hexEncodeToString(theNonce) + "\"");
+    final byte[] theNonce = NaclTweetFast.hexDecode(BOX_NONCE);
+    logger.debug(TAG, "BOX_NONCE: \"" + hexEncodeToString(theNonce) + "\"");
 
     // keypair A
-    final byte[] ska = TweetNaclFast.hexDecode(ALICE_PRIVATE_KEY);
-    final KeyPair ka = NaclUtil.FAST.keyPair(ska);
+    final byte[] ska = NaclTweetFast.hexDecode(ALICE_PRIVATE_KEY);
+    final KeyPair ka = Nacl.TweetFast.keyPairForBox(ska);
 
-    logger.debug(TAG, "ska: \"" + TweetNaclFast.hexEncodeToString(ka.getSecretKey()) + "\"");
-    logger.debug(TAG, "pka: \"" + TweetNaclFast.hexEncodeToString(ka.getPublicKey()) + "\"");
+    logger.debug(TAG, "ska: \"" + hexEncodeToString(ka.getSecretKey()) + "\"");
+    logger.debug(TAG, "pka: \"" + hexEncodeToString(ka.getPublicKey()) + "\"");
 
     // keypair B
-    final byte[] skb = TweetNaclFast.hexDecode(BOB_PRIVATE_KEY);
-    final KeyPair kb = NaclUtil.FAST.keyPair(skb);
+    final byte[] skb = NaclTweetFast.hexDecode(BOB_PRIVATE_KEY);
+    final KeyPair kb = Nacl.TweetFast.keyPairForBox(skb);
 
-    logger.debug(TAG, "skb: \"" + TweetNaclFast.hexEncodeToString(kb.getSecretKey()) + "\"");
-    logger.debug(TAG, "pkb: \"" + TweetNaclFast.hexEncodeToString(kb.getPublicKey()) + "\"");
+    logger.debug(TAG, "skb: \"" + hexEncodeToString(kb.getSecretKey()) + "\"");
+    logger.debug(TAG, "pkb: \"" + hexEncodeToString(kb.getPublicKey()) + "\"");
 
     // peer A -> B
-    final Nacl.Box pabFast = NaclUtil.FAST.newBox(kb.getPublicKey(), ka.getSecretKey());
+    final Nacl.Box pabFast = Nacl.TweetFast.newBox(kb.getPublicKey(), ka.getSecretKey());
 
     // peer B -> A
-    final Nacl.Box pbaFast = NaclUtil.FAST.newBox(ka.getPublicKey(), kb.getSecretKey());
+    final Nacl.Box pbaFast = Nacl.TweetFast.newBox(ka.getPublicKey(), kb.getSecretKey());
 
     // messages
     logger.debug(TAG, "BOX_MESSAGE: \n" + BOX_MESSAGE.toUpperCase());
     logger.debug(TAG, "BOX_CIPHERTEXT: \n" + BOX_CIPHERTEXT.toUpperCase());
 
     // cipher A -> B
-    final byte[] cabFast = pabFast.box(TweetNaclFast.hexDecode(BOX_MESSAGE), theNonce);
-    logger.debug(TAG, "cabFast: \n" + TweetNaclFast.hexEncodeToString(cabFast));
+    final byte[] cabFast = pabFast.box(NaclTweetFast.hexDecode(BOX_MESSAGE), theNonce);
+    logger.debug(TAG, "cabFast: \n" + hexEncodeToString(cabFast));
 
-    assertEquals("!!! TweetNaclFast Box::box/open failed Kalium compatibility !!!", BOX_CIPHERTEXT.toUpperCase(), TweetNaclFast.hexEncodeToString(cabFast));
+    assertEquals("!!! TweetNaclFast Box::box/open failed Kalium compatibility !!!", BOX_CIPHERTEXT.toUpperCase(), hexEncodeToString(cabFast));
 
     final byte[] mbaFastFast = pbaFast.open(cabFast, theNonce);
-    logger.debug(TAG, "mbaFastFast: \n" + TweetNaclFast.hexEncodeToString(mbaFastFast));
+    logger.debug(TAG, "mbaFastFast: \n" + hexEncodeToString(mbaFastFast));
 
-    assertEquals("!!! TweetNaclFast Box::box/open failed Kalium compatibility !!!", BOX_MESSAGE.toUpperCase(), TweetNaclFast.hexEncodeToString(mbaFastFast));
+    assertEquals("!!! TweetNaclFast Box::box/open failed Kalium compatibility !!!", BOX_MESSAGE.toUpperCase(), hexEncodeToString(mbaFastFast));
   }
 
   @Test
@@ -102,7 +113,7 @@ public class TweetNaclFastTest {
     for (int i = 0; i < 32; ++i)
       ska[i] = 0;
 
-    final KeyPair ka = NaclUtil.FAST.keyPair(ska);
+    final KeyPair ka = Nacl.TweetFast.keyPairForBox(ska);
 
     final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; ++i)
@@ -121,7 +132,7 @@ public class TweetNaclFastTest {
     for (int i = 0; i < 32; ++i)
       skb[i] = 1;
 
-    final KeyPair kb = NaclUtil.FAST.keyPair(skb);
+    final KeyPair kb = Nacl.TweetFast.keyPairForBox(skb);
 
     final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; ++i)
@@ -136,10 +147,10 @@ public class TweetNaclFastTest {
     logger.debug(TAG, "pkbt: " + pkbt);
 
     // peer A -> B
-    final Nacl.Box pab = NaclUtil.FAST.newBox(kb.getPublicKey(), ka.getSecretKey(), 0);
+    final Nacl.Box pab = Nacl.TweetFast.newBox(kb.getPublicKey(), ka.getSecretKey(), 0);
 
     // peer B -> A
-    final Nacl.Box pba = NaclUtil.FAST.newBox(ka.getPublicKey(), kb.getSecretKey(), 0);
+    final Nacl.Box pba = Nacl.TweetFast.newBox(ka.getPublicKey(), kb.getSecretKey(), 0);
 
     // messages
     final String m0 = "Helloword, Am Tom ...";
@@ -178,22 +189,22 @@ public class TweetNaclFastTest {
   @Test
   public void testBoxNonce() {
     // explicit nonce
-    final byte[] theNonce = TweetNaclFast.makeBoxNonce();
-    final byte[] theNonce3 = TweetNaclFast.hexDecode(TweetNaclFast.hexEncodeToString(theNonce));
-    logger.debug(TAG, "BoxNonce Hex test Equal: \"" + java.util.Arrays.equals(theNonce, theNonce3) + "\"");
+    final byte[] theNonce = NaclTweetFast.makeBoxNonce();
+    final byte[] theNonce3 = NaclTweetFast.hexDecode(hexEncodeToString(theNonce));
+    logger.debug(TAG, "BoxNonce Hex test Equal: \"" + Arrays.equals(theNonce, theNonce3) + "\"");
     final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; ++i)
       theNoncet.append(' ').append(theNonce[i]);
 
     logger.debug(TAG, "BoxNonce: " + theNoncet);
-    logger.debug(TAG, "BoxNonce: \"" + TweetNaclFast.hexEncodeToString(theNonce) + "\"");
+    logger.debug(TAG, "BoxNonce: \"" + hexEncodeToString(theNonce) + "\"");
 
     // keypair A
     final byte[] ska = new byte[32];
     for (int i = 0; i < 32; ++i)
       ska[i] = 0;
 
-    final KeyPair ka = NaclUtil.FAST.keyPair(ska);
+    final KeyPair ka = Nacl.TweetFast.keyPairForBox(ska);
 
     final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; ++i)
@@ -212,7 +223,7 @@ public class TweetNaclFastTest {
     for (int i = 0; i < 32; ++i)
       skb[i] = 1;
 
-    final KeyPair kb = NaclUtil.FAST.keyPair(skb);
+    final KeyPair kb = Nacl.TweetFast.keyPairForBox(skb);
 
     final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; ++i)
@@ -227,10 +238,10 @@ public class TweetNaclFastTest {
     logger.debug(TAG, "pkbt: " + pkbt);
 
     // peer A -> B
-    final Nacl.Box pab = NaclUtil.FAST.newBox(kb.getPublicKey(), ka.getSecretKey());
+    final Nacl.Box pab = Nacl.TweetFast.newBox(kb.getPublicKey(), ka.getSecretKey());
 
     // peer B -> A
-    final Nacl.Box pba = NaclUtil.FAST.newBox(ka.getPublicKey(), kb.getSecretKey());
+    final Nacl.Box pba = Nacl.TweetFast.newBox(ka.getPublicKey(), kb.getSecretKey());
 
     // messages
     String m0 = "Helloword, Am Tom ...";
@@ -267,15 +278,15 @@ public class TweetNaclFastTest {
   @Test
   public void testSecretBox() {
     // shared key
-    final byte[] shk = new byte[TweetNaclFast.keyLength];
+    final byte[] shk = new byte[NaclTweetFast.keyLength];
     for (int i = 0; i < shk.length; ++i)
       shk[i] = 0x66;
 
     // peer A -> B
-    final Nacl.SecretBox pab = NaclUtil.FAST.newSecretBox(shk, 0);
+    final Nacl.SecretBox pab = Nacl.TweetFast.newSecretBox(shk, 0);
 
     // peer B -> A
-    final Nacl.SecretBox pba = NaclUtil.FAST.newSecretBox(shk, 0);
+    final Nacl.SecretBox pba = Nacl.TweetFast.newSecretBox(shk, 0);
 
     // messages
     String m0 = "Helloword, Am Tom ...";
@@ -316,7 +327,7 @@ public class TweetNaclFastTest {
   @Test
   public void testSecretBoxNonce() {
     // explicit nonce
-    final byte[] theNonce = TweetNaclFast.makeSecretBoxNonce();
+    final byte[] theNonce = NaclTweetFast.makeSecretBoxNonce();
     final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; ++i)
       theNoncet.append(' ').append(theNonce[i]);
@@ -324,15 +335,15 @@ public class TweetNaclFastTest {
     logger.debug(TAG, "SecretBoxNonce: " + theNoncet);
 
     // shared key
-    final byte[] shk = new byte[TweetNaclFast.keyLength];
+    final byte[] shk = new byte[NaclTweetFast.keyLength];
     for (int i = 0; i < shk.length; ++i)
       shk[i] = 0x66;
 
     // peer A -> B
-    final Nacl.SecretBox pab = NaclUtil.FAST.newSecretBox(shk);
+    final Nacl.SecretBox pab = Nacl.TweetFast.newSecretBox(shk);
 
     // peer B -> A
-    final Nacl.SecretBox pba = NaclUtil.FAST.newSecretBox(shk);
+    final Nacl.SecretBox pba = Nacl.TweetFast.newSecretBox(shk);
 
     // messages
     String m0 = "Helloword, Am Tom ...";
@@ -374,16 +385,16 @@ public class TweetNaclFastTest {
   @Test
   public void testSign() {
     // keypair A
-    final KeyPair ka = NaclUtil.FAST.keyPairForSignature();
+    final KeyPair ka = Nacl.TweetFast.keyPairForSig();
 
     // keypair B
-    final KeyPair kb = NaclUtil.FAST.keyPairForSignature();
+    final KeyPair kb = Nacl.TweetFast.keyPairForSig();
 
     // peer A -> B
-    final Nacl.Signature pab = NaclUtil.FAST.newSignature(kb.getPublicKey(), ka.getSecretKey());
+    final Nacl.Signature pab = Nacl.TweetFast.newSignature(kb.getPublicKey(), ka.getSecretKey());
 
     // peer B -> A
-    final Nacl.Signature pba = NaclUtil.FAST.newSignature(ka.getPublicKey(), kb.getSecretKey());
+    final Nacl.Signature pba = Nacl.TweetFast.newSignature(ka.getPublicKey(), kb.getSecretKey());
 
     // messages
     String m0 = "Helloword, Am Tom ...";
@@ -394,7 +405,7 @@ public class TweetNaclFastTest {
     logger.debug(TAG, "...sign@" + System.currentTimeMillis());
 
     final StringBuilder sgt = new StringBuilder("sign@" + m0 + ": ");
-    for (int i = 0; i < TweetNaclFast.Signature.signatureLength; ++i)
+    for (int i = 0; i < NaclTweetFast.Signature.signatureLength; ++i)
       sgt.append(' ').append(sab[i]);
 
     logger.debug(TAG, sgt.toString());
@@ -408,11 +419,11 @@ public class TweetNaclFastTest {
     assertEquals("sign failed", nm0, m0);
 
     // keypair C
-    final byte[] seed = new byte[TweetNaclFast.seedLength];
+    final byte[] seed = new byte[NaclTweetFast.seedLength];
     for (int i = 0; i < seed.length; ++i)
       seed[i] = 0x66;
 
-    final KeyPair kc = NaclUtil.FAST.keyPairFromSeed(seed);
+    final KeyPair kc = Nacl.TweetFast.keyPairFromSeedForSig(seed);
 
     final StringBuilder skct = new StringBuilder();
     for (int i = 0; i < kc.getSecretKey().length; ++i)
@@ -427,14 +438,14 @@ public class TweetNaclFastTest {
     logger.debug(TAG, "pkct: " + pkct);
 
     // self-signed
-    final Nacl.Signature pcc = NaclUtil.FAST.newSignature(kc.getPublicKey(), kc.getSecretKey());
+    final Nacl.Signature pcc = Nacl.TweetFast.newSignature(kc.getPublicKey(), kc.getSecretKey());
 
     logger.debug(TAG, "\nself-sign...@" + System.currentTimeMillis());
     final byte[] scc = pcc.sign(m0.getBytes(StandardCharsets.UTF_8));
     logger.debug(TAG, "...self-sign@" + System.currentTimeMillis());
 
     final StringBuilder ssc = new StringBuilder("self-sign@" + m0 + ": ");
-    for (int i = 0; i < TweetNaclFast.Signature.signatureLength; ++i)
+    for (int i = 0; i < NaclTweetFast.Signature.signatureLength; ++i)
       ssc.append(' ').append(scc[i]);
 
     logger.debug(TAG, ssc.toString());
@@ -457,7 +468,7 @@ public class TweetNaclFastTest {
     final byte[] b0 = m0.getBytes(StandardCharsets.UTF_8);
 
     logger.debug(TAG, "\nsha512...@" + System.currentTimeMillis());
-    final byte[] hash = HashFast.sha512(b0);
+    final byte[] hash = Hash.TweetFast.sha512(b0);
     logger.debug(TAG, "...sha512@" + System.currentTimeMillis());
 
     final StringBuilder hst = new StringBuilder("sha512@" + m0 + "/" + b0.length + ": ");
@@ -480,18 +491,18 @@ public class TweetNaclFastTest {
   private static void testSignDetached(final String seedStr) {
     logger.debug(TAG, "seed:@" + System.currentTimeMillis());
 
-    final byte[] seed = TweetNaclFast.hexDecode(seedStr);
-    final KeyPair kp = NaclUtil.FAST.keyPairFromSeed(seed);
+    final byte[] seed = NaclTweetFast.hexDecode(seedStr);
+    final KeyPair kp = Nacl.TweetFast.keyPairFromSeedForSig(seed);
 
     final String testString = "test string";
     final byte[] bytes = testString.getBytes();
 
-    final Nacl.Signature s1 = NaclUtil.FAST.newSignature(null, kp.getSecretKey());
+    final Nacl.Signature s1 = Nacl.TweetFast.newSignature(null, kp.getSecretKey());
     logger.debug(TAG, "\ndetached...@" + System.currentTimeMillis());
     final byte[] signature = s1.detached(bytes);
     logger.debug(TAG, "...detached@" + System.currentTimeMillis());
 
-    final Nacl.Signature s2 = NaclUtil.FAST.newSignature(kp.getPublicKey(), null);
+    final Nacl.Signature s2 = Nacl.TweetFast.newSignature(kp.getPublicKey(), null);
     logger.debug(TAG, "\nverify...@" + System.currentTimeMillis());
     final boolean result = s2.detachedVerify(bytes, signature);
     logger.debug(TAG, "...verify@" + System.currentTimeMillis());

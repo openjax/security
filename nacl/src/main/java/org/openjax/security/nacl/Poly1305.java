@@ -20,7 +20,7 @@ package org.openjax.security.nacl;
  * Port of Andrew Moon's Poly1305-donna-16. Public domain.
  * https://github.com/floodyberry/poly1305-donna
  */
-public class Poly1305 {
+class Poly1305 {
   private final byte[] buffer;
   private final int[] r;
   private final int[] h;
@@ -28,7 +28,7 @@ public class Poly1305 {
   private int leftover;
   private int fin;
 
-  public Poly1305(final byte[] key) {
+  Poly1305(final byte[] key) {
     this.buffer = new byte[16];
     this.r = new int[10];
     this.h = new int[10];
@@ -73,7 +73,7 @@ public class Poly1305 {
     this.pad[7] = key[30] & 0xff | (key[31] & 0xff) << 8;
   }
 
-  public Poly1305 blocks(final byte[] m, int mpos, int bytes) {
+  Poly1305 blocks(final byte[] m, int mpos, int bytes) {
     final int hibit = this.fin != 0 ? 0 : (1 << 11);
     int t0, t1, t2, t3, t4, t5, t6, t7, c;
     int d0, d1, d2, d3, d4, d5, d6, d7, d8, d9;
@@ -305,7 +305,7 @@ public class Poly1305 {
     return this;
   }
 
-  public Poly1305 finish(final byte[] mac, final int macpos) {
+  Poly1305 finish(final byte[] mac, final int macpos) {
     final int[] g = new int[10];
     int c, mask, f, i;
 
@@ -402,7 +402,7 @@ public class Poly1305 {
     return this;
   }
 
-  public Poly1305 update(final byte[] m, int mpos, int bytes) {
+  Poly1305 update(final byte[] m, int mpos, int bytes) {
     int i, want;
     if (this.leftover != 0) {
       want = (16 - this.leftover);

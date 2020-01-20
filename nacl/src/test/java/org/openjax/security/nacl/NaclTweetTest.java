@@ -17,7 +17,6 @@
 package org.openjax.security.nacl;
 
 import static org.junit.Assert.*;
-import static org.openjax.security.nacl.Nacl.Box.*;
 
 import java.nio.charset.StandardCharsets;
 
@@ -25,8 +24,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TweetNaclTest {
-  private static final Logger logger = LoggerFactory.getLogger(TweetNaclTest.class);
+public class NaclTweetTest {
+  private static final Logger logger = LoggerFactory.getLogger(NaclTweetTest.class);
   private static final String TAG = "TweetNaclTest";
 
   @Test
@@ -36,7 +35,7 @@ public class TweetNaclTest {
     for (int i = 0; i < 32; ++i)
       ska[i] = 0;
 
-    final KeyPair ka = NaclUtil.ORIG.keyPair(ska);
+    final KeyPair ka = Nacl.Tweet.keyPairForBox(ska);
 
     final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; ++i)
@@ -55,7 +54,7 @@ public class TweetNaclTest {
     for (int i = 0; i < 32; ++i)
       skb[i] = 1;
 
-    final KeyPair kb = NaclUtil.ORIG.keyPair(skb);
+    final KeyPair kb = Nacl.Tweet.keyPairForBox(skb);
 
     final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; ++i)
@@ -70,10 +69,10 @@ public class TweetNaclTest {
     logger.debug(TAG, "pkbt: " + pkbt);
 
     // peer A -> B
-    Nacl.Box pab = NaclUtil.ORIG.newBox(kb.getPublicKey(), ka.getSecretKey(), 0);
+    Nacl.Box pab = Nacl.Tweet.newBox(kb.getPublicKey(), ka.getSecretKey(), 0);
 
     // peer B -> A
-    Nacl.Box pba = NaclUtil.ORIG.newBox(ka.getPublicKey(), kb.getSecretKey(), 0);
+    Nacl.Box pba = Nacl.Tweet.newBox(ka.getPublicKey(), kb.getSecretKey(), 0);
 
     // messages
     String m0 = "Helloword, Am Tom ...";
@@ -110,8 +109,8 @@ public class TweetNaclTest {
   @Test
   public void testBoxNonce() {
     // explicit nonce
-    final byte[] theNonce = new byte[nonceLength];
-    NaclUtil.ORIG.randombytes(theNonce, nonceLength);
+    final byte[] theNonce = new byte[Nacl.nonceLength];
+    Nacl.Tweet.randombytes(theNonce, Nacl.nonceLength);
     final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; ++i)
       theNoncet.append(' ').append(theNonce[i]);
@@ -123,7 +122,7 @@ public class TweetNaclTest {
     for (int i = 0; i < 32; ++i)
       ska[i] = 0;
 
-    final KeyPair ka = NaclUtil.ORIG.keyPair(ska);
+    final KeyPair ka = Nacl.Tweet.keyPairForBox(ska);
 
     final StringBuilder skat = new StringBuilder();
     for (int i = 0; i < ka.getSecretKey().length; ++i)
@@ -142,7 +141,7 @@ public class TweetNaclTest {
     for (int i = 0; i < 32; ++i)
       skb[i] = 1;
 
-    final KeyPair kb = NaclUtil.ORIG.keyPair(skb);
+    final KeyPair kb = Nacl.Tweet.keyPairForBox(skb);
 
     final StringBuilder skbt = new StringBuilder();
     for (int i = 0; i < kb.getSecretKey().length; ++i)
@@ -156,10 +155,10 @@ public class TweetNaclTest {
     logger.debug(TAG, "pkbt: " + pkbt);
 
     // peer A -> B
-    final Nacl.Box pab = NaclUtil.ORIG.newBox(kb.getPublicKey(), ka.getSecretKey());
+    final Nacl.Box pab = Nacl.Tweet.newBox(kb.getPublicKey(), ka.getSecretKey());
 
     // peer B -> A
-    final Nacl.Box pba = NaclUtil.ORIG.newBox(ka.getPublicKey(), kb.getSecretKey());
+    final Nacl.Box pba = Nacl.Tweet.newBox(ka.getPublicKey(), kb.getSecretKey());
 
     // messages
     final String m0 = "Helloword, Am Tom ...";
@@ -196,15 +195,15 @@ public class TweetNaclTest {
   @Test
   public void testSecretBox() {
     // shared key
-    final byte[] shk = new byte[TweetNacl.keyLength];
+    final byte[] shk = new byte[NaclTweet.keyLength];
     for (int i = 0; i < shk.length; ++i)
       shk[i] = 0x66;
 
     // peer A -> B
-    final Nacl.SecretBox pab = NaclUtil.ORIG.newSecretBox(shk, 0);
+    final Nacl.SecretBox pab = Nacl.Tweet.newSecretBox(shk, 0);
 
     // peer B -> A
-    final Nacl.SecretBox pba = NaclUtil.ORIG.newSecretBox(shk, 0);
+    final Nacl.SecretBox pba = Nacl.Tweet.newSecretBox(shk, 0);
 
     // messages
     String m0 = "Helloword, Am Tom ...";
@@ -247,23 +246,23 @@ public class TweetNaclTest {
     // shared key plus explicit nonce
 
     // explicit nonce
-    final byte[] theNonce = new byte[nonceLength];
-    NaclUtil.ORIG.randombytes(theNonce, nonceLength);
+    final byte[] theNonce = new byte[Nacl.nonceLength];
+    Nacl.Tweet.randombytes(theNonce, Nacl.nonceLength);
     final StringBuilder theNoncet = new StringBuilder();
     for (int i = 0; i < theNonce.length; ++i)
       theNoncet.append(' ').append(theNonce[i]);
 
     logger.debug(TAG, "SecretBoxNonce: " + theNoncet);
 
-    final byte[] shk = new byte[TweetNacl.keyLength];
+    final byte[] shk = new byte[NaclTweet.keyLength];
     for (int i = 0; i < shk.length; ++i)
       shk[i] = 0x66;
 
     // peer A -> B
-    final Nacl.SecretBox pab = NaclUtil.ORIG.newSecretBox(shk);
+    final Nacl.SecretBox pab = Nacl.Tweet.newSecretBox(shk);
 
     // peer B -> A
-    final Nacl.SecretBox pba = NaclUtil.ORIG.newSecretBox(shk);
+    final Nacl.SecretBox pba = Nacl.Tweet.newSecretBox(shk);
 
     // messages
     String m0 = "Helloword, Am Tom ...";
@@ -304,16 +303,16 @@ public class TweetNaclTest {
   @Test
   public void testSign() {
     // keypair A
-    final KeyPair ka = NaclUtil.ORIG.keyPairForSignature();
+    final KeyPair ka = Nacl.Tweet.keyPairForSig();
 
     // keypair B
-    final KeyPair kb = NaclUtil.ORIG.keyPairForSignature();
+    final KeyPair kb = Nacl.Tweet.keyPairForSig();
 
     // peer A -> B
-    final Nacl.Signature pab = NaclUtil.ORIG.newSignature(kb.getPublicKey(), ka.getSecretKey());
+    final Nacl.Signature pab = Nacl.Tweet.newSignature(kb.getPublicKey(), ka.getSecretKey());
 
     // peer B -> A
-    final Nacl.Signature pba = NaclUtil.ORIG.newSignature(ka.getPublicKey(), kb.getSecretKey());
+    final Nacl.Signature pba = Nacl.Tweet.newSignature(ka.getPublicKey(), kb.getSecretKey());
 
     // messages
     final String m0 = "Helloword, Am Tom ...";
@@ -338,11 +337,11 @@ public class TweetNaclTest {
     assertEquals("sign failed", nm0, m0);
 
     // keypair C
-    final byte[] seed = new byte[TweetNacl.seedLength];
+    final byte[] seed = new byte[NaclTweet.seedLength];
     for (int i = 0; i < seed.length; ++i)
       seed[i] = 0x66;
 
-    final KeyPair kc = NaclUtil.ORIG.keyPairFromSeed(seed);
+    final KeyPair kc = Nacl.Tweet.keyPairFromSeedForSig(seed);
 
     final StringBuilder skct = new StringBuilder();
     for (int i = 0; i < kc.getSecretKey().length; ++i)
@@ -357,7 +356,7 @@ public class TweetNaclTest {
     logger.debug(TAG, "pkct: " + pkct);
 
     // self-signed
-    final Nacl.Signature pcc = NaclUtil.ORIG.newSignature(kc.getPublicKey(), kc.getSecretKey());
+    final Nacl.Signature pcc = Nacl.Tweet.newSignature(kc.getPublicKey(), kc.getSecretKey());
 
     logger.debug(TAG, "\nself-sign...@" + System.currentTimeMillis());
     byte[] scc = pcc.sign(m0.getBytes(StandardCharsets.UTF_8));
@@ -387,7 +386,7 @@ public class TweetNaclTest {
     final byte[] b0 = m0.getBytes(StandardCharsets.UTF_8);
 
     logger.debug(TAG, "\nsha512...@" + System.currentTimeMillis());
-    final byte[] hash = Hash.sha512(b0);
+    final byte[] hash = Hash.Tweet.sha512(b0);
     logger.debug(TAG, "...sha512@" + System.currentTimeMillis());
 
     final StringBuilder hst = new StringBuilder("sha512@" + m0 + "/" + b0.length + ": ");
@@ -411,17 +410,17 @@ public class TweetNaclTest {
     logger.debug(TAG, "seed:@" + System.currentTimeMillis());
 
     final byte[] seed = Nacl.hexDecode(seedStr);
-    final KeyPair kp = NaclUtil.ORIG.keyPairFromSeed(seed);
+    final KeyPair kp = Nacl.Tweet.keyPairFromSeedForSig(seed);
 
     final String testString = "test string";
     final byte[] bytes = testString.getBytes();
 
-    final Nacl.Signature s1 = NaclUtil.ORIG.newSignature(null, kp.getSecretKey());
+    final Nacl.Signature s1 = Nacl.Tweet.newSignature(null, kp.getSecretKey());
     logger.debug(TAG, "\ndetached...@" + System.currentTimeMillis());
     byte[] signature = s1.detached(bytes);
     logger.debug(TAG, "...detached@" + System.currentTimeMillis());
 
-    final Nacl.Signature s2 = NaclUtil.ORIG.newSignature(kp.getPublicKey(), null);
+    final Nacl.Signature s2 = Nacl.Tweet.newSignature(kp.getPublicKey(), null);
     logger.debug(TAG, "\nverify...@" + System.currentTimeMillis());
     final boolean result = s2.detachedVerify(bytes, signature);
     logger.debug(TAG, "...verify@" + System.currentTimeMillis());

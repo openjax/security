@@ -20,26 +20,11 @@ import java.security.SecureRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class Nacl {
-  /** Length of public key in bytes. */
-  public static final int publicKeyLength = 32;
-
-  /** Length of secret key in bytes. */
-  public static final int secretKeyLength = 32;
-
   /** Length of key in bytes. */
   public static final int keyLength = 32;
 
   /** Length of nonce in bytes. */
   public static final int nonceLength = 24;
-
-  /** Length of overhead added to secret box compared to original message. */
-  public static final int overheadLength = 16;
-
-  /** Zero bytes in case box. */
-  public static final int zerobytesLength = 32;
-
-  /** Zero bytes in case open box. */
-  public static final int boxzerobytesLength = 16;
 
   /** Length of seed for nacl.sign.keyPair.fromSeed in bytes. */
   public static final int seedLength = 32;
@@ -51,6 +36,17 @@ public abstract class Nacl {
   /** Java SecureRandom generator */
   static final SecureRandom random = new SecureRandom();
 
+  // "expand 32-byte k"
+  static final byte[] sigma = {101, 120, 112, 97, 110, 100, 32, 51, 50, 45, 98, 121, 116, 101, 32, 107};
+
+  static final long[] D = {0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab, 0x4141, 0x0a4d, 0x0070, 0xe898, 0x7779, 0x4079, 0x8cc7, 0xfe73, 0x2b6f, 0x6cee, 0x5203};
+  static final long[] D2 = {0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0, 0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406};
+  static final long[] X = {0xd51a, 0x8f25, 0x2d60, 0xc956, 0xa7b2, 0x9525, 0xc760, 0x692c, 0xdc5c, 0xfdd6, 0xe231, 0xc0a4, 0x53fe, 0xcd6e, 0x36d3, 0x2169};
+  static final long[] Y = {0x6658, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666};
+  static final long[] I = {0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478, 0xad2f, 0x1806, 0x2f43, 0xd7a7, 0x3dfb, 0x0099, 0x2b4d, 0xdf0b, 0x4fc1, 0x2480, 0x2b83};
+
+  static final long[] L = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10};
+
   static final byte[] _0 = new byte[16];
   static final byte[] _9 = new byte[32];
 
@@ -58,46 +54,174 @@ public abstract class Nacl {
   static final long[] gf1 = new long[16];
   static final long[] _121665 = new long[16];
 
-  // "expand 32-byte k"
-  static final byte[] sigma = {101, 120, 112, 97, 110, 100, 32, 51, 50, 45, 98, 121, 116, 101, 32, 107};
-
   static {
     _9[0] = 9;
-
     gf1[0] = 1;
     _121665[0] = 0xDB41;
     _121665[1] = 1;
   }
 
+  public static final NaclTweet Tweet = new NaclTweet();
+  public static final NaclTweetFast TweetFast = new NaclTweetFast();
+
+  /*
+   * Port of Andrew Moon's Poly1305-donna-16. Public domain.
+   * https://github.com/floodyberry/poly1305-donna
+   */
+  static void cryptoOneTimeAuth(final byte[] out, final int outpos, final byte[] m, final int mpos, final int n, final byte[] k) {
+    final Poly1305 s = new Poly1305(k);
+    s.update(m, mpos, n);
+    s.finish(out, outpos);
+  }
+
+  public static void cryptoOneTimeAuth(final byte[] out, final byte[] m, final int n, final byte[] k) {
+    cryptoOneTimeAuth(out, 0, m, 0, n, k);
+  }
+
+  static void unpack25519(final long[] o, final byte[] n) {
+    for (int i = 0; i < 16; ++i)
+      o[i] = (n[2 * i] & 0xff) + ((long)((n[2 * i + 1] << 8) & 0xffff));
+
+    o[15] &= 0x7fff;
+  }
+
+  static void reduce(final byte[] r) {
+    final long[] x = new long[64];
+    int i;
+    for (i = 0; i < 64; ++i)
+      x[i] = r[i] & 0xff;
+
+    for (i = 0; i < 64; ++i)
+      r[i] = 0;
+
+    modL(r, 0, x);
+  }
+
+  static void modL(final byte[] r, final int roff, final long[] x) {
+    long carry;
+    int i, j;
+    for (i = 63; i >= 32; --i) {
+      carry = 0;
+      for (j = i - 32; j < i - 12; ++j) {
+        x[j] += carry - 16 * x[i] * L[j - (i - 32)];
+        carry = (x[j] + 128) >> 8;
+        x[j] -= carry << 8;
+      }
+      x[j] += carry;
+      x[i] = 0;
+    }
+
+    for (j = 0, carry = 0; j < 32; ++j) {
+      x[j] += carry - (x[31] >> 4) * L[j];
+      carry = x[j] >> 8;
+      x[j] &= 255;
+    }
+
+    for (j = 0; j < 32; ++j)
+      x[j] -= carry * L[j];
+
+    for (i = 0; i < 32; ++i) {
+      x[i + 1] += x[i] >> 8;
+      r[i + roff] = (byte)(x[i] & 255);
+    }
+  }
+
+  static void set25519(final long[] r, final long[] a) {
+    System.arraycopy(a, 0, r, 0, 16);
+  }
+
+  static byte[] hexDecode(final String s) {
+    final byte[] b = new byte[s.length() / 2];
+    for (int i = 0; i < s.length(); i += 2)
+      b[i / 2] = (byte)((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
+
+    return b;
+  }
+
+  static void sel25519(final long[] p, final int poff, final long[] q, final int qoff, final int b) {
+    long t;
+    final long c = -b;
+    for (int i = 0; i < 16; ++i) {
+      t = c & (p[i + poff] ^ q[i + qoff]);
+      p[i + poff] ^= t;
+      q[i + qoff] ^= t;
+    }
+  }
+
+  static int vn(final byte[] x, final int xoff, final byte[] y, final int yoff, final int n) {
+    int d = 0;
+    for (int i = 0; i < n; ++i)
+      d |= (x[i + xoff] ^ y[i + yoff]) & 0xff;
+
+    return (1 & ((d - 1) >>> 8)) - 1;
+  }
+
+  static void cswap(final long[][] p, final long[][] q, final byte b) {
+    for (int i = 0; i < 4; ++i)
+      sel25519(p[i], 0, q[i], 0, b);
+  }
+
+  /*
+   * public static byte[] randombytes(byte [] x, int len) { int ret = len % 8;
+   * long rnd; for (int i = 0; i < len-ret; i += 8) { rnd = jrandom.nextLong();
+   * x[i+0] = (byte) (rnd >>> 0); x[i+1] = (byte) (rnd >>> 8); x[i+2] = (byte)
+   * (rnd >>> 16); x[i+3] = (byte) (rnd >>> 24); x[i+4] = (byte) (rnd >>> 32);
+   * x[i+5] = (byte) (rnd >>> 40); x[i+6] = (byte) (rnd >>> 48); x[i+7] = (byte)
+   * (rnd >>> 56); } if (ret > 0) { rnd = jrandom.nextLong(); for (int i =
+   * len-ret; i < len; i ++) x[i] = (byte) (rnd >>> 8*i); } return x; }
+   */
+
+  private static byte[] randombytes(final byte[] x) {
+    random.nextBytes(x);
+    return x;
+  }
+
+  static byte[] randombytes(final int len) {
+    return randombytes(new byte[len]);
+  }
+
+  static byte[] makeBoxNonce() {
+    return randombytes(nonceLength);
+  }
+
+  static byte[] makeSecretBoxNonce() {
+    return randombytes(nonceLength);
+  }
+
   /**
    * Box algorithm, Public-key authenticated encryption
    */
-  public abstract class Box {
-    /** Length of precomputed shared key in bytes. */
-    public static final int sharedKeyLength = 32;
+  abstract static class Box {
+    /** Length of public key in bytes. */
+    public static final int publicKeyLength = 32;
 
-    /** Length of nonce in bytes. */
-    public static final int nonceLength = 24;
+    /** Length of secret key in bytes. */
+    public static final int secretKeyLength = 32;
+
+    /** Length of precomputed shared key in bytes. */
+    static final int sharedKeyLength = 32;
 
     /** Zero bytes in case box. */
-    public static final int zerobytesLength = 32;
+    static final int zerobytesLength = 32;
 
     /** Zero bytes in case open box. */
-    public static final int boxzerobytesLength = 16;
+    static final int boxzerobytesLength = 16;
 
     /** Length of overhead added to box compared to original message. */
-    public static final int overheadLength = 16;
+    static final int overheadLength = 16;
 
+    final Nacl nacl;
     final AtomicLong nonce;
     final byte[] theirPublicKey;
     final byte[] mySecretKey;
     byte[] sharedKey;
 
-    public Box(final byte[] theirPublicKey, final byte[] mySecretKey) {
-      this(theirPublicKey, mySecretKey, 68);
+    Box(final Nacl nacl, final byte[] theirPublicKey, final byte[] mySecretKey) {
+      this(nacl, theirPublicKey, mySecretKey, 68);
     }
 
-    public Box(final byte[] theirPublicKey, final byte[] mySecretKey, final long nonce) {
+    Box(final Nacl nacl, final byte[] theirPublicKey, final byte[] mySecretKey, final long nonce) {
+      this.nacl = nacl;
       this.theirPublicKey = theirPublicKey;
       this.mySecretKey = mySecretKey;
       this.nonce = new AtomicLong(nonce);
@@ -188,7 +312,7 @@ public abstract class Nacl {
     public final byte[] before() {
       if (this.sharedKey == null) {
         this.sharedKey = new byte[sharedKeyLength];
-        cryptoBoxBeforeNm(this.sharedKey, this.theirPublicKey, this.mySecretKey);
+        nacl.cryptoBoxBeforeNm(this.sharedKey, this.theirPublicKey, this.mySecretKey);
       }
 
       return this.sharedKey;
@@ -198,15 +322,15 @@ public abstract class Nacl {
   /**
    * Secret Box algorithm, secret key
    */
-  public abstract class SecretBox {
+  abstract class SecretBox {
     final AtomicLong nonce;
     final byte[] key;
 
-    public SecretBox(final byte[] key) {
+    SecretBox(final byte[] key) {
       this(key, 68);
     }
 
-    public SecretBox(final byte[] key, final long nonce) {
+    SecretBox(final byte[] key, final long nonce) {
       this.key = key;
 
       this.nonce = new AtomicLong(nonce);
@@ -286,20 +410,20 @@ public abstract class Nacl {
   /**
    * Signature algorithm, Implements ed25519.
    */
-  public abstract class Signature {
+  abstract class Signature {
     /** Length of signature in bytes. */
-    public static final int signatureLength = 64;
+    static final int signatureLength = 64;
 
     /** Length of public key in bytes. */
-    public static final int publicKeyLength = 32;
+    static final int publicKeyLength = 32;
 
     /** Length of signing secret key in bytes. */
-    public static final int secretKeyLength = 64;
+    static final int secretKeyLength = 64;
 
     final byte[] theirPublicKey;
     final byte[] mySecretKey;
 
-    public Signature(final byte[] theirPublicKey, final byte[] mySecretKey) {
+    Signature(final byte[] theirPublicKey, final byte[] mySecretKey) {
       this.theirPublicKey = theirPublicKey;
       this.mySecretKey = mySecretKey;
     }
@@ -360,12 +484,12 @@ public abstract class Nacl {
     public abstract byte[] open(byte[] signedMessage);
   }
 
-  public class ScalarMult {
+  class ScalarMult {
     /** Length of scalar in bytes. */
-    public static final int scalarLength = 32;
+    static final int scalarLength = 32;
 
     /** Length of group element in bytes. */
-    public static final int groupElementLength = 32;
+    static final int groupElementLength = 32;
 
     /**
      * Multiplies an integer n by a group element p.
@@ -402,19 +526,6 @@ public abstract class Nacl {
     }
   }
 
-  public final KeyPair keyPairFromSeed(final byte[] seed) {
-    final KeyPair kp = new KeyPair(Signature.publicKeyLength, Signature.secretKeyLength);
-    final byte[] pk = kp.getPublicKey();
-    final byte[] sk = kp.getSecretKey();
-
-    // copy sk
-    System.arraycopy(seed, 0, sk, 0, seedLength);
-
-    // generate pk from sk
-    cryptoSignKeyPair(pk, sk, true);
-    return kp;
-  }
-
   /**
    * Returns a new random key pair for box and returns it as an object with
    * publicKey and secretKey members.
@@ -422,14 +533,14 @@ public abstract class Nacl {
    * @return A new random key pair for box and returns it as an object with
    *         publicKey and secretKey members.
    */
-  public final KeyPair keyPair() {
-    final KeyPair kp = new KeyPair(publicKeyLength, secretKeyLength);
+  public final KeyPair keyPairForBox() {
+    final KeyPair kp = new KeyPair(Box.publicKeyLength, Box.secretKeyLength);
     cryptoBoxKeyPair(kp.getPublicKey(), kp.getSecretKey());
     return kp;
   }
 
-  public final KeyPair keyPair(final byte[] secretKey) {
-    final KeyPair kp = new KeyPair(publicKeyLength, secretKeyLength);
+  public final KeyPair keyPairForBox(final byte[] secretKey) {
+    final KeyPair kp = new KeyPair(Box.publicKeyLength, Box.secretKeyLength);
     final byte[] sk = kp.getSecretKey();
     final byte[] pk = kp.getPublicKey();
 
@@ -445,14 +556,14 @@ public abstract class Nacl {
    *
    * @return A signed message.
    */
-  public final KeyPair keyPairForSignature() {
+  public final KeyPair keyPairForSig() {
     final KeyPair kp = new KeyPair(Signature.publicKeyLength, Signature.secretKeyLength);
     cryptoSignKeyPair(kp.getPublicKey(), kp.getSecretKey(), false);
     return kp;
   }
 
-  public static KeyPair keyPairForSignature(final byte[] secretKey) {
-    final KeyPair kp = new KeyPair(publicKeyLength, secretKeyLength);
+  public static KeyPair keyPairForSig(final byte[] secretKey) {
+    final KeyPair kp = new KeyPair(Signature.publicKeyLength, Signature.secretKeyLength);
     final byte[] pk = kp.getPublicKey();
     final byte[] sk = kp.getSecretKey();
 
@@ -463,6 +574,19 @@ public abstract class Nacl {
     // hard-copy
     System.arraycopy(secretKey, 32, pk, 0, kp.getPublicKey().length);
 
+    return kp;
+  }
+
+  public final KeyPair keyPairFromSeedForSig(final byte[] seed) {
+    final KeyPair kp = new KeyPair(Signature.publicKeyLength, Signature.secretKeyLength);
+    final byte[] pk = kp.getPublicKey();
+    final byte[] sk = kp.getSecretKey();
+
+    // copy sk
+    System.arraycopy(seed, 0, sk, 0, seedLength);
+
+    // generate pk from sk
+    cryptoSignKeyPair(pk, sk, true);
     return kp;
   }
 
@@ -511,123 +635,50 @@ public abstract class Nacl {
     return cryptoBoxOpenAfterNm(m, c, d, n, k);
   }
 
-  /**
-   * Port of Andrew Moon's Poly1305-donna-16. Public domain.
-   * https://github.com/floodyberry/poly1305-donna
-   */
-  static int cryptoOneTimeAuth(final byte[] out, final int outpos, final byte[] m, final int mpos, final int n, final byte[] k) {
-    final Poly1305 s = new Poly1305(k);
-    s.update(m, mpos, n);
-    s.finish(out, outpos);
-    return 0;
-  }
-
-  public final static int cryptoOneTimeAuth(final byte[] out, final byte[] m, final int n, final byte[] k) {
-    return cryptoOneTimeAuth(out, 0, m, 0, n, k);
-  }
-
-  static void unpack25519(final long[] o, final byte[] n) {
-    for (int i = 0; i < 16; ++i)
-      o[i] = (n[2 * i] & 0xff) + ((long)((n[2 * i + 1] << 8) & 0xffff));
-
-    o[15] &= 0x7fff;
-  }
-
-  static void reduce(final byte[] r) {
-    final long[] x = new long[64];
-    int i;
-    for (i = 0; i < 64; ++i)
-      x[i] = r[i] & 0xff;
-
-    for (i = 0; i < 64; ++i)
-      r[i] = 0;
-
-    modL(r, 0, x);
-  }
-
-  static void modL(final byte[] r, final int roff, final long[] x) {
-    long carry;
-    int i, j;
-    for (i = 63; i >= 32; --i) {
-      carry = 0;
-      for (j = i - 32; j < i - 12; ++j) {
-        x[j] += carry - 16 * x[i] * L[j - (i - 32)];
-        carry = (x[j] + 128) >> 8;
-        x[j] -= carry << 8;
-      }
-      x[j] += carry;
-      x[i] = 0;
-    }
-    carry = 0;
-
-    for (j = 0; j < 32; ++j) {
-      x[j] += carry - (x[31] >> 4) * L[j];
-      carry = x[j] >> 8;
-      x[j] &= 255;
-    }
-
-    for (j = 0; j < 32; ++j)
-      x[j] -= carry * L[j];
-
-    for (i = 0; i < 32; ++i) {
-      x[i + 1] += x[i] >> 8;
-      r[i + roff] = (byte)(x[i] & 255);
-    }
-  }
-
-  static final long[] D = {0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab, 0x4141, 0x0a4d, 0x0070, 0xe898, 0x7779, 0x4079, 0x8cc7, 0xfe73, 0x2b6f, 0x6cee, 0x5203};
-  static final long[] D2 = {0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0, 0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406};
-  static final long[] X = {0xd51a, 0x8f25, 0x2d60, 0xc956, 0xa7b2, 0x9525, 0xc760, 0x692c, 0xdc5c, 0xfdd6, 0xe231, 0xc0a4, 0x53fe, 0xcd6e, 0x36d3, 0x2169};
-  static final long[] Y = {0x6658, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666};
-  static final long[] I = {0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478, 0xad2f, 0x1806, 0x2f43, 0xd7a7, 0x3dfb, 0x0099, 0x2b4d, 0xdf0b, 0x4fc1, 0x2480, 0x2b83};
-
-  static final long[] L = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10};
-
-  static void set25519(final long[] r, final long[] a) {
-    System.arraycopy(a, 0, r, 0, 16);
-  }
-
-  static byte[] hexDecode(final String s) {
-    final byte[] b = new byte[s.length() / 2];
-    for (int i = 0; i < s.length(); i += 2)
-      b[i / 2] = (byte)((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
-
-    return b;
-  }
-
-  static void sel25519(final long[] p, final int poff, final long[] q, final int qoff, final int b) {
-    long t;
-    final long c = -b;
-    for (int i = 0; i < 16; ++i) {
-      t = c & (p[i + poff] ^ q[i + qoff]);
-      p[i + poff] ^= t;
-      q[i + qoff] ^= t;
-    }
-  }
-
-  static int vn(final byte[] x, final int xoff, final byte[] y, final int yoff, final int n) {
-    int d = 0;
-    for (int i = 0; i < n; ++i)
-      d |= (x[i + xoff] ^ y[i + yoff]) & 0xff;
-
-    return (1 & ((d - 1) >>> 8)) - 1;
-  }
-
-  static void cswap(final long[][] p, final long[][] q, final byte b) {
-    for (int i = 0; i < 4; ++i)
-      sel25519(p[i], 0, q[i], 0, b);
-  }
-
   abstract Box newBox(byte[] publicKey, byte[] privateKey);
   abstract Box newBox(byte[] publicKey, byte[] privateKey, long nonce);
   abstract SecretBox newSecretBox(byte[] key);
   abstract SecretBox newSecretBox(byte[] key, long nonce);
   abstract Signature newSignature(byte[] theirPublicKey, byte[] mySecretKey);
+
   abstract byte[] randombytes(byte[] x, int len);
   abstract void cryptoScalarMult(byte[] q, byte[] n, byte[] p);
   abstract int cryptoSecretBox(byte[] c, byte[] m, int d, byte[] n, byte[] k);
   abstract int cryptoSecretBoxOpen(byte[] m, byte[] c, int d, byte[] n, byte[] k);
-  abstract int cryptoSignOpen(byte[] m, long dummy, byte[] sm, int smoff, int/*long*/ n, byte[] pk);
+  abstract int cryptoSignOpen(byte[] m, long dummy, byte[] sm, int smoff, int n, byte[] pk);
+  abstract int neq25519(long[] a, long[] b);
+  abstract byte par25519(long[] a);
+  abstract void pow2523(long[] o, long[] i);
+  abstract int unpackneg(long[][] r, byte[] p);
+  abstract void pack(byte[] r, long[][] p);
+  abstract void add(long[][] p, long[][] q);
+
+  public abstract int cryptoVerify16(byte[] x, byte[] y);
+  public abstract int cryptoVerify32(byte[] x, byte[] y);
+  public abstract int cryptoOneTimeAuthVerify(byte[] h, byte[] m, int n, byte[] k);
   public abstract void cryptoCoreHsalsa20(byte[] out, byte[] in, byte[] k, byte[] c);
-  public abstract int cryptoSignKeyPair(byte[] pk, byte[] sk, boolean seeded);
+  public abstract void cryptoSignKeyPair(byte[] pk, byte[] sk, boolean seeded);
+  public abstract void cryptoCoreSalsa20(byte[] out, byte[] in, byte[] k, byte[] c);
+
+  public byte[] decrypt(final byte[] publicKey, final byte[] privateKey, final byte[] ciphertextWithNonce) {
+    final byte[] nonce = new byte[NaclTweetFast.nonceLength];
+    System.arraycopy(ciphertextWithNonce, 0, nonce, 0, nonce.length);
+
+    final byte[] ciphertext = new byte[ciphertextWithNonce.length - nonce.length];
+    System.arraycopy(ciphertextWithNonce, nonce.length, ciphertext, 0, ciphertext.length);
+
+    final Nacl.Box box = newBox(publicKey, privateKey);
+    return box.open(ciphertext, nonce);
+  }
+
+  public byte[] encrypt(final byte[] publicKey, final byte[] privateKey, final byte[] data) {
+    final Nacl.Box box = newBox(publicKey, privateKey);
+
+    final byte[] nonce = Nacl.makeBoxNonce();
+    final byte[] ciphertext = box.box(data, nonce);
+    final byte[] ciphertextWithNonce = new byte[nonce.length + ciphertext.length];
+    System.arraycopy(nonce, 0, ciphertextWithNonce, 0, nonce.length);
+    System.arraycopy(ciphertext, 0, ciphertextWithNonce, nonce.length, ciphertext.length);
+    return ciphertextWithNonce;
+  }
 }

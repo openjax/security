@@ -20,16 +20,16 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class NaclUtilTest {
-  private static void test(final NaclUtil naclUtil, final KeyPair keyPair1, final KeyPair keyPair2, final String data) {
+public class NaclTest {
+  private static void test(final Nacl naclUtil, final KeyPair keyPair1, final KeyPair keyPair2, final String data) {
     final byte[] encrypted = naclUtil.encrypt(keyPair1.getPublicKey(), keyPair2.getSecretKey(), data.getBytes());
     final byte[] decrypted = naclUtil.decrypt(keyPair2.getPublicKey(), keyPair1.getSecretKey(), encrypted);
     assertEquals(data, new String(decrypted));
   }
 
-  private static void test(final NaclUtil nacl) {
-    final KeyPair keyPair1 = nacl.keyPair();
-    final KeyPair keyPair2 = nacl.keyPair();
+  private static void test(final Nacl nacl) {
+    final KeyPair keyPair1 = nacl.keyPairForBox();
+    final KeyPair keyPair2 = nacl.keyPairForBox();
     test(nacl, keyPair1, keyPair2, "test");
     test(nacl, keyPair1, keyPair2, "foo");
     test(nacl, keyPair1, keyPair2, "bar");
@@ -37,11 +37,11 @@ public class NaclUtilTest {
 
   @Test
   public void testOriginal() {
-    test(NaclUtil.ORIG);
+    test(Nacl.Tweet);
   }
 
   @Test
   public void testFast() {
-    test(NaclUtil.FAST);
+    test(Nacl.TweetFast);
   }
 }
