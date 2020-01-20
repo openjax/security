@@ -61,8 +61,8 @@ public abstract class Nacl {
     _121665[1] = 1;
   }
 
-  public static final NaclTweet Tweet = new NaclTweet();
-  public static final NaclTweetFast TweetFast = new NaclTweetFast();
+  public static final Nacl Tweet = new NaclTweet();
+  public static final Nacl TweetFast = new NaclTweetFast();
 
   /*
    * Port of Andrew Moon's Poly1305-donna-16. Public domain.

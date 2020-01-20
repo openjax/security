@@ -22,8 +22,8 @@ public abstract class Hash {
   /** Length of hash in bytes. */
   static final int hashLength = 64;
 
-  public static final HashTweet Tweet = new HashTweet();
-  public static final HashTweetFast TweetFast = new HashTweetFast();
+  public static final Hash Tweet = new HashTweet();
+  public static final Hash TweetFast = new HashTweetFast();
 
   /**
    * Returns the SHA-512 hash of the message.
