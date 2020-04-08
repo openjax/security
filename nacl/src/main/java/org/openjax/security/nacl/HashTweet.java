@@ -16,9 +16,6 @@
 
 package org.openjax.security.nacl;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-
 /**
  * Hash algorithm, Implements SHA-512.
  */

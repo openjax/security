@@ -16,11 +16,6 @@
 
 package org.openjax.security.nacl;
 
-import java.security.SecureRandom;
-import java.util.concurrent.atomic.AtomicLong;
-
-import org.openjax.security.nacl.NaclTweet.Box;
-
 /**
  * TweetNacl.c Java Port
  */
