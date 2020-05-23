@@ -1,6 +1,8 @@
 # Changes by Version
 
-## [v0.3.3](https://github.com/openjax/security/compare/7ed32a5b39248ed4e9eae7226af63c39e9ed10ca..HEAD) (2020-05-23)
+## [v0.3.4-SNAPSHOT](https://github.com/openjax/security/compare/87532db96444c02f5eb692e9c24f778b104f6db0..HEAD)
+
+## [v0.3.3](https://github.com/openjax/security/compare/7ed32a5b39248ed4e9eae7226af63c39e9ed10ca..87532db96444c02f5eb692e9c24f778b104f6db0) (2020-05-23)
 * Rename `GAuth.getGoogleAuthenticatorBarCode` to `GAuth.getBarCode`.
 * Improve Tweet Nacl APIs.
 * Improve tests.
