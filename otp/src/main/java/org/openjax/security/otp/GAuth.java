@@ -20,8 +20,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 
-import org.libj.util.Base32;
-import org.libj.util.Hexadecimal;
+import org.libj.lang.Base32;
+import org.libj.lang.Hexadecimal;
 import org.openjax.security.crypto.Hmac;
 
 /**
