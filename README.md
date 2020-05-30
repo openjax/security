@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/openjax/security/badge.svg?1)](https://coveralls.io/github/openjax/security)
 [![Javadocs](https://www.javadoc.io/badge/org.openjax.security/security.svg?1)](https://www.javadoc.io/doc/org.openjax.security/security)
 [![Released Version](https://img.shields.io/maven-central/v/org.openjax.security/security.svg?1)](https://mvnrepository.com/artifact/org.openjax.security/security)
+![Snapshot Version](https://img.shields.io/nexus/s/org.openjax.security/security?label=maven-snapshot&server=https%3A%2F%2Foss.sonatype.org)
 
 ## Introduction
 
