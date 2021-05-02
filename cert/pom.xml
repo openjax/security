@@ -1,5 +1,5 @@
 <!--
-  Copyright (c) 2018 OpenJAX
+  Copyright (c) 2021 OpenJAX
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -20,43 +20,17 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.openjax</groupId>
-    <artifactId>openjax</artifactId>
-    <version>2.5.6-SNAPSHOT</version>
+    <groupId>org.openjax.security</groupId>
+    <artifactId>security</artifactId>
+    <version>0.3.4-SNAPSHOT</version>
   </parent>
-  <groupId>org.openjax.security</groupId>
-  <artifactId>security</artifactId>
-  <version>0.3.4-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>OpenJAX Security</name>
-  <description>
-    Modules that provide convenient APIs of structures and functions related to security.
-  </description>
-  <modules>
-    <module>cert</module>
-    <module>crypto</module>
-    <module>nacl</module>
-    <module>otp</module>
-  </modules>
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.safris.maven</groupId>
-          <artifactId>coverallsio-maven-plugin</artifactId>
-          <configuration>
-            <aggregateOnly>true</aggregateOnly>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+  <artifactId>cert</artifactId>
+  <name>OpenJAX Security Cert</name>
   <dependencies>
     <dependency>
-      <groupId>org.libj</groupId>
-      <artifactId>test</artifactId>
-      <version>0.7.2-SNAPSHOT</version>
-      <scope>test</scope>
+      <groupId>org.openjax.security</groupId>
+      <artifactId>crypto</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>
