@@ -30,6 +30,7 @@ import javax.crypto.spec.SecretKeySpec;
 public enum Hmac {
   SHA1("HmacSHA1"),
   SHA256("HmacSHA256"),
+  SHA384("HmacSHA384"),
   SHA512("HmacSHA512");
 
   private final ThreadLocal<Mac> mac;
