@@ -258,6 +258,21 @@ public final class X509Certificates {
   }
 
   /**
+   * Returns a {@link X509Certificate} from the specified {@code byte[]}
+   * DER-formatted certificate.
+   *
+   * @param der A {@code byte[]} DER-formatted certificate.
+   * @return A {@link X509Certificate} from the specified {@link InputStream}
+   *         providing a DER-formatted certificate.
+   * @throws CertificateException If an exception occurs parsing the
+   *           DER-formatted certificate from the provided {@link InputStream}.
+   * @throws NullPointerException If {@code in} is null.
+   */
+  public static X509Certificate decodeCertificate(final byte[] der) throws CertificateException {
+    return decodeCertificate(new ByteArrayInputStream(der));
+  }
+
+  /**
    * Returns a new {@link KeyStore} instance that is loaded and initialized from
    * the provided {@link InputStream}, and unlocked if the provided
    * {@code storePassword} is not null. The type of the new {@link KeyStore} is
