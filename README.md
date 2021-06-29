@@ -1,6 +1,6 @@
 # Security
 
-[![Build Status](https://github.com/openjax/security/workflows/build.yml/badge.svg)](https://github.com/openjax/security/actions/workflows/build.yml)
+[![Build Status](https://github.com/openjax/security/actions/workflows/build.yml/badge.svg)](https://github.com/openjax/security/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/security/badge.svg)](https://coveralls.io/github/openjax/security)
 [![Javadocs](https://www.javadoc.io/badge/org.openjax.security/security.svg)](https://www.javadoc.io/doc/org.openjax.security/security)
 [![Released Version](https://img.shields.io/maven-central/v/org.openjax.security/security.svg)](https://mvnrepository.com/artifact/org.openjax.security/security)
