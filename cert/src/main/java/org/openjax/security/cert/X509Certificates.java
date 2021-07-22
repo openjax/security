@@ -20,7 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -44,49 +43,60 @@ import org.openjax.security.crypto.Hash;
  * Utility functions pertaining to {@link X509Certificate}s.
  */
 public final class X509Certificates {
+  private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+
   private enum Type {
     CERTIFICATE("CERTIFICATE"),
     PUBLIC_KEY("PUBLIC KEY"),
     PRIVATE_KEY("PRIVATE KEY");
 
     private final String name;
+    private final String begin;
+    private final String end;
 
     private Type(final String name) {
       this.name = name;
+      this.begin = "-----BEGIN " + name + "-----";
+      this.end = "-----END " + name + "-----";
+    }
+
+    /**
+     * Returns a DER representation of the provided Base64-encoded string PEM.
+     *
+     * @param pem The Base64-encoded string PEM.
+     * @return A DER representation of the provided Base64-encoded string PEM.
+     */
+    byte[] pemToDer(final String pem) {
+      try {
+        return pem == null ? null : Base64.getDecoder().decode(unwrap(pem));
+      }
+      catch (final IllegalArgumentException e) {
+        return null;
+      }
+    }
+
+    /**
+     * Returns a Base64-encoded string PEM representation of the provided DER.
+     *
+     * @param der The DER.
+     * @param wrap Whether the PEM should be wrapped with a header and footer.
+     * @return A Base64-encoded string PEM representation of the provided DER.
+     */
+    String derToPem(final byte[] der, final boolean wrap) {
+      return wrap ? begin + LINE_SEPARATOR + Base64.getMimeEncoder(64, LINE_SEPARATOR.getBytes()).encodeToString(der) + LINE_SEPARATOR + end : Base64.getEncoder().encodeToString(der);
+    }
+
+    String unwrap(String pem) {
+      pem = pem.replace("\r\n", "").replace("\n", "");
+      final int len = pem.length();
+      pem = pem.replace(begin, "");
+      return pem.length() == len ? pem : pem.replace(end, "");
     }
 
     @Override
     public String toString() {
       return name;
     }
-  }
-
-  private static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";
-  private static final String END_CERT = "-----END CERTIFICATE-----";
-  private static final String LINE_SEPARATOR = System.getProperty("line.separator");
-
-  private static String certToBase64(final byte[] encoded, final boolean wrap) {
-    final Base64.Encoder encoder = Base64.getMimeEncoder(64, LINE_SEPARATOR.getBytes());
-    final String encodedCertText = new String(encoder.encode(encoded));
-    return wrap ? BEGIN_CERT + LINE_SEPARATOR + encodedCertText + LINE_SEPARATOR + END_CERT : encodedCertText;
-  }
-
-  private static String removeBeginEnd(String pem, final Type type) {
-    pem = pem.replace("\r\n", "");
-    pem = pem.replace("\n", "");
-    final int len = pem.length();
-    if (type == null) {
-      pem = pem.replaceAll("-----(BEGIN|END) (.*)-----", "");
-    }
-    else {
-      pem = pem.replace("-----BEGIN " + type + "-----", "");
-      if (pem.length() == len)
-        return pem;
-
-      pem = pem.replace("-----END " + type + "----", "");
-    }
-
-    return pem.trim();
   }
 
   /**
@@ -101,7 +111,7 @@ public final class X509Certificates {
    */
   public static X509Certificate decodeCertificate(final String cert) throws CertificateException {
     final byte[] der;
-    return cert == null ? null : (der = pemToDer(cert, Type.CERTIFICATE)) == null ? null : decodeCertificate(new ByteArrayInputStream(der));
+    return cert == null ? null : (der = Type.CERTIFICATE.pemToDer(cert)) == null ? null : decodeCertificate(new ByteArrayInputStream(der));
   }
 
   /**
@@ -115,7 +125,7 @@ public final class X509Certificates {
    *           key from the provided {@code key}.
    */
   public static PublicKey decodePublicKey(final String key) throws InvalidKeySpecException {
-    return key == null ? null : decodePublicKey(pemToDer(key, Type.PUBLIC_KEY));
+    return key == null ? null : decodePublicKey(Type.PUBLIC_KEY.pemToDer(key));
   }
 
   /**
@@ -129,58 +139,61 @@ public final class X509Certificates {
    *           private key from the provided {@code key}.
    */
   public static PrivateKey decodePrivateKey(final String key) throws InvalidKeySpecException {
-    return key == null ? null : decodePrivateKey(pemToDer(key, Type.PRIVATE_KEY));
+    return key == null ? null : decodePrivateKey(Type.PRIVATE_KEY.pemToDer(key));
   }
 
   /**
-   * Returns a Base64-encoded string representation of the provided {@link Key}.
+   * Returns a Base64-encoded string (with "-----PRIVATE KEY-----" header)
+   * representation of the provided {@link PrivateKey}.
    *
-   * @param key The {@link Key} to encode.
-   * @return A Base64-encoded string representation of the provided {@link Key}.
+   * @param key The {@link PrivateKey} to encode.
+   * @return A Base64-encoded string (with "-----PRIVATE KEY-----" header)
+   *         representation of the provided {@link PrivateKey}.
    * @throws NullPointerException If {@code key} is null.
    */
-  public static String encodeKey(final Key key) {
-    return certToBase64(key.getEncoded(), false);
+  public static String encodeKey(final PrivateKey key) {
+    return Type.PRIVATE_KEY.derToPem(key.getEncoded(), true);
   }
 
   /**
-   * Returns a Base64-encoded string representation of the provided
-   * {@link Certificate}.
+   * Returns a Base64-encoded string (with "-----PUBLIC KEY-----" header)
+   * representation of the provided {@link PublicKey}.
+   *
+   * @param key The {@link PublicKey} to encode.
+   * @return A Base64-encoded string (with "-----PUBLIC KEY-----" header)
+   *         representation of the provided {@link PublicKey}.
+   * @throws NullPointerException If {@code key} is null.
+   */
+  public static String encodeKey(final PublicKey key) {
+    return Type.PUBLIC_KEY.derToPem(key.getEncoded(), true);
+  }
+
+  /**
+   * Returns a Base64-encoded string (without "-----CERTIFICATE-----" header)
+   * representation of the provided der-encoded certificate bytes.
+   *
+   * @param certificate The der-encoded certificate bytes to encode.
+   * @return A Base64-encoded string (without "-----CERTIFICATE-----" header)
+   *         representation of the provided {@link Certificate}.
+   * @throws CertificateEncodingException If an encoding error occurs.
+   * @throws NullPointerException If {@code certificate} is null.
+   */
+  public static String encodeCertificate(final byte[] certificate) throws CertificateEncodingException {
+    return Type.CERTIFICATE.derToPem(certificate, false);
+  }
+
+  /**
+   * Returns a Base64-encoded string (with "-----CERTIFICATE-----" header)
+   * representation of the provided {@link Certificate}.
    *
    * @param certificate The {@link Certificate} to encode.
-   * @return A Base64-encoded string representation of the provided
-   *         {@link Certificate}.
+   * @return A Base64-encoded string (with "-----CERTIFICATE-----" header)
+   *         representation of the provided {@link Certificate}.
    * @throws CertificateEncodingException If an encoding error occurs.
    * @throws NullPointerException If {@code certificate} is null.
    */
   public static String encodeCertificate(final Certificate certificate) throws CertificateEncodingException {
-    return certToBase64(certificate.getEncoded(), false);
-  }
-
-  /**
-   * Returns a DER representation of the provided Base64-encoded string PEM.
-   *
-   * @param pem The Base64-encoded string PEM.
-   * @return A DER representation of the provided Base64-encoded string PEM.
-   */
-  public static byte[] pemToDer(final String pem) {
-    return pemToDer(pem, null);
-  }
-
-  /**
-   * Returns a DER representation of the provided Base64-encoded string PEM.
-   *
-   * @param pem The Base64-encoded string PEM.
-   * @param type The {@link Type} of the PEM.
-   * @return A DER representation of the provided Base64-encoded string PEM.
-   */
-  private static byte[] pemToDer(final String pem, final Type type) {
-    try {
-      return pem == null ? null : Base64.getDecoder().decode(removeBeginEnd(pem, type));
-    }
-    catch (final IllegalArgumentException e) {
-      return null;
-    }
+    return Type.CERTIFICATE.derToPem(certificate.getEncoded(), false);
   }
 
   /**
@@ -194,7 +207,7 @@ public final class X509Certificates {
    * @throws NullPointerException If {@code certChain} or {@code hash} is null.
    */
   public static byte[] generateThumbprint(final String certificate, final Hash hash) {
-    return hash.encode(pemToDer(certificate, Type.CERTIFICATE));
+    return hash.encode(Type.CERTIFICATE.pemToDer(certificate));
   }
 
   /**
