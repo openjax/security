@@ -40,9 +40,8 @@ public enum AES {
      * Encrypt the specified {@code data} with the provided {@code password} and
      * random SALT.
      *
-     * @implNote This implementation reproduces the encryption mechanism of the
-     *           OpenSSL "aes-256-cbc" cipher: openssl enc -aes-256-cbc -a -p -k
-     *           $password
+     * @implNote This implementation reproduces the encryption mechanism of:
+     *           {@code openssl enc -aes-256-cbc -p -k $password}
      * @param data The data to be encrypted.
      * @param password The password to be used for encryption.
      * @return The encrypted data.
@@ -56,9 +55,8 @@ public enum AES {
      * Encrypt the specified {@code data} with the provided {@code password} and
      * {@code salt}.
      *
-     * @implNote This implementation reproduces the encryption mechanism of the
-     *           OpenSSL "aes-256-cbc" cipher: openssl enc -aes-256-cbc -a -p -k
-     *           $password
+     * @implNote This implementation reproduces the encryption mechanism of:
+     *           {@code openssl enc -aes-256-cbc -p -k $password}
      * @param data The data to be encrypted.
      * @param password The password to be used for encryption.
      * @param salt The SALT (length must equal 8).
@@ -99,9 +97,8 @@ public enum AES {
      * Decrypt the specified Base-64 encoded data with the provided
      * {@code password} and return as an ISO_8859_1-encoded string.
      *
-     * @implNote This implementation reproduces the encryption mechanism of the
-     *           OpenSSL "aes-256-cbc" cipher: openssl aes-256-cbc -d -a -k
-     *           $password
+     * @implNote This implementation reproduces the encryption mechanism of:
+     *           {@code openssl aes-256-cbc -d -k $password}
      * @param encryptedBase64 The Base-64 encoded data to be decrypted.
      * @param password The password to be used for decryption.
      * @return The decrypted data.
@@ -115,9 +112,8 @@ public enum AES {
      * Decrypt the specified data with the provided {@code password} and return
      * as an ISO_8859_1-encoded string.
      *
-     * @implNote This implementation reproduces the encryption mechanism of the
-     *           OpenSSL "aes-256-cbc" cipher: openssl aes-256-cbc -d -a -k
-     *           $password
+     * @implNote This implementation reproduces the encryption mechanism of:
+     *           {@code openssl aes-256-cbc -d -k $password}
      * @param encrypted The data to be decrypted.
      * @param password The password to be used for decryption.
      * @return The decrypted data.
@@ -131,9 +127,8 @@ public enum AES {
      * Decrypt the specified Base-64 encoded data with the provided
      * {@code password}.
      *
-     * @implNote This implementation reproduces the encryption mechanism of the
-     *           OpenSSL "aes-256-cbc" cipher: openssl aes-256-cbc -d -a -k
-     *           $password
+     * @implNote This implementation reproduces the encryption mechanism of:
+     *           {@code openssl aes-256-cbc -d -k $password}
      * @param encryptedBase64 The Base-64 encoded data to be decrypted.
      * @param password The password to be used for decryption.
      * @return The decrypted data.
@@ -147,9 +142,8 @@ public enum AES {
      * Decrypt the specified Base-64 encoded data with the provided
      * {@code password}.
      *
-     * @implNote This implementation reproduces the encryption mechanism of the
-     *           OpenSSL "aes-256-cbc" cipher: openssl aes-256-cbc -d -a -k
-     *           $password
+     * @implNote This implementation reproduces the encryption mechanism of:
+     *           {@code openssl aes-256-cbc -d -k $password}
      * @param encrypted The data to be decrypted.
      * @param password The password to be used for decryption.
      * @return The decrypted data.
