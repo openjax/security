@@ -285,7 +285,7 @@ public enum Hash {
    * @param bytes The byte array.
    * @return The product of applying this hash function to the specified byte
    *         array returned as an {@code int}.
-   * @throws NullPointerException If the specified byte array is null.
+   * @throws IllegalArgumentException If the specified byte array is null.
    */
   public int encodeAsInt(final byte[] bytes) {
     return new BigInteger(encode(bytes)).intValue();
@@ -302,7 +302,7 @@ public enum Hash {
    * @param bytes The byte array.
    * @return The product of applying this hash function to the specified byte
    *         array returned as an {@code long}.
-   * @throws NullPointerException If the specified byte array is null.
+   * @throws IllegalArgumentException If the specified byte array is null.
    */
   public long encodeAsLong(final byte[] bytes) {
     return new BigInteger(encode(bytes)).longValue();
@@ -314,7 +314,7 @@ public enum Hash {
    * @param bytes The byte array.
    * @return The product of applying this hash function to the specified byte
    *         array.
-   * @throws NullPointerException If the specified byte array is null.
+   * @throws IllegalArgumentException If the specified byte array is null.
    */
   public byte[] encode(final byte[] bytes) {
     messageDigest.get().update(bytes);
@@ -326,7 +326,7 @@ public enum Hash {
    *
    * @param string The string.
    * @return The product of applying this hash function to the specified string.
-   * @throws NullPointerException If the specified string is null.
+   * @throws IllegalArgumentException If the specified string is null.
    */
   public final byte[] encode(final String string) {
     return encode(string.getBytes());

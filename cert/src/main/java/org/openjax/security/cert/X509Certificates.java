@@ -149,7 +149,7 @@ public final class X509Certificates {
    * @param key The {@link PrivateKey} to encode.
    * @return A Base64-encoded string (with "-----PRIVATE KEY-----" header)
    *         representation of the provided {@link PrivateKey}.
-   * @throws NullPointerException If {@code key} is null.
+   * @throws IllegalArgumentException If {@code key} is null.
    */
   public static String encodeKey(final PrivateKey key) {
     return Type.PRIVATE_KEY.derToPem(key.getEncoded(), true);
@@ -162,7 +162,7 @@ public final class X509Certificates {
    * @param key The {@link PublicKey} to encode.
    * @return A Base64-encoded string (with "-----PUBLIC KEY-----" header)
    *         representation of the provided {@link PublicKey}.
-   * @throws NullPointerException If {@code key} is null.
+   * @throws IllegalArgumentException If {@code key} is null.
    */
   public static String encodeKey(final PublicKey key) {
     return Type.PUBLIC_KEY.derToPem(key.getEncoded(), true);
@@ -176,7 +176,7 @@ public final class X509Certificates {
    * @return A Base64-encoded string (without "-----CERTIFICATE-----" header)
    *         representation of the provided {@link Certificate}.
    * @throws CertificateEncodingException If an encoding error occurs.
-   * @throws NullPointerException If {@code certificate} is null.
+   * @throws IllegalArgumentException If {@code certificate} is null.
    */
   public static String encodeCertificate(final byte[] certificate) throws CertificateEncodingException {
     return Type.CERTIFICATE.derToPem(certificate, false);
@@ -190,7 +190,7 @@ public final class X509Certificates {
    * @return A Base64-encoded string (with "-----CERTIFICATE-----" header)
    *         representation of the provided {@link Certificate}.
    * @throws CertificateEncodingException If an encoding error occurs.
-   * @throws NullPointerException If {@code certificate} is null.
+   * @throws IllegalArgumentException If {@code certificate} is null.
    */
   public static String encodeCertificate(final Certificate certificate) throws CertificateEncodingException {
     return Type.CERTIFICATE.derToPem(certificate.getEncoded(), false);
@@ -204,7 +204,7 @@ public final class X509Certificates {
    * @param hash The {@link Hash} algorithm.
    * @return A thumbprint of the provided {@code certChain} with the specified
    *         {@link Hash} algorithm.
-   * @throws NullPointerException If {@code certChain} or {@code hash} is null.
+   * @throws IllegalArgumentException If {@code certChain} or {@code hash} is null.
    */
   public static byte[] generateThumbprint(final String certificate, final Hash hash) {
     return hash.encode(Type.CERTIFICATE.pemToDer(certificate));
@@ -217,7 +217,7 @@ public final class X509Certificates {
    * @return A {@link PublicKey} from the provided {@code der} byte array.
    * @throws InvalidKeySpecException If an exception occurs generating the
    *           private key from the provided {@code der} byte array.
-   * @throws NullPointerException If {@code der} is null.
+   * @throws IllegalArgumentException If {@code der} is null.
    */
   public static PublicKey decodePublicKey(final byte[] der) throws InvalidKeySpecException {
     try {
@@ -235,7 +235,7 @@ public final class X509Certificates {
    * @return A {@link PrivateKey} from the provided {@code der} byte array.
    * @throws InvalidKeySpecException If an exception occurs generating the
    *           private key from the provided {@code der} byte array.
-   * @throws NullPointerException If {@code der} is null.
+   * @throws IllegalArgumentException If {@code der} is null.
    */
   public static PrivateKey decodePrivateKey(final byte[] der) throws InvalidKeySpecException {
     try {
@@ -255,7 +255,7 @@ public final class X509Certificates {
    *         providing a DER-formatted certificate.
    * @throws CertificateException If an exception occurs parsing the
    *           DER-formatted certificate from the provided {@link InputStream}.
-   * @throws NullPointerException If {@code in} is null.
+   * @throws IllegalArgumentException If {@code in} is null.
    */
   public static X509Certificate decodeCertificate(final InputStream in) throws CertificateException {
     Objects.requireNonNull(in);
@@ -279,7 +279,7 @@ public final class X509Certificates {
    *         providing a DER-formatted certificate.
    * @throws CertificateException If an exception occurs parsing the
    *           DER-formatted certificate from the provided {@link InputStream}.
-   * @throws NullPointerException If {@code in} is null.
+   * @throws IllegalArgumentException If {@code in} is null.
    */
   public static X509Certificate decodeCertificate(final byte[] der) throws CertificateException {
     return decodeCertificate(new ByteArrayInputStream(der));
@@ -306,7 +306,7 @@ public final class X509Certificates {
    *           specified type.
    * @throws NoSuchAlgorithmException If the algorithm used to check the
    *           integrity of the keystore cannot be found.
-   * @throws NullPointerException If {@code url} is null.
+   * @throws IllegalArgumentException If {@code url} is null.
    */
   public static KeyStore getKeyStore(final URL url, final String storePassword) throws CertificateException, IOException, KeyStoreException, NoSuchAlgorithmException {
     final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());

@@ -51,7 +51,7 @@ public final class GAuth {
    * @param issuer The organization managing this account.
    * @return The Google Authenticator barcode otpauth string.
    * @throws UnsupportedOperationException If UTF-8 encoding is not supported.
-   * @throws NullPointerException If {@code key} or {@code issuer} is null.
+   * @throws IllegalArgumentException If {@code key} or {@code issuer} is null.
    * @see <a href=
    *      "https://github.com/google/google-authenticator/wiki/Key-Uri-Format">Key-Uri-Format</a>
    */
@@ -75,7 +75,7 @@ public final class GAuth {
    * @param key Base32 encoded secret key (will be converted to upper-case, and
    *          allows whitespace, which will be removed).
    * @return The TOTP code for the secret key.
-   * @throws NullPointerException If {@code key} is null.
+   * @throws IllegalArgumentException If {@code key} is null.
    */
   public static String getTOTPCode(final String key) {
     final String normalizedKey = key.replace(" ", "").toUpperCase();

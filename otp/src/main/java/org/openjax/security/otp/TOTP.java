@@ -31,7 +31,7 @@ public final class TOTP {
    * @return A numeric String in base 10 that includes {@code length} number of
    *         digits.
    * @throws IllegalArgumentException If {@code key} is invalid.
-   * @throws NullPointerException If {@code key}, {@code time}, or {@code hmac}
+   * @throws IllegalArgumentException If {@code key}, {@code time}, or {@code hmac}
    *           is null.
    */
   public static String generateTOTP(final String key, String time, final int length, final Hmac hmac) {
