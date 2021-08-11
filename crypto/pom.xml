@@ -29,4 +29,11 @@
   <description>
     Cryptography API and algorithms.
   </description>
+  <dependencies>
+    <dependency>
+      <groupId>org.libj</groupId>
+      <artifactId>lang</artifactId>
+      <version>0.8.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 </project>

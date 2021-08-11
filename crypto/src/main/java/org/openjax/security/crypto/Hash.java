@@ -20,6 +20,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.libj.lang.Assertions;
+
 /**
  * An enum of common hash functions.
  */
@@ -35,7 +37,8 @@ public enum Hash {
      *
      * poly=0x04c11db7 init=0xffffffff refin=true refout=true xorout=0xffffffff
      *
-     * @see <a href="http://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic
+     * @see <a href=
+     *      "http://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic
      *      redundancy check</a>
      * @see <a href="http://reveng.sourceforge.net/crc-catalogue/17plus.htm">CRC
      *      RevEng</a>
@@ -124,7 +127,9 @@ public enum Hash {
     @Override
     public byte[] encode(final byte[] bytes) {
       final int crc = encodeAsInt(bytes);
-      return new byte[] {(byte)(crc >> 24), (byte)(crc >> 16), (byte)(crc >> 8), (byte)crc};
+      return new byte[] {
+        (byte)(crc >> 24), (byte)(crc >> 16), (byte)(crc >> 8), (byte)crc
+      };
     }
   },
   CRC64(null) {
@@ -139,7 +144,8 @@ public enum Hash {
      *
      * poly=0x42f0e1eba9ea3693 init=0x0 refin=false refout=false xorout=0x0
      *
-     * @see <a href="http://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic
+     * @see <a href=
+     *      "http://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic
      *      redundancy check</a>
      * @see <a href="http://reveng.sourceforge.net/crc-catalogue/17plus.htm">CRC
      *      RevEng</a>
@@ -250,16 +256,12 @@ public enum Hash {
     @Override
     public byte[] encode(final byte[] bytes) {
       final long crc = encodeAsLong(bytes);
-      return new byte[] {(byte)(crc >> 56), (byte)(crc >> 48), (byte)(crc >> 40), (byte)(crc >> 32), (byte)(crc >> 24), (byte)(crc >> 16), (byte)(crc >> 8), (byte)crc};
+      return new byte[] {
+        (byte)(crc >> 56), (byte)(crc >> 48), (byte)(crc >> 40), (byte)(crc >> 32), (byte)(crc >> 24), (byte)(crc >> 16), (byte)(crc >> 8), (byte)crc
+      };
     }
   },
-  MD2("MD2"),
-  MD5("MD5"),
-  SHA1("SHA-1"),
-  SHA224("SHA-224"),
-  SHA256("SHA-256"),
-  SHA384("SHA-384"),
-  SHA512("SHA-512");
+  MD2("MD2"), MD5("MD5"), SHA1("SHA-1"), SHA224("SHA-224"), SHA256("SHA-256"), SHA384("SHA-384"), SHA512("SHA-512");
 
   private final ThreadLocal<MessageDigest> messageDigest;
 
@@ -275,7 +277,7 @@ public enum Hash {
   }
 
   /**
-   * Encodes the specified byte array with this hash function and returns the
+   * Encodes the provided byte array with this hash function and returns the
    * value as an {@code int}.
    *
    * @implNote If the hash is too big to fit in an int, only the low-order 32
@@ -283,16 +285,16 @@ public enum Hash {
    *           about the overall magnitude of the hash value as well as return a
    *           result with the opposite sign.
    * @param bytes The byte array.
-   * @return The product of applying this hash function to the specified byte
+   * @return The product of applying this hash function to the provided byte
    *         array returned as an {@code int}.
-   * @throws IllegalArgumentException If the specified byte array is null.
+   * @throws IllegalArgumentException If the provided byte array is null.
    */
   public int encodeAsInt(final byte[] bytes) {
     return new BigInteger(encode(bytes)).intValue();
   };
 
   /**
-   * Encodes the specified byte array with this hash function and returns the
+   * Encodes the provided byte array with this hash function and returns the
    * value as an {@code long}.
    *
    * @implNote If the hash is too big to fit in an long, only the low-order 64
@@ -300,35 +302,36 @@ public enum Hash {
    *           about the overall magnitude of the hash value as well as return a
    *           result with the opposite sign.
    * @param bytes The byte array.
-   * @return The product of applying this hash function to the specified byte
+   * @return The product of applying this hash function to the provided byte
    *         array returned as an {@code long}.
-   * @throws IllegalArgumentException If the specified byte array is null.
+   * @throws IllegalArgumentException If the provided byte array is null.
    */
   public long encodeAsLong(final byte[] bytes) {
     return new BigInteger(encode(bytes)).longValue();
   };
 
   /**
-   * Encodes the specified byte array with this hash function.
+   * Encodes the provided byte array with this hash function.
    *
    * @param bytes The byte array.
-   * @return The product of applying this hash function to the specified byte
+   * @return The product of applying this hash function to the provided byte
    *         array.
-   * @throws IllegalArgumentException If the specified byte array is null.
+   * @throws IllegalArgumentException If the provided byte array is null.
    */
   public byte[] encode(final byte[] bytes) {
+    Assertions.assertNotNull(bytes);
     messageDigest.get().update(bytes);
     return messageDigest.get().digest();
   }
 
   /**
-   * Encodes the specified string with this hash function.
+   * Encodes the provided string with this hash function.
    *
    * @param string The string.
-   * @return The product of applying this hash function to the specified string.
-   * @throws IllegalArgumentException If the specified string is null.
+   * @return The product of applying this hash function to the provided string.
+   * @throws IllegalArgumentException If the provided string is null.
    */
   public final byte[] encode(final String string) {
-    return encode(string.getBytes());
+    return encode(Assertions.assertNotNull(string).getBytes());
   }
 }

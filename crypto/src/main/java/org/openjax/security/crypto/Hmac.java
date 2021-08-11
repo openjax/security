@@ -24,6 +24,8 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.libj.lang.Assertions;
+
 /**
  * An enum of common Hashed Message Authentication Code algorithms.
  */
@@ -75,9 +77,12 @@ public enum Hmac {
    * @param key The HMAC key.
    * @param data The text to be authenticated.
    * @return The Hashed Message Authentication Code.
-   * @throws IllegalArgumentException If {@code key} is invalid.
+   * @throws IllegalArgumentException If {@code key} or {@code data} is null, or
+   *           if {@code key} is not appropriate for this HMAC.
    */
   public byte[] generateCode(final byte[] key, final byte[] data) {
+    Assertions.assertNotNull(key);
+    Assertions.assertNotNull(data);
     try {
       final SecretKeySpec secretKey = new SecretKeySpec(key, "RAW");
       final Mac mac = this.mac.get();

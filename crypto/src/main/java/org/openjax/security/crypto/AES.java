@@ -31,40 +31,23 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.libj.lang.Assertions;
+
 /**
  * An enum of common AES crypto functions.
  */
 public enum AES {
   OPEN_SSL_256_CBC {
-    /**
-     * Encrypt the specified {@code data} with the provided {@code password} and
-     * random SALT.
-     *
-     * @implNote This implementation reproduces the encryption mechanism of:
-     *           {@code openssl enc -aes-256-cbc -p -k $password}
-     * @param data The data to be encrypted.
-     * @param password The password to be used for encryption.
-     * @return The encrypted data.
-     */
     @Override
     public byte[] encrypt(final byte[] data, final String password) {
       return encrypt(data, password, new SecureRandom().generateSeed(8));
     }
 
-    /**
-     * Encrypt the specified {@code data} with the provided {@code password} and
-     * {@code salt}.
-     *
-     * @implNote This implementation reproduces the encryption mechanism of:
-     *           {@code openssl enc -aes-256-cbc -p -k $password}
-     * @param data The data to be encrypted.
-     * @param password The password to be used for encryption.
-     * @param salt The SALT (length must equal 8).
-     * @return The encrypted data.
-     * @throws IllegalArgumentException If {@code salt.length != 8}.
-     */
     @Override
     public byte[] encrypt(final byte[] data, final String password, final byte[] salt) {
+      Assertions.assertNotNull(data);
+      Assertions.assertNotNull(password);
+      Assertions.assertNotNull(salt);
       if (salt.length != 8)
         throw new IllegalArgumentException("salt.length (" + salt.length + ") must be equal to 8");
 
@@ -93,63 +76,25 @@ public enum AES {
       }
     }
 
-    /**
-     * Decrypt the specified Base-64 encoded data with the provided
-     * {@code password} and return as an ISO_8859_1-encoded string.
-     *
-     * @implNote This implementation reproduces the encryption mechanism of:
-     *           {@code openssl aes-256-cbc -d -k $password}
-     * @param encryptedBase64 The Base-64 encoded data to be decrypted.
-     * @param password The password to be used for decryption.
-     * @return The decrypted data.
-     */
     @Override
     public String decryptToString(final String encryptedBase64, final String password) {
       return new String(decrypt(encryptedBase64, password), ISO_8859_1);
     }
 
-    /**
-     * Decrypt the specified data with the provided {@code password} and return
-     * as an ISO_8859_1-encoded string.
-     *
-     * @implNote This implementation reproduces the encryption mechanism of:
-     *           {@code openssl aes-256-cbc -d -k $password}
-     * @param encrypted The data to be decrypted.
-     * @param password The password to be used for decryption.
-     * @return The decrypted data.
-     */
     @Override
     public String decryptToString(final byte[] encrypted, final String password) {
       return new String(decrypt(encrypted, password), ISO_8859_1);
     }
 
-    /**
-     * Decrypt the specified Base-64 encoded data with the provided
-     * {@code password}.
-     *
-     * @implNote This implementation reproduces the encryption mechanism of:
-     *           {@code openssl aes-256-cbc -d -k $password}
-     * @param encryptedBase64 The Base-64 encoded data to be decrypted.
-     * @param password The password to be used for decryption.
-     * @return The decrypted data.
-     */
     @Override
     public byte[] decrypt(final String encryptedBase64, final String password) {
       return decrypt(Base64.getDecoder().decode(encryptedBase64.replaceAll("\\s", "")), password);
     }
 
-    /**
-     * Decrypt the specified Base-64 encoded data with the provided
-     * {@code password}.
-     *
-     * @implNote This implementation reproduces the encryption mechanism of:
-     *           {@code openssl aes-256-cbc -d -k $password}
-     * @param encrypted The data to be decrypted.
-     * @param password The password to be used for decryption.
-     * @return The decrypted data.
-     */
     @Override
     public byte[] decrypt(final byte[] encrypted, final String password) {
+      Assertions.assertNotNull(encrypted);
+      Assertions.assertNotNull(password);
       for (int i = 0; i < MAGIC.length; ++i)
         if (MAGIC[i] != encrypted[i])
           throw new IllegalArgumentException("Bad magic number");
@@ -196,10 +141,88 @@ public enum AES {
     return concat;
   }
 
+  /**
+   * Encrypt the specified {@code data} with the provided {@code password} and
+   * random SALT.
+   *
+   * @implNote This implementation reproduces the encryption mechanism of:
+   *           {@code openssl enc -aes-256-cbc -p -k $password}
+   * @param data The data to be encrypted.
+   * @param password The password to be used for encryption.
+   * @return The encrypted data.
+   * @throws IllegalArgumentException If {@code data} or {@code password} is
+   *           null.
+   */
   public abstract byte[] encrypt(byte[] data, String password);
+
+  /**
+   * Encrypt the specified {@code data} with the provided {@code password} and
+   * {@code salt}.
+   *
+   * @implNote This implementation reproduces the encryption mechanism of:
+   *           {@code openssl enc -aes-256-cbc -p -k $password}
+   * @param data The data to be encrypted.
+   * @param password The password to be used for encryption.
+   * @param salt The SALT (length must equal 8).
+   * @return The encrypted data.
+   * @throws IllegalArgumentException If {@code data}, {@code password} or
+   *           {@code salt} is null, or if {@code salt.length != 8}.
+   */
   public abstract byte[] encrypt(byte[] data, String password, byte[] salt);
+
+  /**
+   * Decrypt the specified Base-64 encoded data with the provided
+   * {@code password} and return as an ISO_8859_1-encoded string.
+   *
+   * @implNote This implementation reproduces the encryption mechanism of:
+   *           {@code openssl aes-256-cbc -d -k $password}
+   * @param encryptedBase64 The Base-64 encoded data to be decrypted.
+   * @param password The password to be used for decryption.
+   * @return The decrypted data.
+   * @throws IllegalArgumentException If {@code encryptedBase64} or
+   *           {@code password} is null.
+   */
   public abstract String decryptToString(String encryptedBase64, String password);
+
+  /**
+   * Decrypt the specified data with the provided {@code password} and return as
+   * an ISO_8859_1-encoded string.
+   *
+   * @implNote This implementation reproduces the encryption mechanism of:
+   *           {@code openssl aes-256-cbc -d -k $password}
+   * @param encrypted The data to be decrypted.
+   * @param password The password to be used for decryption.
+   * @return The decrypted data.
+   * @throws IllegalArgumentException If {@code encrypted} or {@code password}
+   *           is null.
+   */
   public abstract String decryptToString(byte[] encrypted, String password);
+
+  /**
+   * Decrypt the specified Base-64 encoded data with the provided
+   * {@code password}.
+   *
+   * @implNote This implementation reproduces the encryption mechanism of:
+   *           {@code openssl aes-256-cbc -d -k $password}
+   * @param encryptedBase64 The Base-64 encoded data to be decrypted.
+   * @param password The password to be used for decryption.
+   * @return The decrypted data.
+   * @throws IllegalArgumentException If {@code encryptedBase64} or
+   *           {@code password} is null.
+   */
   public abstract byte[] decrypt(String encryptedBase64, String password);
+
+  /**
+   * Decrypt the specified data with the provided {@code password}.
+   *
+   * @implNote This implementation reproduces the encryption mechanism of:
+   *           {@code openssl aes-256-cbc -d -k $password}
+   * @param encrypted The data to be decrypted.
+   * @param password The password to be used for decryption.
+   * @return The decrypted data.
+   * @throws IllegalArgumentException If {@code encrypted} or {@code password}
+   *           is null, or if the magic number in the provided data is not equal
+   *           to {@code "Salted__"}.
+   */
   public abstract byte[] decrypt(byte[] encrypted, String password);
 }
