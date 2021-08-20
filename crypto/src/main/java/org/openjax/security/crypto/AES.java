@@ -53,8 +53,8 @@ public enum AES {
 
       final byte[] pass = password.getBytes(US_ASCII);
 
-      byte[] hash = new byte[0];
-      byte[] keyAndIv = new byte[0];
+      byte[] hash = {};
+      byte[] keyAndIv = {};
       for (int i = 0; i < 3 && keyAndIv.length < 48; ++i) {
         final byte[] hashPassSalt = new byte[hash.length + pass.length + 8];
         System.arraycopy(hash, 0, hashPassSalt, 0, hash.length);
@@ -101,8 +101,8 @@ public enum AES {
 
       final byte[] pass = password.getBytes(US_ASCII);
 
-      byte[] hash = new byte[0];
-      byte[] keyAndIv = new byte[0];
+      byte[] hash = {};
+      byte[] keyAndIv = {};
       for (int i = 0; i < 3 && keyAndIv.length < 48; ++i) {
         final byte[] hashPassSalt = new byte[hash.length + pass.length + 8];
         System.arraycopy(hash, 0, hashPassSalt, 0, hash.length);
