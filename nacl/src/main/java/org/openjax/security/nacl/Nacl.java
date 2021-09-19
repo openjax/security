@@ -269,7 +269,7 @@ public abstract class Nacl {
      * @return An encrypted and authenticated message, which is
      *         nacl.box.overheadLength longer than the original message.
      */
-    public abstract byte[] box(final byte[] message);
+    public abstract byte[] box(byte[] message);
 
     /**
      * Encrypt and authenticates message using peer's public key, our secret
@@ -281,7 +281,7 @@ public abstract class Nacl {
      * @return An encrypted and authenticated message, which is
      *         nacl.box.overheadLength longer than the original message.
      */
-    public abstract byte[] box(final byte[] message, final byte[] nonce);
+    public abstract byte[] box(byte[] message, byte[] nonce);
 
     /**
      * Authenticates and decrypts the given box with peer's public key, our
@@ -290,7 +290,7 @@ public abstract class Nacl {
      * @param box The box.
      * @return The original message, or {@code null} if authentication fails.
      */
-    public abstract byte[] open(final byte[] box);
+    public abstract byte[] open(byte[] box);
 
     /**
      * Authenticates and decrypts the given box with peer's public key, our
@@ -300,7 +300,7 @@ public abstract class Nacl {
      * @param nonce The nonce.
      * @return The original message, or {@code null} if authentication fails.
      */
-    public abstract byte[] open(final byte[] box, final byte[] nonce);
+    public abstract byte[] open(byte[] box, byte[] nonce);
 
     /**
      * Returns a precomputed shared key which can be used in nacl.box.after and
@@ -374,7 +374,7 @@ public abstract class Nacl {
      * @return An encrypted and authenticated message, which is
      *         nacl.secretbox.overheadLength longer than the original message.
      */
-    public abstract byte[] box(final byte[] message);
+    public abstract byte[] box(byte[] message);
 
     /**
      * Authenticates and decrypts the given secret box using the key and the
@@ -434,7 +434,7 @@ public abstract class Nacl {
      * @param message The message.
      * @return A signed message.
      */
-    public abstract byte[] sign(final byte[] message);
+    public abstract byte[] sign(byte[] message);
 
     /**
      * Signs the message using the secret key.

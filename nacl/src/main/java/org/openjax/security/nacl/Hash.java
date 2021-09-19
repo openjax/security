@@ -44,5 +44,5 @@ public abstract class Hash {
     return sha512(message.getBytes(StandardCharsets.UTF_8));
   }
 
-  public abstract int cryptoHash(final byte[] out, final byte[] m);
+  public abstract int cryptoHash(byte[] out, byte[] m);
 }
