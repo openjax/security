@@ -16,11 +16,11 @@
 
 package org.openjax.security.crypto;
 
+import static org.libj.lang.Assertions.*;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import org.libj.lang.Assertions;
 
 /**
  * An enum of common hash functions.
@@ -319,7 +319,7 @@ public enum Hash {
    * @throws IllegalArgumentException If the provided byte array is null.
    */
   public byte[] encode(final byte[] bytes) {
-    Assertions.assertNotNull(bytes);
+    assertNotNull(bytes);
     messageDigest.get().update(bytes);
     return messageDigest.get().digest();
   }
@@ -332,6 +332,6 @@ public enum Hash {
    * @throws IllegalArgumentException If the provided string is null.
    */
   public final byte[] encode(final String string) {
-    return encode(Assertions.assertNotNull(string).getBytes());
+    return encode(assertNotNull(string).getBytes());
   }
 }

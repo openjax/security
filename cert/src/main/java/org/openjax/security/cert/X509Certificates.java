@@ -16,6 +16,8 @@
 
 package org.openjax.security.cert;
 
+import static org.libj.lang.Assertions.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +52,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.libj.lang.Assertions;
 import org.openjax.security.crypto.Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,7 +170,7 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If {@code key} is null.
    */
   public static String encodeKey(final PrivateKey key) {
-    return Type.PRIVATE_KEY.derToPem(Assertions.assertNotNull(key).getEncoded(), true);
+    return Type.PRIVATE_KEY.derToPem(assertNotNull(key).getEncoded(), true);
   }
 
   /**
@@ -182,7 +183,7 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If {@code key} is null.
    */
   public static String encodeKey(final PublicKey key) {
-    return Type.PUBLIC_KEY.derToPem(Assertions.assertNotNull(key).getEncoded(), true);
+    return Type.PUBLIC_KEY.derToPem(assertNotNull(key).getEncoded(), true);
   }
 
   /**
@@ -196,7 +197,7 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If {@code certificate} is null.
    */
   public static String encodeCertificate(final byte[] certificate) throws CertificateEncodingException {
-    return Type.CERTIFICATE.derToPem(Assertions.assertNotNull(certificate), false);
+    return Type.CERTIFICATE.derToPem(assertNotNull(certificate), false);
   }
 
   /**
@@ -210,7 +211,7 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If {@code certificate} is null.
    */
   public static String encodeCertificate(final Certificate certificate) throws CertificateEncodingException {
-    return Type.CERTIFICATE.derToPem(Assertions.assertNotNull(certificate).getEncoded(), false);
+    return Type.CERTIFICATE.derToPem(assertNotNull(certificate).getEncoded(), false);
   }
 
   /**
@@ -243,7 +244,7 @@ public final class X509Certificates {
    *           null.
    */
   public static byte[] generateThumbprint(final String certificate, final Hash hash) {
-    return Assertions.assertNotNull(hash).encode(Type.CERTIFICATE.pemToDer(Assertions.assertNotNull(certificate)));
+    return assertNotNull(hash).encode(Type.CERTIFICATE.pemToDer(assertNotNull(certificate)));
   }
 
   /**
@@ -257,7 +258,7 @@ public final class X509Certificates {
    */
   public static PublicKey decodePublicKey(final byte[] der) throws InvalidKeySpecException {
     try {
-      return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Assertions.assertNotNull(der)));
+      return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(assertNotNull(der)));
     }
     catch (final NoSuchAlgorithmException e) {
       throw new RuntimeException(e);
@@ -275,7 +276,7 @@ public final class X509Certificates {
    */
   public static PrivateKey decodePrivateKey(final byte[] der) throws InvalidKeySpecException {
     try {
-      return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(Assertions.assertNotNull(der)));
+      return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(assertNotNull(der)));
     }
     catch (final NoSuchAlgorithmException e) {
       throw new RuntimeException(e);
@@ -295,7 +296,7 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If {@code in} is null.
    */
   public static X509Certificate decodeCertificate(final InputStream in) throws CertificateException {
-    Assertions.assertNotNull(in);
+    assertNotNull(in);
     final CertificateFactory certificateFactory;
     try {
       certificateFactory = CertificateFactory.getInstance("X.509");
@@ -322,7 +323,7 @@ public final class X509Certificates {
    */
   @SuppressWarnings("unchecked")
   public static Collection<X509Certificate> decodeCertificateChain(final InputStream in) throws CertificateException {
-    Assertions.assertNotNull(in);
+    assertNotNull(in);
     final CertificateFactory certificateFactory;
     try {
       certificateFactory = CertificateFactory.getInstance("X.509");
@@ -346,7 +347,7 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If {@code der} is null.
    */
   public static X509Certificate decodeCertificate(final byte[] der) throws CertificateException {
-    return decodeCertificate(new ByteArrayInputStream(Assertions.assertNotNull(der)));
+    return decodeCertificate(new ByteArrayInputStream(assertNotNull(der)));
   }
 
   /**
@@ -361,7 +362,7 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If {@code der} is null.
    */
   public static Collection<X509Certificate> decodeCertificateChain(final byte[] der) throws CertificateException {
-    return decodeCertificateChain(new ByteArrayInputStream(Assertions.assertNotNull(der)));
+    return decodeCertificateChain(new ByteArrayInputStream(assertNotNull(der)));
   }
 
   /**
@@ -389,7 +390,7 @@ public final class X509Certificates {
    */
   public static KeyStore getKeyStore(final URL url, final String storePassword) throws CertificateException, IOException, KeyStoreException, NoSuchAlgorithmException {
     final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-    try (final InputStream in = Assertions.assertNotNull(url).openStream()) {
+    try (final InputStream in = assertNotNull(url).openStream()) {
       keyStore.load(in, storePassword == null ? null : storePassword.toCharArray());
     }
 
@@ -406,7 +407,7 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If {@code cert} is null.
    */
   public static boolean isSelfIssued(final X509Certificate cert) {
-    return Assertions.assertNotNull(cert).getSubjectX500Principal().equals(cert.getIssuerX500Principal());
+    return assertNotNull(cert).getSubjectX500Principal().equals(cert.getIssuerX500Principal());
   }
 
   private static X509Certificate[] convertCertPathToX509CertArray(final List<? extends Certificate> certs, final int index, final int depth) {
@@ -463,12 +464,12 @@ public final class X509Certificates {
     try {
       // Create the trust anchors (set of root CA certificates)
       final HashSet<TrustAnchor> trustAnchors = new HashSet<>();
-      for (final X509Certificate trustedRootCert : Assertions.assertNotNull(trustedRootCerts))
-        trustAnchors.add(new TrustAnchor(Assertions.assertNotNull(trustedRootCert), null));
+      for (final X509Certificate trustedRootCert : assertNotNull(trustedRootCerts))
+        trustAnchors.add(new TrustAnchor(assertNotNull(trustedRootCert), null));
 
       // Create the selector that specifies the starting certificate
       final X509CertSelector targetConstraints = new X509CertSelector();
-      targetConstraints.setCertificate(Assertions.assertNotNull(clientCert));
+      targetConstraints.setCertificate(assertNotNull(clientCert));
 
       // Configure the PKIX certificate builder algorithm parameters
       final PKIXBuilderParameters pkixBuilderParameters = new PKIXBuilderParameters(trustAnchors, targetConstraints);
@@ -526,9 +527,9 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If any parameter is null.
    */
   public static void readTrustStore(final KeyStore keyStore, final Set<X509Certificate> trustedRootCerts, final Set<X509Certificate> intermediateCerts) throws KeyStoreException {
-    Assertions.assertNotNull(keyStore);
-    Assertions.assertNotNull(trustedRootCerts);
-    Assertions.assertNotNull(intermediateCerts);
+    assertNotNull(keyStore);
+    assertNotNull(trustedRootCerts);
+    assertNotNull(intermediateCerts);
     for (final Enumeration<String> aliases = keyStore.aliases(); aliases.hasMoreElements();) {
       final String alias = aliases.nextElement();
       if (keyStore.isCertificateEntry(alias)) {

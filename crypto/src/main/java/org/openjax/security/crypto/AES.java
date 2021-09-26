@@ -17,6 +17,7 @@
 package org.openjax.security.crypto;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.libj.lang.Assertions.*;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -31,8 +32,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.libj.lang.Assertions;
-
 /**
  * An enum of common AES crypto functions.
  */
@@ -45,9 +44,9 @@ public enum AES {
 
     @Override
     public byte[] encrypt(final byte[] data, final String password, final byte[] salt) {
-      Assertions.assertNotNull(data);
-      Assertions.assertNotNull(password);
-      Assertions.assertNotNull(salt);
+      assertNotNull(data);
+      assertNotNull(password);
+      assertNotNull(salt);
       if (salt.length != 8)
         throw new IllegalArgumentException("salt.length (" + salt.length + ") must be equal to 8");
 
@@ -93,8 +92,8 @@ public enum AES {
 
     @Override
     public byte[] decrypt(final byte[] encrypted, final String password) {
-      Assertions.assertNotNull(encrypted);
-      Assertions.assertNotNull(password);
+      assertNotNull(encrypted);
+      assertNotNull(password);
       for (int i = 0; i < MAGIC.length; ++i)
         if (MAGIC[i] != encrypted[i])
           throw new IllegalArgumentException("Bad magic number");
