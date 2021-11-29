@@ -71,7 +71,7 @@ public enum AES {
         return concat(MAGIC, salt, encrypted);
       }
       catch (final BadPaddingException | IllegalBlockSizeException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException e) {
-        throw new RuntimeException(e);
+        throw new RuntimeException("data: " + data + ", password: " + password + ", salt: " + salt, e);
       }
     }
 
@@ -117,8 +117,8 @@ public enum AES {
         cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(keyAndIv, 32, 16));
         return cipher.doFinal(encrypted, 16, encrypted.length - 16);
       }
-      catch (final BadPaddingException | IllegalBlockSizeException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException e) {
-        throw new RuntimeException(e);
+      catch (final BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e) {
+        throw new RuntimeException("data: " + encrypted + ", password: " + password, e);
       }
     }
   };
