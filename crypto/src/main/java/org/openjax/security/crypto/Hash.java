@@ -117,7 +117,7 @@ public enum Hash {
         crc = ((crc >>> 8) ^ CRC_TABLE[(crc ^ (bytes[i++] & 0xFF)) & 0xFF]);
 
       return (int)((crc ^ 0xFFFFFFFF) & 0xFFFFFFFFL);
-    };
+    }
 
     @Override
     public long encodeAsLong(final byte[] bytes) {
@@ -240,7 +240,7 @@ public enum Hash {
     };
 
     @Override
-    public int encodeAsInt(byte[] bytes) {
+    public int encodeAsInt(final byte[] bytes) {
       return (int)encodeAsLong(bytes);
     }
 
@@ -251,7 +251,7 @@ public enum Hash {
         crc = CRC_TABLE[((int)(crc >> 56) ^ bytes[i++]) & 0xFF] ^ (crc << 8);
 
       return crc;
-    };
+    }
 
     @Override
     public byte[] encode(final byte[] bytes) {
@@ -261,7 +261,13 @@ public enum Hash {
       };
     }
   },
-  MD2("MD2"), MD5("MD5"), SHA1("SHA-1"), SHA224("SHA-224"), SHA256("SHA-256"), SHA384("SHA-384"), SHA512("SHA-512");
+  MD2("MD2"),
+  MD5("MD5"),
+  SHA1("SHA-1"),
+  SHA224("SHA-224"),
+  SHA256("SHA-256"),
+  SHA384("SHA-384"),
+  SHA512("SHA-512");
 
   private final ThreadLocal<MessageDigest> messageDigest;
 
