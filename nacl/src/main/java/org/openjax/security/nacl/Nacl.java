@@ -130,7 +130,7 @@ public abstract class Nacl {
     System.arraycopy(a, 0, r, 0, 16);
   }
 
-  static byte[] hexDecode(final String s) {
+  public static byte[] hexDecode(final String s) {
     final byte[] b = new byte[s.length() / 2];
     for (int i = 0; i < s.length(); i += 2)
       b[i / 2] = (byte)((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
@@ -176,22 +176,22 @@ public abstract class Nacl {
     return x;
   }
 
-  static byte[] randombytes(final int len) {
+  public static byte[] randombytes(final int len) {
     return randombytes(new byte[len]);
   }
 
-  static byte[] makeBoxNonce() {
+  public static byte[] makeBoxNonce() {
     return randombytes(nonceLength);
   }
 
-  static byte[] makeSecretBoxNonce() {
+  public static byte[] makeSecretBoxNonce() {
     return randombytes(nonceLength);
   }
 
   /**
    * Box algorithm, Public-key authenticated encryption
    */
-  abstract static class Box {
+  public abstract static class Box {
     /** Length of public key in bytes. */
     public static final int publicKeyLength = 32;
 
@@ -322,7 +322,7 @@ public abstract class Nacl {
   /**
    * Secret Box algorithm, secret key
    */
-  abstract class SecretBox {
+  public abstract class SecretBox {
     final AtomicLong nonce;
     final byte[] key;
 
@@ -410,15 +410,15 @@ public abstract class Nacl {
   /**
    * Signature algorithm, Implements ed25519.
    */
-  abstract class Signature {
+  public abstract class Signature {
     /** Length of signature in bytes. */
-    static final int signatureLength = 64;
+    public static final int signatureLength = 64;
 
     /** Length of public key in bytes. */
-    static final int publicKeyLength = 32;
+    public static final int publicKeyLength = 32;
 
     /** Length of signing secret key in bytes. */
-    static final int secretKeyLength = 64;
+    public static final int secretKeyLength = 64;
 
     final byte[] theirPublicKey;
     final byte[] mySecretKey;
@@ -635,13 +635,13 @@ public abstract class Nacl {
     return cryptoBoxOpenAfterNm(m, c, d, n, k);
   }
 
-  abstract Box newBox(byte[] publicKey, byte[] privateKey);
-  abstract Box newBox(byte[] publicKey, byte[] privateKey, long nonce);
-  abstract SecretBox newSecretBox(byte[] key);
-  abstract SecretBox newSecretBox(byte[] key, long nonce);
-  abstract Signature newSignature(byte[] theirPublicKey, byte[] mySecretKey);
+  public abstract Box newBox(byte[] publicKey, byte[] privateKey);
+  public abstract Box newBox(byte[] publicKey, byte[] privateKey, long nonce);
+  public abstract SecretBox newSecretBox(byte[] key);
+  public abstract SecretBox newSecretBox(byte[] key, long nonce);
+  public abstract Signature newSignature(byte[] theirPublicKey, byte[] mySecretKey);
 
-  abstract byte[] randombytes(byte[] x, int len);
+  public abstract byte[] randombytes(byte[] x, int len);
   abstract void cryptoScalarMult(byte[] q, byte[] n, byte[] p);
   abstract int cryptoSecretBox(byte[] c, byte[] m, int d, byte[] n, byte[] k);
   abstract int cryptoSecretBoxOpen(byte[] m, byte[] c, int d, byte[] n, byte[] k);

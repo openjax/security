@@ -20,7 +20,7 @@ package org.openjax.security.nacl;
  * TweetNacl.c Java Port
  */
 @SuppressWarnings("unused")
-final class NaclTweetFast extends Nacl {
+public final class NaclTweetFast extends Nacl {
   /**
    * Box algorithm, Public-key authenticated encryption
    */
@@ -251,27 +251,27 @@ final class NaclTweetFast extends Nacl {
   }
 
   @Override
-  Box newBox(final byte[] publicKey, final byte[] privateKey) {
+  public Box newBox(final byte[] publicKey, final byte[] privateKey) {
     return new Box(this, publicKey, privateKey);
   }
 
   @Override
-  Box newBox(final byte[] publicKey, final byte[] privateKey, final long nonce) {
+  public Box newBox(final byte[] publicKey, final byte[] privateKey, final long nonce) {
     return new Box(this, publicKey, privateKey, nonce);
   }
 
   @Override
-  SecretBox newSecretBox(final byte[] key) {
+  public SecretBox newSecretBox(final byte[] key) {
     return new SecretBox(key);
   }
 
   @Override
-  SecretBox newSecretBox(final byte[] key, final long nonce) {
+  public SecretBox newSecretBox(final byte[] key, final long nonce) {
     return new SecretBox(key, nonce);
   }
 
   @Override
-  Signature newSignature(final byte[] theirPublicKey, final byte[] mySecretKey) {
+  public Signature newSignature(final byte[] theirPublicKey, final byte[] mySecretKey) {
     return new Signature(theirPublicKey, mySecretKey);
   }
 
@@ -406,7 +406,7 @@ final class NaclTweetFast extends Nacl {
   /**
    * Signature algorithm, Implements ed25519.
    */
-  final class Signature extends Nacl.Signature {
+  public final class Signature extends Nacl.Signature {
     Signature(final byte[] theirPublicKey, final byte[] mySecretKey) {
       super(theirPublicKey, mySecretKey);
     }
