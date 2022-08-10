@@ -113,7 +113,7 @@ public enum Hash {
     @Override
     public int encodeAsInt(final byte[] bytes) {
       int crc = ~0;
-      for (int i = 0, len = bytes.length; len > 0; --len)
+      for (int i = 0, len = bytes.length; len > 0; --len) // [A]
         crc = ((crc >>> 8) ^ CRC_TABLE[(crc ^ (bytes[i++] & 0xFF)) & 0xFF]);
 
       return (int)((crc ^ 0xFFFFFFFF) & 0xFFFFFFFFL);
@@ -127,9 +127,7 @@ public enum Hash {
     @Override
     public byte[] encode(final byte[] bytes) {
       final int crc = encodeAsInt(bytes);
-      return new byte[] {
-        (byte)(crc >> 24), (byte)(crc >> 16), (byte)(crc >> 8), (byte)crc
-      };
+      return new byte[] {(byte)(crc >> 24), (byte)(crc >> 16), (byte)(crc >> 8), (byte)crc};
     }
   },
   CRC64(null) {
@@ -247,7 +245,7 @@ public enum Hash {
     @Override
     public long encodeAsLong(final byte[] bytes) {
       long crc = 0;
-      for (int i = 0, len = bytes.length; len > 0; --len)
+      for (int i = 0, len = bytes.length; len > 0; --len) // [A]
         crc = CRC_TABLE[((int)(crc >> 56) ^ bytes[i++]) & 0xFF] ^ (crc << 8);
 
       return crc;
@@ -256,9 +254,7 @@ public enum Hash {
     @Override
     public byte[] encode(final byte[] bytes) {
       final long crc = encodeAsLong(bytes);
-      return new byte[] {
-        (byte)(crc >> 56), (byte)(crc >> 48), (byte)(crc >> 40), (byte)(crc >> 32), (byte)(crc >> 24), (byte)(crc >> 16), (byte)(crc >> 8), (byte)crc
-      };
+      return new byte[] {(byte)(crc >> 56), (byte)(crc >> 48), (byte)(crc >> 40), (byte)(crc >> 32), (byte)(crc >> 24), (byte)(crc >> 16), (byte)(crc >> 8), (byte)crc};
     }
   },
   MD2("MD2"),

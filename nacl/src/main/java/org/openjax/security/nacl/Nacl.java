@@ -26,7 +26,7 @@ public abstract class Nacl {
   /** Length of nonce in bytes. */
   public static final int nonceLength = 24;
 
-  /** Length of seed for nacl.sign.keyPair.fromSeed in bytes. */
+  /** Length of seed for nacl.sign.keyPair.fromSeed in bytes. */ // [A]
   public static final int seedLength = 32;
 
   /**
@@ -79,7 +79,7 @@ public abstract class Nacl {
   }
 
   static void unpack25519(final long[] o, final byte[] n) {
-    for (int i = 0; i < 16; ++i)
+    for (int i = 0; i < 16; ++i) // [A]
       o[i] = (n[2 * i] & 0xff) + ((long)((n[2 * i + 1] << 8) & 0xffff));
 
     o[15] &= 0x7fff;
@@ -88,10 +88,10 @@ public abstract class Nacl {
   static void reduce(final byte[] r) {
     final long[] x = new long[64];
     int i;
-    for (i = 0; i < 64; ++i)
+    for (i = 0; i < 64; ++i) // [A]
       x[i] = r[i] & 0xff;
 
-    for (i = 0; i < 64; ++i)
+    for (i = 0; i < 64; ++i) // [A]
       r[i] = 0;
 
     modL(r, 0, x);
@@ -100,9 +100,9 @@ public abstract class Nacl {
   static void modL(final byte[] r, final int roff, final long[] x) {
     long carry;
     int i, j;
-    for (i = 63; i >= 32; --i) {
+    for (i = 63; i >= 32; --i) { // [A]
       carry = 0;
-      for (j = i - 32; j < i - 12; ++j) {
+      for (j = i - 32; j < i - 12; ++j) { // [A]
         x[j] += carry - 16 * x[i] * L[j - (i - 32)];
         carry = (x[j] + 128) >> 8;
         x[j] -= carry << 8;
@@ -111,16 +111,16 @@ public abstract class Nacl {
       x[i] = 0;
     }
 
-    for (j = 0, carry = 0; j < 32; ++j) {
+    for (j = 0, carry = 0; j < 32; ++j) { // [A]
       x[j] += carry - (x[31] >> 4) * L[j];
       carry = x[j] >> 8;
       x[j] &= 255;
     }
 
-    for (j = 0; j < 32; ++j)
+    for (j = 0; j < 32; ++j) // [A]
       x[j] -= carry * L[j];
 
-    for (i = 0; i < 32; ++i) {
+    for (i = 0; i < 32; ++i) { // [A]
       x[i + 1] += x[i] >> 8;
       r[i + roff] = (byte)(x[i] & 255);
     }
@@ -132,7 +132,7 @@ public abstract class Nacl {
 
   public static byte[] hexDecode(final String s) {
     final byte[] b = new byte[s.length() / 2];
-    for (int i = 0; i < s.length(); i += 2)
+    for (int i = 0; i < s.length(); i += 2) // [A]
       b[i / 2] = (byte)((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
 
     return b;
@@ -141,7 +141,7 @@ public abstract class Nacl {
   static void sel25519(final long[] p, final int poff, final long[] q, final int qoff, final int b) {
     long t;
     final long c = -b;
-    for (int i = 0; i < 16; ++i) {
+    for (int i = 0; i < 16; ++i) { // [A]
       t = c & (p[i + poff] ^ q[i + qoff]);
       p[i + poff] ^= t;
       q[i + qoff] ^= t;
@@ -150,24 +150,24 @@ public abstract class Nacl {
 
   static int vn(final byte[] x, final int xoff, final byte[] y, final int yoff, final int n) {
     int d = 0;
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i) // [A]
       d |= (x[i + xoff] ^ y[i + yoff]) & 0xff;
 
     return (1 & ((d - 1) >>> 8)) - 1;
   }
 
   static void cswap(final long[][] p, final long[][] q, final byte b) {
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < 4; ++i) // [A]
       sel25519(p[i], 0, q[i], 0, b);
   }
 
   /*
    * public static byte[] randombytes(byte [] x, int len) { int ret = len % 8;
-   * long rnd; for (int i = 0; i < len-ret; i += 8) { rnd = jrandom.nextLong();
+   * long rnd; for (int i = 0; i < len-ret; i += 8) { rnd = jrandom.nextLong(); // [A]
    * x[i+0] = (byte) (rnd >>> 0); x[i+1] = (byte) (rnd >>> 8); x[i+2] = (byte)
    * (rnd >>> 16); x[i+3] = (byte) (rnd >>> 24); x[i+4] = (byte) (rnd >>> 32);
    * x[i+5] = (byte) (rnd >>> 40); x[i+6] = (byte) (rnd >>> 48); x[i+7] = (byte)
-   * (rnd >>> 56); } if (ret > 0) { rnd = jrandom.nextLong(); for (int i =
+   * (rnd >>> 56); } if (ret > 0) { rnd = jrandom.nextLong(); for (int i = // [A]
    * len-ret; i < len; i ++) x[i] = (byte) (rnd >>> 8*i); } return x; }
    */
 
@@ -246,7 +246,7 @@ public abstract class Nacl {
       // generate nonce
       final long nonce = this.nonce.get();
       final byte[] n = new byte[nonceLength];
-      for (int i = 0; i < nonceLength;) {
+      for (int i = 0; i < nonceLength;) { // [A]
         n[i++] = (byte)(nonce);
         n[i++] = (byte)(nonce >>> 8);
         n[i++] = (byte)(nonce >>> 16);
@@ -262,8 +262,8 @@ public abstract class Nacl {
 
     /**
      * Encrypt and authenticates message using peer's public key, our secret
-     * key, and the given nonce, which must be unique for each distinct
-     * message for a key pair.
+     * key, and the given nonce, which must be unique for each distinct // [A]
+     * message for a key pair. // [A]
      *
      * @param message The message.
      * @return An encrypted and authenticated message, which is
@@ -274,7 +274,7 @@ public abstract class Nacl {
     /**
      * Encrypt and authenticates message using peer's public key, our secret
      * key, and the explicitly provided nonce. Caller is responsible for
-     * ensuring that nonce is unique for each distinct message for a key pair.
+     * ensuring that nonce is unique for each distinct message for a key pair. // [A]
      *
      * @param message The message.
      * @param nonce The nonce.
@@ -352,7 +352,7 @@ public abstract class Nacl {
       // generate nonce
       final long nonce = this.nonce.get();
       final byte[] n = new byte[nonceLength];
-      for (int i = 0; i < nonceLength;) {
+      for (int i = 0; i < nonceLength;) { // [A]
         n[i++] = (byte)(nonce);
         n[i++] = (byte)(nonce >>> 8);
         n[i++] = (byte)(nonce >>> 16);
@@ -368,7 +368,7 @@ public abstract class Nacl {
 
     /**
      * Encrypt and authenticates message using the key and the nonce. The nonce
-     * must be unique for each distinct message for this key.
+     * must be unique for each distinct message for this key. // [A]
      *
      * @param message The message.
      * @return An encrypted and authenticated message, which is
@@ -387,7 +387,7 @@ public abstract class Nacl {
 
     /**
      * Encrypt and authenticates message using the key and the explicitly passed
-     * nonce. The nonce must be unique for each distinct message for this key.
+     * nonce. The nonce must be unique for each distinct message for this key. // [A]
      *
      * @param message The message.
      * @param nonce The nonce.
@@ -451,7 +451,7 @@ public abstract class Nacl {
     }
 
     /**
-     * Verifies the signature for the message.
+     * Verifies the signature for the message. // [A]
      *
      * @param message The message.
      * @param signature The signature.
@@ -527,10 +527,10 @@ public abstract class Nacl {
   }
 
   /**
-   * Returns a new random key pair for box and returns it as an object with
+   * Returns a new random key pair for box and returns it as an object with // [A]
    * publicKey and secretKey members.
    *
-   * @return A new random key pair for box and returns it as an object with
+   * @return A new random key pair for box and returns it as an object with // [A]
    *         publicKey and secretKey members.
    */
   public final KeyPair keyPairForBox() {

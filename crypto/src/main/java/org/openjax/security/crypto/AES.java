@@ -54,7 +54,7 @@ public enum AES {
 
       byte[] hash = {};
       byte[] keyAndIv = {};
-      for (int i = 0; i < 3 && keyAndIv.length < 48; ++i) {
+      for (int i = 0; i < 3 && keyAndIv.length < 48; ++i) { // [A]
         final byte[] hashPassSalt = new byte[hash.length + pass.length + 8];
         System.arraycopy(hash, 0, hashPassSalt, 0, hash.length);
         System.arraycopy(pass, 0, hashPassSalt, hash.length, pass.length);
@@ -94,7 +94,7 @@ public enum AES {
     public byte[] decrypt(final byte[] encrypted, final String password) {
       assertNotNull(encrypted);
       assertNotNull(password);
-      for (int i = 0; i < MAGIC.length; ++i)
+      for (int i = 0; i < MAGIC.length; ++i) // [A]
         if (MAGIC[i] != encrypted[i])
           throw new IllegalArgumentException("Bad magic number");
 
@@ -102,7 +102,7 @@ public enum AES {
 
       byte[] hash = {};
       byte[] keyAndIv = {};
-      for (int i = 0; i < 3 && keyAndIv.length < 48; ++i) {
+      for (int i = 0; i < 3 && keyAndIv.length < 48; ++i) { // [A]
         final byte[] hashPassSalt = new byte[hash.length + pass.length + 8];
         System.arraycopy(hash, 0, hashPassSalt, 0, hash.length);
         System.arraycopy(pass, 0, hashPassSalt, hash.length, pass.length);

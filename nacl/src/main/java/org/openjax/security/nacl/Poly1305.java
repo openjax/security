@@ -312,7 +312,7 @@ class Poly1305 {
     if (this.leftover != 0) {
       i = this.leftover;
       this.buffer[i++] = 1;
-      for (; i < 16; ++i)
+      for (; i < 16; ++i) // [A]
         this.buffer[i] = 0;
 
       this.fin = 1;
@@ -321,7 +321,7 @@ class Poly1305 {
 
     c = this.h[1] >>> 13;
     this.h[1] &= 0x1fff;
-    for (i = 2; i < 10; ++i) {
+    for (i = 2; i < 10; ++i) { // [A]
       this.h[i] += c;
       c = this.h[i] >>> 13;
       this.h[i] &= 0x1fff;
@@ -338,7 +338,7 @@ class Poly1305 {
     g[0] = this.h[0] + 5;
     c = g[0] >>> 13;
     g[0] &= 0x1fff;
-    for (i = 1; i < 10; ++i) {
+    for (i = 1; i < 10; ++i) { // [A]
       g[i] = this.h[i] + c;
       c = g[i] >>> 13;
       g[i] &= 0x1fff;
@@ -359,11 +359,11 @@ class Poly1305 {
     mask = (c ^ 1) - 1;
     mask &= 0xffff;
 
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 10; ++i) // [A]
       g[i] &= mask;
 
     mask = ~mask;
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 10; ++i) // [A]
       this.h[i] = (this.h[i] & mask) | g[i];
 
     this.h[0] = ((this.h[0]) | (this.h[1] << 13)) & 0xffff;
@@ -377,7 +377,7 @@ class Poly1305 {
 
     f = this.h[0] + this.pad[0];
     this.h[0] = f & 0xffff;
-    for (i = 1; i < 8; ++i) {
+    for (i = 1; i < 8; ++i) { // [A]
       f = this.h[i] + this.pad[i] + (f >>> 16);
       this.h[i] = f & 0xffff;
     }
@@ -409,7 +409,7 @@ class Poly1305 {
       if (want > bytes)
         want = bytes;
 
-      for (i = 0; i < want; ++i)
+      for (i = 0; i < want; ++i) // [A]
         this.buffer[this.leftover + i] = m[mpos + i];
 
       bytes -= want;
@@ -430,7 +430,7 @@ class Poly1305 {
     }
 
     if (bytes != 0) {
-      for (i = 0; i < bytes; ++i)
+      for (i = 0; i < bytes; ++i) // [A]
         this.buffer[this.leftover + i] = m[mpos + i];
 
       this.leftover += bytes;

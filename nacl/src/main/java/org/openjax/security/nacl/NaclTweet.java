@@ -41,7 +41,7 @@ public final class NaclTweet extends Nacl {
     /**
      * Encrypt and authenticates message using peer's public key, our secret
      * key, and the explicitly provided nonce. Caller is responsible for
-     * ensuring that nonce is unique for each distinct message for a key pair.
+     * ensuring that nonce is unique for each distinct message for a key pair. // [A]
      *
      * @param message The message.
      * @param nonce The nonce.
@@ -318,7 +318,7 @@ public final class NaclTweet extends Nacl {
   }
 
   private static void st32(final byte[] x, final int xoff, final int xlen, int u) {
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i) { // [A]
       x[i + xoff] = (byte)(u & 0xff);
       u >>>= 8;
     }
@@ -345,48 +345,48 @@ public final class NaclTweet extends Nacl {
   private static void coreSalsa20(final byte[] out, final byte[] in, final byte[] k, final byte[] c, final int h) {
     final int[] w = new int[16], x = new int[16], y = new int[16], t = new int[4];
     int i, j, m;
-    for (i = 0; i < 4; ++i) {
+    for (i = 0; i < 4; ++i) { // [A]
       x[5 * i] = ld32(c, 4 * i, 4);
       x[1 + i] = ld32(k, 4 * i, 4);
       x[6 + i] = ld32(in, 4 * i, 4);
       x[11 + i] = ld32(k, 16 + 4 * i, 4);
     }
 
-    for (i = 0; i < 16; ++i)
+    for (i = 0; i < 16; ++i) // [A]
       y[i] = x[i];
 
-    for (i = 0; i < 20; ++i) {
-      for (j = 0; j < 4; ++j) {
-        for (m = 0; m < 4; ++m)
+    for (i = 0; i < 20; ++i) { // [A]
+      for (j = 0; j < 4; ++j) { // [A]
+        for (m = 0; m < 4; ++m) // [A]
           t[m] = x[(5 * j + 4 * m) % 16];
 
         t[1] ^= L32(t[0] + t[3], 7);
         t[2] ^= L32(t[1] + t[0], 9);
         t[3] ^= L32(t[2] + t[1], 13);
         t[0] ^= L32(t[3] + t[2], 18);
-        for (m = 0; m < 4; ++m)
+        for (m = 0; m < 4; ++m) // [A]
           w[4 * j + (j + m) % 4] = t[m];
       }
 
-      for (m = 0; m < 16; ++m)
+      for (m = 0; m < 16; ++m) // [A]
         x[m] = w[m];
     }
 
     if (h != 0) {
-      for (i = 0; i < 16; ++i)
+      for (i = 0; i < 16; ++i) // [A]
         x[i] += y[i];
 
-      for (i = 0; i < 4; ++i) {
+      for (i = 0; i < 4; ++i) { // [A]
         x[5 * i] -= ld32(c, 4 * i, 4);
         x[6 + i] -= ld32(in, 4 * i, 4);
       }
-      for (i = 0; i < 4; ++i) {
+      for (i = 0; i < 4; ++i) { // [A]
         st32(out, 4 * i, 4, x[5 * i]);
         st32(out, 16 + 4 * i, 4, x[6 + i]);
       }
     }
     else {
-      for (i = 0; i < 16; ++i)
+      for (i = 0; i < 16; ++i) // [A]
         st32(out, 4 * i, 4, x[i] + y[i]);
     }
   }
@@ -408,20 +408,20 @@ public final class NaclTweet extends Nacl {
     final byte[] z = new byte[16];
     final byte[] x = new byte[64];
     int u, i;
-    for (i = 0; i < 16; ++i)
+    for (i = 0; i < 16; ++i) // [A]
       z[i] = 0;
-    for (i = 0; i < 8; ++i)
+    for (i = 0; i < 8; ++i) // [A]
       z[i] = n[i + noff];
 
     int coffset = 0;
     int moffset = 0;
     while (b >= 64) {
       cryptoCoreSalsa20(x, z, k, sigma);
-      for (i = 0; i < 64; ++i)
+      for (i = 0; i < 64; ++i) // [A]
         c[i + coffset] = (byte)(((m != null ? m[i + moffset] : 0) ^ x[i]) & 0xff);
 
       u = 1;
-      for (i = 8; i < 16; ++i) {
+      for (i = 8; i < 16; ++i) { // [A]
         u += z[i] & 0xff;
         z[i] = (byte)(u & 0xff);
         u >>>= 8;
@@ -435,7 +435,7 @@ public final class NaclTweet extends Nacl {
 
     if (b > 0) {
       cryptoCoreSalsa20(x, z, k, sigma);
-      for (i = 0; i < b; ++i)
+      for (i = 0; i < b; ++i) // [A]
         c[i + coffset] = (byte)(((m != null ? m[i + moffset] : 0) ^ x[i]) & 0xff);
     }
   }
@@ -528,7 +528,7 @@ public final class NaclTweet extends Nacl {
 
   private static void car25519(final long[] o, final int ooff, final int olen) {
     long c;
-    for (int i = 0; i < 16; ++i) {
+    for (int i = 0; i < 16; ++i) { // [A]
       o[i + ooff] += (1L << 16);
       c = o[i + ooff] >> 16;
       o[(i + 1) * ((i < 15) ? 1 : 0) + ooff] += c - 1 + 37 * (c - 1) * ((i == 15) ? 1 : 0);
@@ -540,15 +540,15 @@ public final class NaclTweet extends Nacl {
     int i, j, b;
     final long[] m = new long[16];
     final long[] t = new long[16];
-    for (i = 0; i < 16; ++i)
+    for (i = 0; i < 16; ++i) // [A]
       t[i] = n[i + noff];
 
     car25519(t, 0, t.length);
     car25519(t, 0, t.length);
     car25519(t, 0, t.length);
-    for (j = 0; j < 2; ++j) {
+    for (j = 0; j < 2; ++j) { // [A]
       m[0] = t[0] - 0xffed;
-      for (i = 1; i < 15; ++i) {
+      for (i = 1; i < 15; ++i) { // [A]
         m[i] = t[i] - 0xffff - ((m[i - 1] >> 16) & 1);
         m[i - 1] &= 0xffff;
       }
@@ -559,7 +559,7 @@ public final class NaclTweet extends Nacl {
       sel25519(t, 0, m, 0, 1 - b);
     }
 
-    for (i = 0; i < 16; ++i) {
+    for (i = 0; i < 16; ++i) { // [A]
       o[2 * i] = (byte)(t[i] & 0xff);
       o[2 * i + 1] = (byte)(t[i] >> 8);
     }
@@ -582,29 +582,29 @@ public final class NaclTweet extends Nacl {
   }
 
   private static void A(final long[] o, final int ooff, final int olen, final long[] a, final int aoff, final int alen, final long[] b, final int boff, final int blen) {
-    for (int i = 0; i < 16; ++i)
+    for (int i = 0; i < 16; ++i) // [A]
       o[i + ooff] = a[i + aoff] + b[i + boff];
   }
 
   private static void Z(final long[] o, final int ooff, final int olen, final long[] a, final int aoff, final int alen, final long[] b, final int boff, final int blen) {
-    for (int i = 0; i < 16; ++i)
+    for (int i = 0; i < 16; ++i) // [A]
       o[i + ooff] = a[i + aoff] - b[i + boff];
   }
 
   private static void M(final long[] o, final int ooff, final int olen, final long[] a, final int aoff, final int alen, final long[] b, final int boff, final int blen) {
     int i, j;
     final long[] t = new long[31];
-    for (i = 0; i < 31; ++i)
+    for (i = 0; i < 31; ++i) // [A]
       t[i] = 0;
 
-    for (i = 0; i < 16; ++i)
-      for (j = 0; j < 16; ++j)
+    for (i = 0; i < 16; ++i) // [A]
+      for (j = 0; j < 16; ++j) // [A]
         t[i + j] += a[i + aoff] * b[j + boff];
 
-    for (i = 0; i < 15; ++i)
+    for (i = 0; i < 15; ++i) // [A]
       t[i] += 38 * t[i + 16];
 
-    for (i = 0; i < 16; ++i)
+    for (i = 0; i < 16; ++i) // [A]
       o[i + ooff] = t[i];
 
     car25519(o, ooff, olen);
@@ -618,16 +618,16 @@ public final class NaclTweet extends Nacl {
   private static void inv25519(final long[] o, final int ooff, final int olen, final long[] i, final int ioff, final int ilen) {
     final long[] c = new long[16];
     int a;
-    for (a = 0; a < 16; ++a)
+    for (a = 0; a < 16; ++a) // [A]
       c[a] = i[a + ioff];
 
-    for (a = 253; a >= 0; --a) {
+    for (a = 253; a >= 0; --a) { // [A]
       S(c, 0, c.length, c, 0, c.length);
       if (a != 2 && a != 4)
         M(c, 0, c.length, c, 0, c.length, i, ioff, ilen);
     }
 
-    for (a = 0; a < 16; ++a)
+    for (a = 0; a < 16; ++a) // [A]
       o[a + ooff] = c[a];
   }
 
@@ -635,16 +635,16 @@ public final class NaclTweet extends Nacl {
   void pow2523(final long[] o, final long[] i) {
     final long[] c = new long[16];
     int a;
-    for (a = 0; a < 16; ++a)
+    for (a = 0; a < 16; ++a) // [A]
       c[a] = i[a];
 
-    for (a = 250; a >= 0; --a) {
+    for (a = 250; a >= 0; --a) { // [A]
       S(c, 0, c.length, c, 0, c.length);
       if (a != 1)
         M(c, 0, c.length, c, 0, c.length, i, 0, i.length);
     }
 
-    for (a = 0; a < 16; ++a)
+    for (a = 0; a < 16; ++a) // [A]
       o[a] = c[a];
   }
 
@@ -654,20 +654,20 @@ public final class NaclTweet extends Nacl {
     final long[] x = new long[80];
     int i;
     final long[] a = new long[16], b = new long[16], c = new long[16], d = new long[16], e = new long[16], f = new long[16];
-    for (i = 0; i < 31; ++i)
+    for (i = 0; i < 31; ++i) // [A]
       z[i] = n[i];
 
     z[31] = (byte)(((n[31] & 127) | 64) & 0xff);
     z[0] &= 248;
     unpack25519(x, p);
-    for (i = 0; i < 16; ++i) {
+    for (i = 0; i < 16; ++i) { // [A]
       b[i] = x[i];
       d[i] = a[i] = c[i] = 0;
     }
 
     a[0] = d[0] = 1;
     i = 254;
-    for (int r; i >= 0; --i) {
+    for (int r; i >= 0; --i) { // [A]
       r = (z[i >>> 3] >>> (i & 7)) & 1;
       sel25519(a, 0, b, 0, r);
       sel25519(c, 0, d, 0, r);
@@ -693,7 +693,7 @@ public final class NaclTweet extends Nacl {
       sel25519(c, 0, d, 0, r);
     }
 
-    for (i = 0; i < 16; ++i) {
+    for (i = 0; i < 16; ++i) { // [A]
       x[i + 16] = a[i];
       x[i + 32] = c[i];
       x[i + 48] = b[i];
@@ -771,7 +771,7 @@ public final class NaclTweet extends Nacl {
     set25519(p[2], gf1);
     set25519(p[3], gf0);
 
-    for (int i = 255; i >= 0; --i) {
+    for (int i = 255; i >= 0; --i) { // [A]
       final byte b = (byte)((s[i / 8 + soff] >> (i & 7)) & 1);
 
       cswap(p, q, b);
@@ -839,10 +839,10 @@ public final class NaclTweet extends Nacl {
     d[31] |= 64;
 
     int i;
-    for (i = 0; i < n; ++i)
+    for (i = 0; i < n; ++i) // [A]
       sm[64 + i] = m[i];
 
-    for (i = 0; i < 32; ++i)
+    for (i = 0; i < 32; ++i) // [A]
       sm[32 + i] = d[32 + i];
 
     HashTweet.cryptoHash(r, sm, 32, sm.length - 32, n + 32);
@@ -850,20 +850,20 @@ public final class NaclTweet extends Nacl {
     scalarbase(p, r, 0, r.length);
     pack(sm, p);
 
-    for (i = 0; i < 32; ++i)
+    for (i = 0; i < 32; ++i) // [A]
       sm[i + 32] = sk[i + 32];
 
     HashTweet.cryptoHash(h, sm, 0, sm.length, n + 64);
     reduce(h);
 
-    for (i = 0; i < 64; ++i)
+    for (i = 0; i < 64; ++i) // [A]
       x[i] = 0;
 
-    for (i = 0; i < 32; ++i)
+    for (i = 0; i < 32; ++i) // [A]
       x[i] = r[i] & 0xff;
 
-    for (i = 0; i < 32; ++i)
-      for (int j = 0; j < 32; ++j)
+    for (i = 0; i < 32; ++i) // [A]
+      for (int j = 0; j < 32; ++j) // [A]
         x[i + j] += (h[i] & 0xff) * (long)(d[j] & 0xff);
 
     modL(sm, 32, x);
@@ -940,10 +940,10 @@ public final class NaclTweet extends Nacl {
       return -1;
 
     int i;
-    for (i = 0; i < n; ++i)
+    for (i = 0; i < n; ++i) // [A]
       m[i] = sm[i];
 
-    for (i = 0; i < 32; ++i)
+    for (i = 0; i < 32; ++i) // [A]
       m[i + 32] = pk[i];
 
     HashTweet.cryptoHash(h, m, 0, m.length, n);
@@ -967,7 +967,7 @@ public final class NaclTweet extends Nacl {
   public byte[] randombytes(final byte[] x, final int len) {
     final int ret = len % 8;
     long rnd;
-    for (int i = 0; i < len - ret;) {
+    for (int i = 0; i < len - ret;) { // [A]
       rnd = random.nextLong();
 
       x[i++] = (byte)(rnd);
@@ -982,7 +982,7 @@ public final class NaclTweet extends Nacl {
 
     if (ret > 0) {
       rnd = random.nextLong();
-      for (int i = len - ret; i < len; ++i)
+      for (int i = len - ret; i < len; ++i) // [A]
         x[i] = (byte)(rnd >>> 8 * i);
     }
 

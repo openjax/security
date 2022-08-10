@@ -33,7 +33,7 @@ public class NaclTweetFastTest {
 
   private static String hexEncodeToString(final byte[] raw) {
     final StringBuilder hex = new StringBuilder(2 * raw.length);
-    for (final byte b : raw)
+    for (final byte b : raw) // [A]
       hex.append(HEXES.charAt((b & 0xF0) >> 4)).append(HEXES.charAt((b & 0x0F)));
 
     return hex.toString();
@@ -110,38 +110,38 @@ public class NaclTweetFastTest {
   public void testBox() {
     // keypair A
     final byte[] ska = new byte[32];
-    for (int i = 0; i < 32; ++i)
+    for (int i = 0; i < 32; ++i) // [A]
       ska[i] = 0;
 
     final KeyPair ka = Nacl.TweetFast.keyPairForBox(ska);
 
     final StringBuilder skat = new StringBuilder();
-    for (int i = 0; i < ka.getSecretKey().length; ++i)
+    for (int i = 0; i < ka.getSecretKey().length; ++i) // [A]
       skat.append(' ').append(ka.getSecretKey()[i]);
 
     logger.debug(TAG, "skat: " + skat);
 
     final StringBuilder pkat = new StringBuilder();
-    for (int i = 0; i < ka.getPublicKey().length; ++i)
+    for (int i = 0; i < ka.getPublicKey().length; ++i) // [A]
       pkat.append(' ').append(ka.getPublicKey()[i]);
 
     logger.debug(TAG, "pkat: " + pkat);
 
     // keypair B
     final byte[] skb = new byte[32];
-    for (int i = 0; i < 32; ++i)
+    for (int i = 0; i < 32; ++i) // [A]
       skb[i] = 1;
 
     final KeyPair kb = Nacl.TweetFast.keyPairForBox(skb);
 
     final StringBuilder skbt = new StringBuilder();
-    for (int i = 0; i < kb.getSecretKey().length; ++i)
+    for (int i = 0; i < kb.getSecretKey().length; ++i) // [A]
       skbt.append(' ').append(kb.getSecretKey()[i]);
 
     logger.debug(TAG, "skbt: " + skbt);
 
     final StringBuilder pkbt = new StringBuilder();
-    for (int i = 0; i < kb.getPublicKey().length; ++i)
+    for (int i = 0; i < kb.getPublicKey().length; ++i) // [A]
       pkbt.append(' ').append(kb.getPublicKey()[i]);
 
     logger.debug(TAG, "pkbt: " + pkbt);
@@ -158,14 +158,14 @@ public class NaclTweetFastTest {
     // cipher A -> B
     final byte[] cab = pab.box(m0.getBytes(StandardCharsets.UTF_8));
     final StringBuilder cabt = new StringBuilder();
-    for (int i = 0; i < cab.length; ++i)
+    for (int i = 0; i < cab.length; ++i) // [A]
       cabt.append(' ').append(cab[i]);
 
     logger.debug(TAG, "cabt: " + cabt);
 
     final byte[] mba = pba.open(cab);
     final StringBuilder mbat = new StringBuilder();
-    for (int i = 0; i < mba.length; ++i)
+    for (int i = 0; i < mba.length; ++i) // [A]
       mbat.append(' ').append(mba[i]);
 
     logger.debug(TAG, "mbat: " + mbat);
@@ -175,7 +175,7 @@ public class NaclTweetFastTest {
 
     // cipher B -> A
     final byte[] b0 = new byte[100 * 1000000];
-    for (int i = 0; i < b0.length; ++i)
+    for (int i = 0; i < b0.length; ++i) // [A]
       b0[i] = (byte)i;
 
     logger.debug(TAG, "big of 100M  box@" + System.currentTimeMillis());
@@ -193,7 +193,7 @@ public class NaclTweetFastTest {
     final byte[] theNonce3 = NaclTweetFast.hexDecode(hexEncodeToString(theNonce));
     logger.debug(TAG, "BoxNonce Hex test Equal: \"" + Arrays.equals(theNonce, theNonce3) + "\"");
     final StringBuilder theNoncet = new StringBuilder();
-    for (int i = 0; i < theNonce.length; ++i)
+    for (int i = 0; i < theNonce.length; ++i) // [A]
       theNoncet.append(' ').append(theNonce[i]);
 
     logger.debug(TAG, "BoxNonce: " + theNoncet);
@@ -201,38 +201,38 @@ public class NaclTweetFastTest {
 
     // keypair A
     final byte[] ska = new byte[32];
-    for (int i = 0; i < 32; ++i)
+    for (int i = 0; i < 32; ++i) // [A]
       ska[i] = 0;
 
     final KeyPair ka = Nacl.TweetFast.keyPairForBox(ska);
 
     final StringBuilder skat = new StringBuilder();
-    for (int i = 0; i < ka.getSecretKey().length; ++i)
+    for (int i = 0; i < ka.getSecretKey().length; ++i) // [A]
       skat.append(' ').append(ka.getSecretKey()[i]);
 
     logger.debug(TAG, "skat: " + skat);
 
     final StringBuilder pkat = new StringBuilder();
-    for (int i = 0; i < ka.getPublicKey().length; ++i)
+    for (int i = 0; i < ka.getPublicKey().length; ++i) // [A]
       pkat.append(' ').append(ka.getPublicKey()[i]);
 
     logger.debug(TAG, "pkat: " + pkat);
 
     // keypair B
     byte[] skb = new byte[32];
-    for (int i = 0; i < 32; ++i)
+    for (int i = 0; i < 32; ++i) // [A]
       skb[i] = 1;
 
     final KeyPair kb = Nacl.TweetFast.keyPairForBox(skb);
 
     final StringBuilder skbt = new StringBuilder();
-    for (int i = 0; i < kb.getSecretKey().length; ++i)
+    for (int i = 0; i < kb.getSecretKey().length; ++i) // [A]
       skbt.append(' ').append(kb.getSecretKey()[i]);
 
     logger.debug(TAG, "skbt: " + skbt);
 
     final StringBuilder pkbt = new StringBuilder();
-    for (int i = 0; i < kb.getPublicKey().length; ++i)
+    for (int i = 0; i < kb.getPublicKey().length; ++i) // [A]
       pkbt.append(' ').append(kb.getPublicKey()[i]);
 
     logger.debug(TAG, "pkbt: " + pkbt);
@@ -249,14 +249,14 @@ public class NaclTweetFastTest {
     // cipher A -> B
     final byte[] cab = pab.box(m0.getBytes(StandardCharsets.UTF_8), theNonce);
     final StringBuilder cabt = new StringBuilder();
-    for (int i = 0; i < cab.length; ++i)
+    for (int i = 0; i < cab.length; ++i) // [A]
       cabt.append(' ').append(cab[i]);
 
     logger.debug(TAG, "cabt: " + cabt);
 
     final byte[] mba = pba.open(cab, theNonce);
     final StringBuilder mbat = new StringBuilder();
-    for (int i = 0; i < mba.length; ++i)
+    for (int i = 0; i < mba.length; ++i) // [A]
       mbat.append(' ').append(mba[i]);
 
     logger.debug(TAG, "mbat: " + mbat);
@@ -279,7 +279,7 @@ public class NaclTweetFastTest {
   public void testSecretBox() {
     // shared key
     final byte[] shk = new byte[NaclTweetFast.keyLength];
-    for (int i = 0; i < shk.length; ++i)
+    for (int i = 0; i < shk.length; ++i) // [A]
       shk[i] = 0x66;
 
     // peer A -> B
@@ -294,7 +294,7 @@ public class NaclTweetFastTest {
     // cipher A -> B
     logger.debug(TAG, "streess on secret box@" + m0);
 
-    for (int t = 0; t < 19; ++t, m0 += m0) {
+    for (int t = 0; t < 19; ++t, m0 += m0) { // [A]
       final byte[] mb0 = m0.getBytes(StandardCharsets.UTF_8);
       logger.debug(TAG, "\n\n\tstreess/" + (mb0.length / 1000.0) + "kB: " + t + " times");
 
@@ -329,14 +329,14 @@ public class NaclTweetFastTest {
     // explicit nonce
     final byte[] theNonce = NaclTweetFast.makeSecretBoxNonce();
     final StringBuilder theNoncet = new StringBuilder();
-    for (int i = 0; i < theNonce.length; ++i)
+    for (int i = 0; i < theNonce.length; ++i) // [A]
       theNoncet.append(' ').append(theNonce[i]);
 
     logger.debug(TAG, "SecretBoxNonce: " + theNoncet);
 
     // shared key
     final byte[] shk = new byte[NaclTweetFast.keyLength];
-    for (int i = 0; i < shk.length; ++i)
+    for (int i = 0; i < shk.length; ++i) // [A]
       shk[i] = 0x66;
 
     // peer A -> B
@@ -351,7 +351,7 @@ public class NaclTweetFastTest {
     // cipher A -> B
     logger.debug(TAG, "stress on secret box with explicit nonce@" + m0);
 
-    for (int t = 0; t < 19; t++, m0 += m0) {
+    for (int t = 0; t < 19; t++, m0 += m0) { // [A]
       final byte[] mb0 = m0.getBytes(StandardCharsets.UTF_8);
 
       logger.debug(TAG, "\n\n\tstress/" + (mb0.length / 1000.0) + "kB: " + t + " times");
@@ -405,7 +405,7 @@ public class NaclTweetFastTest {
     logger.debug(TAG, "...sign@" + System.currentTimeMillis());
 
     final StringBuilder sgt = new StringBuilder("sign@" + m0 + ": ");
-    for (int i = 0; i < NaclTweetFast.Signature.signatureLength; ++i)
+    for (int i = 0; i < NaclTweetFast.Signature.signatureLength; ++i) // [A]
       sgt.append(' ').append(sab[i]);
 
     logger.debug(TAG, sgt.toString());
@@ -420,19 +420,19 @@ public class NaclTweetFastTest {
 
     // keypair C
     final byte[] seed = new byte[NaclTweetFast.seedLength];
-    for (int i = 0; i < seed.length; ++i)
+    for (int i = 0; i < seed.length; ++i) // [A]
       seed[i] = 0x66;
 
     final KeyPair kc = Nacl.TweetFast.keyPairFromSeedForSig(seed);
 
     final StringBuilder skct = new StringBuilder();
-    for (int i = 0; i < kc.getSecretKey().length; ++i)
+    for (int i = 0; i < kc.getSecretKey().length; ++i) // [A]
       skct.append(' ').append(kc.getSecretKey()[i]);
 
     logger.debug(TAG, "skct: " + skct);
 
     final StringBuilder pkct = new StringBuilder();
-    for (int i = 0; i < kc.getPublicKey().length; ++i)
+    for (int i = 0; i < kc.getPublicKey().length; ++i) // [A]
       pkct.append(' ').append(kc.getPublicKey()[i]);
 
     logger.debug(TAG, "pkct: " + pkct);
@@ -445,7 +445,7 @@ public class NaclTweetFastTest {
     logger.debug(TAG, "...self-sign@" + System.currentTimeMillis());
 
     final StringBuilder ssc = new StringBuilder("self-sign@" + m0 + ": ");
-    for (int i = 0; i < NaclTweetFast.Signature.signatureLength; ++i)
+    for (int i = 0; i < NaclTweetFast.Signature.signatureLength; ++i) // [A]
       ssc.append(' ').append(scc[i]);
 
     logger.debug(TAG, ssc.toString());
@@ -472,7 +472,7 @@ public class NaclTweetFastTest {
     logger.debug(TAG, "...sha512@" + System.currentTimeMillis());
 
     final StringBuilder hst = new StringBuilder("sha512@" + m0 + "/" + b0.length + ": ");
-    for (int i = 0; i < hash.length; ++i)
+    for (int i = 0; i < hash.length; ++i) // [A]
       hst.append(' ').append(hash[i]);
 
     logger.debug(TAG, hst.toString());

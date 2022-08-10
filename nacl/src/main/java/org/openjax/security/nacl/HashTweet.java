@@ -30,7 +30,7 @@ final class HashTweet extends Hash {
     final long b = n;
     int i;
 
-    for (i = 0; i < 64; ++i)
+    for (i = 0; i < 64; ++i) // [A]
       h[i] = iv[i];
 
     cryptoHashBlocks(h, m, moff, mlen, n);
@@ -38,10 +38,10 @@ final class HashTweet extends Hash {
     n &= 127;
     // m -= n;
 
-    for (i = 0; i < 256; ++i)
+    for (i = 0; i < 256; ++i) // [A]
       x[i] = 0;
 
-    for (i = 0; i < n; ++i)
+    for (i = 0; i < n; ++i) // [A]
       x[i] = m[i + moff];
 
     x[n] = (byte)128;
@@ -50,7 +50,7 @@ final class HashTweet extends Hash {
     ts64(x, n - 8, x.length - (n - 8), b << 3);
     cryptoHashBlocks(h, x, 0, x.length, n);
 
-    for (i = 0; i < 64; ++i)
+    for (i = 0; i < 64; ++i) // [A]
       out[i] = h[i];
 
     return 0;
@@ -71,32 +71,32 @@ final class HashTweet extends Hash {
     long t;
     int i;
 
-    for (i = 0; i < 8; ++i)
+    for (i = 0; i < 8; ++i) // [A]
       z[i] = a[i] = dl64(x, 8 * i, x.length - 8 * i);
 
     int moffset = moff;
     while (n >= 128) {
-      for (i = 0; i < 16; ++i)
+      for (i = 0; i < 16; ++i) // [A]
         w[i] = dl64(m, 8 * i + moffset, mlen - 8 * i);
 
       i = 0;
-      for (int j; i < 80; ++i) {
-        for (j = 0; j < 8; j++)
+      for (int j; i < 80; ++i) { // [A]
+        for (j = 0; j < 8; j++) // [A]
           b[j] = a[j];
 
         t = a[7] + Sigma1(a[4]) + Ch(a[4], a[5], a[6]) + K[i] + w[i % 16];
         b[7] = t + Sigma0(a[0]) + Maj(a[0], a[1], a[2]);
         b[3] += t;
 
-        for (j = 0; j < 8; j++)
+        for (j = 0; j < 8; j++) // [A]
           a[(j + 1) % 8] = b[j];
 
         if (i % 16 == 15)
-          for (j = 0; j < 16; j++)
+          for (j = 0; j < 16; j++) // [A]
             w[j] += w[(j + 9) % 16] + sigma0(w[(j + 1) % 16]) + sigma1(w[(j + 14) % 16]);
       }
 
-      for (i = 0; i < 8; ++i) {
+      for (i = 0; i < 8; ++i) { // [A]
         a[i] += z[i];
         z[i] = a[i];
       }
@@ -105,7 +105,7 @@ final class HashTweet extends Hash {
       n -= 128;
     }
 
-    for (i = 0; i < 8; ++i)
+    for (i = 0; i < 8; ++i) // [A]
       ts64(x, 8 * i, x.length - 8 * i, z[i]);
 
     return n;
@@ -147,14 +147,14 @@ final class HashTweet extends Hash {
 
   private static long dl64(final byte[] x, final int xoff, final int xlen) {
     long u = 0;
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < 8; ++i) // [A]
       u = (u << 8) | (x[i + xoff] & 0xff);
 
     return u;
   }
 
   private static void ts64(final byte[] x, final int xoff, final int xlen, long u) {
-    for (int i = 7; i >= 0; --i) {
+    for (int i = 7; i >= 0; --i) { // [A]
       x[i + xoff] = (byte)(u & 0xff);
       u >>>= 8;
     }

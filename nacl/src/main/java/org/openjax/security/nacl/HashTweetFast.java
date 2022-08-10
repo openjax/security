@@ -31,13 +31,13 @@ final class HashTweetFast extends Hash {
 
     int pos = 0;
     while (n >= 128) {
-      for (i = 0; i < 16; ++i) {
+      for (i = 0; i < 16; ++i) { // [A]
         j = 8 * i + pos;
         wh[i] = ((m[j + 0 + moff] & 0xff) << 24) | ((m[j + 1 + moff] & 0xff) << 16) | ((m[j + 2 + moff] & 0xff) << 8) | ((m[j + 3 + moff] & 0xff));
         wl[i] = ((m[j + 4 + moff] & 0xff) << 24) | ((m[j + 5 + moff] & 0xff) << 16) | ((m[j + 6 + moff] & 0xff) << 8) | ((m[j + 7 + moff] & 0xff));
       }
 
-      for (i = 0; i < 80; ++i) {
+      for (i = 0; i < 80; ++i) { // [A]
         bh0 = ah0;
         bh1 = ah1;
         bh2 = ah2;
@@ -187,7 +187,7 @@ final class HashTweetFast extends Hash {
         al0 = bl7;
 
         if (i % 16 == 15) {
-          for (j = 0; j < 16; j++) {
+          for (j = 0; j < 16; j++) { // [A]
             // add
             h = wh[j];
             l = wl[j];
@@ -461,7 +461,7 @@ final class HashTweetFast extends Hash {
     }
 
     int i;
-    for (i = 0; i < n; ++i)
+    for (i = 0; i < n; ++i) // [A]
       x[i] = m[b - n + i + moff];
     x[n] = (byte)128;
 
@@ -472,7 +472,7 @@ final class HashTweetFast extends Hash {
 
     cryptoHashBlocksHl(hh, hl, x, 0, n);
 
-    for (i = 0; i < 8; ++i) {
+    for (i = 0; i < 8; ++i) { // [A]
       u = hh[i];
       u <<= 32;
       u |= hl[i] & 0xffffffffL;

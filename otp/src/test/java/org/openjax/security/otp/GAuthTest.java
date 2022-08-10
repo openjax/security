@@ -33,7 +33,7 @@ public class GAuthTest {
     // FIXME: This test can break, because the TOTP code changes every 30
     // FIXME: seconds, and the test can by chance happen to cross this moment.
     String lastCode = null;
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i) { // [N]
       final String code = GAuth.getTOTPCode(secretKey);
       if (lastCode != null && !code.equals(lastCode))
         fail(code);
