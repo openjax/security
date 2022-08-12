@@ -48,7 +48,7 @@ public class TOTPTest {
     logger.info("+---------------+-----------------------+------------------+--------+--------+");
 
     final long[] times = {59L, 1111111109L, 1111111111L, 1234567890L, 2000000000L, 20000000000L};
-    for (int i = 0; i < times.length; ++i) { // [A]
+    for (int i = 0, i$ = times.length; i < i$; ++i) { // [A]
       final long time = times[i] / 30;
       String steps = Long.toHexString(time).toUpperCase();
       if (steps.length() < 16)

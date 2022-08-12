@@ -37,11 +37,8 @@ public enum Hash {
      *
      * poly=0x04c11db7 init=0xffffffff refin=true refout=true xorout=0xffffffff
      *
-     * @see <a href=
-     *      "http://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic
-     *      redundancy check</a>
-     * @see <a href="http://reveng.sourceforge.net/crc-catalogue/17plus.htm">CRC
-     *      RevEng</a>
+     * @see <a href= "http://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic redundancy check</a>
+     * @see <a href="http://reveng.sourceforge.net/crc-catalogue/17plus.htm">CRC RevEng</a>
      */
     private final int[] CRC_TABLE = {
       0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
@@ -113,7 +110,7 @@ public enum Hash {
     @Override
     public int encodeAsInt(final byte[] bytes) {
       int crc = ~0;
-      for (int i = 0, len = bytes.length; len > 0; --len) // [A]
+      for (int i = 0, i$ = bytes.length; i$ > 0; --i$) // [A]
         crc = ((crc >>> 8) ^ CRC_TABLE[(crc ^ (bytes[i++] & 0xFF)) & 0xFF]);
 
       return (int)((crc ^ 0xFFFFFFFF) & 0xFFFFFFFFL);
@@ -142,11 +139,8 @@ public enum Hash {
      *
      * poly=0x42f0e1eba9ea3693 init=0x0 refin=false refout=false xorout=0x0
      *
-     * @see <a href=
-     *      "http://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic
-     *      redundancy check</a>
-     * @see <a href="http://reveng.sourceforge.net/crc-catalogue/17plus.htm">CRC
-     *      RevEng</a>
+     * @see <a href= "http://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic redundancy check</a>
+     * @see <a href="http://reveng.sourceforge.net/crc-catalogue/17plus.htm">CRC RevEng</a>
      */
     private final long[] CRC_TABLE = {
       0x0000000000000000L,
@@ -245,7 +239,7 @@ public enum Hash {
     @Override
     public long encodeAsLong(final byte[] bytes) {
       long crc = 0;
-      for (int i = 0, len = bytes.length; len > 0; --len) // [A]
+      for (int i = 0, i$ = bytes.length; i$ > 0; --i$) // [A]
         crc = CRC_TABLE[((int)(crc >> 56) ^ bytes[i++]) & 0xFF] ^ (crc << 8);
 
       return crc;
@@ -279,16 +273,12 @@ public enum Hash {
   }
 
   /**
-   * Encodes the provided byte array with this hash function and returns the
-   * value as an {@code int}.
+   * Encodes the provided byte array with this hash function and returns the value as an {@code int}.
    *
-   * @implNote If the hash is too big to fit in an int, only the low-order 32
-   *           bits are returned. Note that this conversion can lose information
-   *           about the overall magnitude of the hash value as well as return a
-   *           result with the opposite sign.
+   * @implNote If the hash is too big to fit in an int, only the low-order 32 bits are returned. Note that this conversion can lose
+   *           information about the overall magnitude of the hash value as well as return a result with the opposite sign.
    * @param bytes The byte array.
-   * @return The product of applying this hash function to the provided byte
-   *         array returned as an {@code int}.
+   * @return The product of applying this hash function to the provided byte array returned as an {@code int}.
    * @throws IllegalArgumentException If the provided byte array is null.
    */
   public int encodeAsInt(final byte[] bytes) {
@@ -296,16 +286,12 @@ public enum Hash {
   };
 
   /**
-   * Encodes the provided byte array with this hash function and returns the
-   * value as an {@code long}.
+   * Encodes the provided byte array with this hash function and returns the value as an {@code long}.
    *
-   * @implNote If the hash is too big to fit in an long, only the low-order 64
-   *           bits are returned. Note that this conversion can lose information
-   *           about the overall magnitude of the hash value as well as return a
-   *           result with the opposite sign.
+   * @implNote If the hash is too big to fit in an long, only the low-order 64 bits are returned. Note that this conversion can lose
+   *           information about the overall magnitude of the hash value as well as return a result with the opposite sign.
    * @param bytes The byte array.
-   * @return The product of applying this hash function to the provided byte
-   *         array returned as an {@code long}.
+   * @return The product of applying this hash function to the provided byte array returned as an {@code long}.
    * @throws IllegalArgumentException If the provided byte array is null.
    */
   public long encodeAsLong(final byte[] bytes) {
@@ -316,8 +302,7 @@ public enum Hash {
    * Encodes the provided byte array with this hash function.
    *
    * @param bytes The byte array.
-   * @return The product of applying this hash function to the provided byte
-   *         array.
+   * @return The product of applying this hash function to the provided byte array.
    * @throws IllegalArgumentException If the provided byte array is null.
    */
   public byte[] encode(final byte[] bytes) {

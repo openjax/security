@@ -94,7 +94,7 @@ public enum AES {
     public byte[] decrypt(final byte[] encrypted, final String password) {
       assertNotNull(encrypted);
       assertNotNull(password);
-      for (int i = 0; i < MAGIC.length; ++i) // [A]
+      for (int i = 0, i$ = MAGIC.length; i < i$; ++i) // [A]
         if (MAGIC[i] != encrypted[i])
           throw new IllegalArgumentException("Bad magic number");
 
@@ -141,87 +141,70 @@ public enum AES {
   }
 
   /**
-   * Encrypt the specified {@code data} with the provided {@code password} and
-   * random SALT.
+   * Encrypt the specified {@code data} with the provided {@code password} and random SALT.
    *
-   * @implNote This implementation reproduces the encryption mechanism of:
-   *           {@code openssl enc -aes-256-cbc -p -k $password}
+   * @implNote This implementation reproduces the encryption mechanism of: {@code openssl enc -aes-256-cbc -p -k $password}
    * @param data The data to be encrypted.
    * @param password The password to be used for encryption.
    * @return The encrypted data.
-   * @throws IllegalArgumentException If {@code data} or {@code password} is
-   *           null.
+   * @throws IllegalArgumentException If {@code data} or {@code password} is null.
    */
   public abstract byte[] encrypt(byte[] data, String password);
 
   /**
-   * Encrypt the specified {@code data} with the provided {@code password} and
-   * {@code salt}.
+   * Encrypt the specified {@code data} with the provided {@code password} and {@code salt}.
    *
-   * @implNote This implementation reproduces the encryption mechanism of:
-   *           {@code openssl enc -aes-256-cbc -p -k $password}
+   * @implNote This implementation reproduces the encryption mechanism of: {@code openssl enc -aes-256-cbc -p -k $password}
    * @param data The data to be encrypted.
    * @param password The password to be used for encryption.
    * @param salt The SALT (length must equal 8).
    * @return The encrypted data.
-   * @throws IllegalArgumentException If {@code data}, {@code password} or
-   *           {@code salt} is null, or if {@code salt.length != 8}.
+   * @throws IllegalArgumentException If {@code data}, {@code password} or {@code salt} is null, or if {@code salt.length != 8}.
    */
   public abstract byte[] encrypt(byte[] data, String password, byte[] salt);
 
   /**
-   * Decrypt the specified Base-64 encoded data with the provided
-   * {@code password} and return as an ISO_8859_1-encoded string.
+   * Decrypt the specified Base-64 encoded data with the provided {@code password} and return as an ISO_8859_1-encoded string.
    *
-   * @implNote This implementation reproduces the encryption mechanism of:
-   *           {@code openssl aes-256-cbc -d -k $password}
+   * @implNote This implementation reproduces the encryption mechanism of: {@code openssl aes-256-cbc -d -k $password}
    * @param encryptedBase64 The Base-64 encoded data to be decrypted.
    * @param password The password to be used for decryption.
    * @return The decrypted data.
-   * @throws IllegalArgumentException If {@code encryptedBase64} or
-   *           {@code password} is null.
+   * @throws IllegalArgumentException If {@code encryptedBase64} or {@code password} is null.
    */
   public abstract String decryptToString(String encryptedBase64, String password);
 
   /**
-   * Decrypt the specified data with the provided {@code password} and return as
-   * an ISO_8859_1-encoded string.
+   * Decrypt the specified data with the provided {@code password} and return as an ISO_8859_1-encoded string.
    *
-   * @implNote This implementation reproduces the encryption mechanism of:
-   *           {@code openssl aes-256-cbc -d -k $password}
+   * @implNote This implementation reproduces the encryption mechanism of: {@code openssl aes-256-cbc -d -k $password}
    * @param encrypted The data to be decrypted.
    * @param password The password to be used for decryption.
    * @return The decrypted data.
-   * @throws IllegalArgumentException If {@code encrypted} or {@code password}
-   *           is null.
+   * @throws IllegalArgumentException If {@code encrypted} or {@code password} is null.
    */
   public abstract String decryptToString(byte[] encrypted, String password);
 
   /**
-   * Decrypt the specified Base-64 encoded data with the provided
-   * {@code password}.
+   * Decrypt the specified Base-64 encoded data with the provided {@code password}.
    *
-   * @implNote This implementation reproduces the encryption mechanism of:
-   *           {@code openssl aes-256-cbc -d -k $password}
+   * @implNote This implementation reproduces the encryption mechanism of: {@code openssl aes-256-cbc -d -k $password}
    * @param encryptedBase64 The Base-64 encoded data to be decrypted.
    * @param password The password to be used for decryption.
    * @return The decrypted data.
-   * @throws IllegalArgumentException If {@code encryptedBase64} or
-   *           {@code password} is null.
+   * @throws IllegalArgumentException If {@code encryptedBase64} or {@code password} is null.
    */
   public abstract byte[] decrypt(String encryptedBase64, String password);
 
   /**
    * Decrypt the specified data with the provided {@code password}.
    *
-   * @implNote This implementation reproduces the encryption mechanism of:
-   *           {@code openssl aes-256-cbc -d -k $password}
+   * @implNote This implementation reproduces the encryption mechanism of: {@code openssl aes-256-cbc -d -k $password}
    * @param encrypted The data to be decrypted.
    * @param password The password to be used for decryption.
    * @return The decrypted data.
-   * @throws IllegalArgumentException If {@code encrypted} or {@code password}
-   *           is null, or if the magic number in the provided data is not equal
-   *           to {@code "Salted__"}.
+   * @throws IllegalArgumentException If {@code encrypted} or {@code password} is null, or if the magic number in the provided data
+   *           is not equal to {@code "Salted__"}.
    */
   public abstract byte[] decrypt(byte[] encrypted, String password);
 }

@@ -57,14 +57,12 @@ public final class NaclTweetFast extends Nacl {
     }
 
     /**
-     * Encrypt and authenticates message using peer's public key, our secret
-     * key, and the given nonce, which must be unique for each distinct // [A]
-     * message for a key pair. // [A]
+     * Encrypt and authenticates message using peer's public key, our secret key, and the given nonce, which must be unique for each
+     * distinct // [A] message for a key pair. // [A]
      *
      * @param message The message.
      * @param nonce The nonce.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.secretbox.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.secretbox.overheadLength longer than the original message.
      */
     @Override
     public byte[] box(final byte[] message, final byte[] nonce) {
@@ -164,23 +162,20 @@ public final class NaclTweetFast extends Nacl {
      * @param message The message.
      * @param moff The m offset.
      * @param mlen The m length.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.box.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.box.overheadLength longer than the original message.
      */
     private byte[] after(final byte[] message, final int moff, final int mlen) {
       return after(message, moff, mlen, generateNonce());
     }
 
     /**
-     * Same as nacl.box, but uses a shared key precomputed with nacl.box.before,
-     * and passes a nonce explicitly.
+     * Same as nacl.box, but uses a shared key precomputed with nacl.box.before, and passes a nonce explicitly.
      *
      * @param message The message.
      * @param moff The m offset.
      * @param mlen The m length.
      * @param nonce The nonce.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.box.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.box.overheadLength longer than the original message.
      */
     private byte[] after(final byte[] message, final int moff, final int mlen, final byte[] nonce) {
       // check message
@@ -206,22 +201,19 @@ public final class NaclTweetFast extends Nacl {
     }
 
     /**
-     * Same as nacl.box.open, but uses a shared key precomputed with
-     * nacl.box.before.
+     * Same as nacl.box.open, but uses a shared key precomputed with nacl.box.before.
      *
      * @param box The box.
      * @param boxoff The box offset.
      * @param boxlen The box length.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.box.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.box.overheadLength longer than the original message.
      */
     private byte[] openAfter(final byte[] box, final int boxoff, final int boxlen) {
       return openAfter(box, boxoff, boxlen, generateNonce());
     }
 
     /**
-     * Same as nacl.box.open, but uses a shared key precomputed with
-     * nacl.box.before, and explicitly passed nonce
+     * Same as nacl.box.open, but uses a shared key precomputed with nacl.box.before, and explicitly passed nonce
      *
      * @param box The box.
      * @param nonce The nonce.
@@ -458,7 +450,7 @@ public final class NaclTweetFast extends Nacl {
 
       // message
       final byte[] msg = new byte[smlen - signatureLength];
-      for (int i = 0; i < msg.length; ++i) // [A]
+      for (int i = 0, i$ = msg.length; i < i$; ++i) // [A]
         msg[i] = signedMessage[smoff + i + signatureLength];
 
       return msg;

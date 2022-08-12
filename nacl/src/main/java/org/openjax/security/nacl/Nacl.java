@@ -132,7 +132,7 @@ public abstract class Nacl {
 
   public static byte[] hexDecode(final String s) {
     final byte[] b = new byte[s.length() / 2];
-    for (int i = 0; i < s.length(); i += 2) // [A]
+    for (int i = 0, i$ = s.length(); i < i$; i += 2) // [A]
       b[i / 2] = (byte)((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
 
     return b;
@@ -261,31 +261,26 @@ public abstract class Nacl {
     }
 
     /**
-     * Encrypt and authenticates message using peer's public key, our secret
-     * key, and the given nonce, which must be unique for each distinct // [A]
-     * message for a key pair. // [A]
+     * Encrypt and authenticates message using peer's public key, our secret key, and the given nonce, which must be unique for each
+     * distinct // [A] message for a key pair. // [A]
      *
      * @param message The message.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.box.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.box.overheadLength longer than the original message.
      */
     public abstract byte[] box(byte[] message);
 
     /**
-     * Encrypt and authenticates message using peer's public key, our secret
-     * key, and the explicitly provided nonce. Caller is responsible for
-     * ensuring that nonce is unique for each distinct message for a key pair. // [A]
+     * Encrypt and authenticates message using peer's public key, our secret key, and the explicitly provided nonce. Caller is
+     * responsible for ensuring that nonce is unique for each distinct message for a key pair. // [A]
      *
      * @param message The message.
      * @param nonce The nonce.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.box.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.box.overheadLength longer than the original message.
      */
     public abstract byte[] box(byte[] message, byte[] nonce);
 
     /**
-     * Authenticates and decrypts the given box with peer's public key, our
-     * secret key, and the given nonce.
+     * Authenticates and decrypts the given box with peer's public key, our secret key, and the given nonce.
      *
      * @param box The box.
      * @return The original message, or {@code null} if authentication fails.
@@ -293,8 +288,7 @@ public abstract class Nacl {
     public abstract byte[] open(byte[] box);
 
     /**
-     * Authenticates and decrypts the given box with peer's public key, our
-     * secret key, and the explicitly provided nonce.
+     * Authenticates and decrypts the given box with peer's public key, our secret key, and the explicitly provided nonce.
      *
      * @param box The box.
      * @param nonce The nonce.
@@ -303,11 +297,9 @@ public abstract class Nacl {
     public abstract byte[] open(byte[] box, byte[] nonce);
 
     /**
-     * Returns a precomputed shared key which can be used in nacl.box.after and
-     * nacl.box.open.after.
+     * Returns a precomputed shared key which can be used in nacl.box.after and nacl.box.open.after.
      *
-     * @return A precomputed shared key which can be used in nacl.box.after and
-     *         nacl.box.open.after.
+     * @return A precomputed shared key which can be used in nacl.box.after and nacl.box.open.after.
      */
     public final byte[] before() {
       if (this.sharedKey == null) {
@@ -367,18 +359,16 @@ public abstract class Nacl {
     }
 
     /**
-     * Encrypt and authenticates message using the key and the nonce. The nonce
-     * must be unique for each distinct message for this key. // [A]
+     * Encrypt and authenticates message using the key and the nonce. The nonce must be unique for each distinct message for this
+     * key. // [A]
      *
      * @param message The message.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.secretbox.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.secretbox.overheadLength longer than the original message.
      */
     public abstract byte[] box(byte[] message);
 
     /**
-     * Authenticates and decrypts the given secret box using the key and the
-     * nonce.
+     * Authenticates and decrypts the given secret box using the key and the nonce.
      *
      * @param box The box.
      * @return The original message, or {@code null} if authentication fails.
@@ -386,19 +376,17 @@ public abstract class Nacl {
     public abstract byte[] open(byte[] box);
 
     /**
-     * Encrypt and authenticates message using the key and the explicitly passed
-     * nonce. The nonce must be unique for each distinct message for this key. // [A]
+     * Encrypt and authenticates message using the key and the explicitly passed nonce. The nonce must be unique for each distinct
+     * message for this key. // [A]
      *
      * @param message The message.
      * @param nonce The nonce.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.secretbox.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.secretbox.overheadLength longer than the original message.
      */
     public abstract byte[] box(byte[] message, byte[] nonce);
 
     /**
-     * Authenticates and decrypts the given secret box using the key and the
-     * explicitly passed nonce.
+     * Authenticates and decrypts the given secret box using the key and the explicitly passed nonce.
      *
      * @param box The box.
      * @param nonce The nonce.
@@ -455,8 +443,7 @@ public abstract class Nacl {
      *
      * @param message The message.
      * @param signature The signature.
-     * @return {@code true} if verification succeeded or {@code false} if it
-     *         failed.
+     * @return {@code true} if verification succeeded or {@code false} if it failed.
      */
     public final boolean detachedVerify(final byte[] message, final byte[] signature) {
       if (signature.length != signatureLength)
@@ -478,8 +465,7 @@ public abstract class Nacl {
      * Verifies the signed message.
      *
      * @param signedMessage The signed message.
-     * @return The message without signature, or {@code null} if verification
-     *         fails.
+     * @return The message without signature, or {@code null} if verification fails.
      */
     public abstract byte[] open(byte[] signedMessage);
   }
@@ -527,11 +513,9 @@ public abstract class Nacl {
   }
 
   /**
-   * Returns a new random key pair for box and returns it as an object with // [A]
-   * publicKey and secretKey members.
+   * Returns a new random key pair for box and returns it as an object with // [A] publicKey and secretKey members.
    *
-   * @return A new random key pair for box and returns it as an object with // [A]
-   *         publicKey and secretKey members.
+   * @return A new random key pair for box and returns it as an object with // [A] publicKey and secretKey members.
    */
   public final KeyPair keyPairForBox() {
     final KeyPair kp = new KeyPair(Box.publicKeyLength, Box.secretKeyLength);
