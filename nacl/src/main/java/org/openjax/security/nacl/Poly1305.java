@@ -17,8 +17,7 @@
 package org.openjax.security.nacl;
 
 /**
- * Port of Andrew Moon's Poly1305-donna-16. Public domain.
- * https://github.com/floodyberry/poly1305-donna
+ * Port of Andrew Moon's Poly1305-donna-16. Public domain. https://github.com/floodyberry/poly1305-donna
  */
 class Poly1305 {
   private final byte[] buffer;

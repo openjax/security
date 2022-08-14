@@ -44,16 +44,13 @@ public final class GAuth {
   /**
    * Returns the Google Authenticator barcode otpauth string.
    *
-   * @param key Base32 encoded secret key (will be converted to upper-case, and
-   *          allows whitespace, which will be removed).
-   * @param account The user's account name (e.g. an email address or a
-   *          username).
+   * @param key Base32 encoded secret key (will be converted to upper-case, and allows whitespace, which will be removed).
+   * @param account The user's account name (e.g. an email address or a username).
    * @param issuer The organization managing this account.
    * @return The Google Authenticator barcode otpauth string.
    * @throws UnsupportedOperationException If UTF-8 encoding is not supported.
    * @throws IllegalArgumentException If {@code key} or {@code issuer} is null.
-   * @see <a href=
-   *      "https://github.com/google/google-authenticator/wiki/Key-Uri-Format">Key-Uri-Format</a>
+   * @see <a href= "https://github.com/google/google-authenticator/wiki/Key-Uri-Format">Key-Uri-Format</a>
    */
   public static String getBarCode(final String key, final String account, final String issuer) {
     final String normalizedBase32Key = key.replace(" ", "").toUpperCase();
@@ -68,12 +65,10 @@ public final class GAuth {
   /**
    * Returns the TOTP code for the secret key.
    * <p>
-   * The TOTP code is guaranteed to be consistent for the same key, for a
-   * duration of 30 seconds. After every 30 seconds, the time component is
-   * updated.
+   * The TOTP code is guaranteed to be consistent for the same key, for a duration of 30 seconds. After every 30 seconds, the time
+   * component is updated.
    *
-   * @param key Base32 encoded secret key (will be converted to upper-case, and
-   *          allows whitespace, which will be removed).
+   * @param key Base32 encoded secret key (will be converted to upper-case, and allows whitespace, which will be removed).
    * @return The TOTP code for the secret key.
    * @throws IllegalArgumentException If {@code key} is null.
    */

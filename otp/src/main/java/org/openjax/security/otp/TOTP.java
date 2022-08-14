@@ -28,11 +28,9 @@ public final class TOTP {
    * @param time A hex encoded value that reflects a time.
    * @param length The number of digits to return.
    * @param hmac The crypto function.
-   * @return A numeric String in base 10 that includes {@code length} number of
-   *         digits.
+   * @return A numeric String in base 10 that includes {@code length} number of digits.
    * @throws IllegalArgumentException If {@code key} is invalid.
-   * @throws IllegalArgumentException If {@code key}, {@code time}, or {@code hmac}
-   *           is null.
+   * @throws IllegalArgumentException If {@code key}, {@code time}, or {@code hmac} is null.
    */
   public static String generateTOTP(final String key, String time, final int length, final Hmac hmac) {
     if (time.length() % 2 == 1)

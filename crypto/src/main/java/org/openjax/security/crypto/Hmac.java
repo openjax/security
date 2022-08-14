@@ -69,16 +69,14 @@ public enum Hmac {
   }
 
   /**
-   * Generate the Hashed Message Authentication Code for the given {@code key}
-   * and {@code data}.
+   * Generate the Hashed Message Authentication Code for the given {@code key} and {@code data}.
    * <p>
    * This method uses JCE to provide the crypto algorithm.
    *
    * @param key The HMAC key.
    * @param data The text to be authenticated.
    * @return The Hashed Message Authentication Code.
-   * @throws IllegalArgumentException If {@code key} or {@code data} is null, or
-   *           if {@code key} is not appropriate for this HMAC.
+   * @throws IllegalArgumentException If {@code key} or {@code data} is null, or if {@code key} is not appropriate for this HMAC.
    */
   public byte[] generateCode(final byte[] key, final byte[] data) {
     assertNotNull(key);

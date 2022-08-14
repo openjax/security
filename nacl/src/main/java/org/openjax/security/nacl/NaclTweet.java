@@ -39,14 +39,12 @@ public final class NaclTweet extends Nacl {
     }
 
     /**
-     * Encrypt and authenticates message using peer's public key, our secret
-     * key, and the explicitly provided nonce. Caller is responsible for
-     * ensuring that nonce is unique for each distinct message for a key pair. // [A]
+     * Encrypt and authenticates message using peer's public key, our secret key, and the explicitly provided nonce. Caller is
+     * responsible for ensuring that nonce is unique for each distinct message for a key pair. // [A]
      *
      * @param message The message.
      * @param nonce The nonce.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.box.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.box.overheadLength longer than the original message.
      */
     @Override
     public byte[] box(final byte[] message, final byte[] nonce) {
@@ -100,21 +98,18 @@ public final class NaclTweet extends Nacl {
      * Same as nacl.box, but uses a shared key precomputed with nacl.box.before.
      *
      * @param message The message.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.box.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.box.overheadLength longer than the original message.
      */
     private byte[] after(final byte[] message) {
       return after(message, generateNonce());
     }
 
     /**
-     * Same as nacl.box, but uses a shared key precomputed with nacl.box.before,
-     * and passes a nonce explicitly.
+     * Same as nacl.box, but uses a shared key precomputed with nacl.box.before, and passes a nonce explicitly.
      *
      * @param message The message.
      * @param nonce The nonce.
-     * @return An encrypted and authenticated message, which is
-     *         nacl.box.overheadLength longer than the original message.
+     * @return An encrypted and authenticated message, which is nacl.box.overheadLength longer than the original message.
      */
     private byte[] after(final byte[] message, final byte[] nonce) {
       // check message
@@ -138,8 +133,7 @@ public final class NaclTweet extends Nacl {
     }
 
     /**
-     * Same as nacl.box.open, but uses a shared key precomputed with
-     * nacl.box.before.
+     * Same as nacl.box.open, but uses a shared key precomputed with nacl.box.before.
      *
      * @param box The box.
      * @return The original message, or {@code null} if authentication fails.
@@ -149,8 +143,7 @@ public final class NaclTweet extends Nacl {
     }
 
     /**
-     * Same as nacl.box.open, but uses a shared key precomputed with
-     * nacl.box.before, and explicitly passed nonce
+     * Same as nacl.box.open, but uses a shared key precomputed with nacl.box.before, and explicitly passed nonce
      *
      * @param box The box.
      * @param nonce The nonce.
