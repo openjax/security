@@ -47,6 +47,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -207,6 +208,9 @@ public final class X509Certificates {
    * @throws IllegalArgumentException If {@code certificateChain} is null.
    */
   public static String encodeCertificate(final Collection<Certificate> certificateChain) throws CertificateEncodingException {
+    if (assertNotNull(certificateChain).size() == 0)
+      return "[]";
+
     final StringBuilder builder = new StringBuilder();
     for (final Certificate certificate : certificateChain) // [C]
       builder.append(encodeCertificate(certificate));
@@ -414,9 +418,16 @@ public final class X509Certificates {
     intermediateCerts = intermediateCerts != null ? new HashSet<>(intermediateCerts) : new HashSet<>();
     try {
       // Create the trust anchors (set of root CA certificates)
-      final HashSet<TrustAnchor> trustAnchors = new HashSet<>();
-      for (final X509Certificate trustedRootCert : assertNotNull(trustedRootCerts)) // [S]
-        trustAnchors.add(new TrustAnchor(assertNotNull(trustedRootCert), null));
+      final int size = assertNotNull(trustedRootCerts).size();
+      final Set<TrustAnchor> trustAnchors;
+      if (size > 0) {
+        trustAnchors = new HashSet<>(size);
+        for (final X509Certificate trustedRootCert : trustedRootCerts) // [S]
+          trustAnchors.add(new TrustAnchor(assertNotNull(trustedRootCert), null));
+      }
+      else {
+        trustAnchors = Collections.EMPTY_SET;
+      }
 
       // Create the selector that specifies the starting certificate
       final X509CertSelector targetConstraints = new X509CertSelector();
