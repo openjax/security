@@ -488,7 +488,7 @@ public final class X509Certificates {
     assertNotNull(keyStore);
     assertNotNull(trustedRootCerts);
     assertNotNull(intermediateCerts);
-    for (final Enumeration<String> aliases = keyStore.aliases(); aliases.hasMoreElements();) { // [X]
+    for (final Enumeration<String> aliases = keyStore.aliases(); aliases.hasMoreElements();) { // [E]
       final String alias = aliases.nextElement();
       if (keyStore.isCertificateEntry(alias)) {
         final Certificate cert = keyStore.getCertificate(alias);
