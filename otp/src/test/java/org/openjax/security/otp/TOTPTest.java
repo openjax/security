@@ -43,23 +43,25 @@ public class TOTPTest {
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    logger.info("+---------------+-----------------------+------------------+--------+--------+");
-    logger.info("|  Time(sec)    |   Time (UTC format)   | Value of T(Hex)  |  TOTP  | Mode   |");
-    logger.info("+---------------+-----------------------+------------------+--------+--------+");
-
-    final long[] times = {59L, 1111111109L, 1111111111L, 1234567890L, 2000000000L, 20000000000L};
-    for (int i = 0, i$ = times.length; i < i$; ++i) { // [A]
-      final long time = times[i] / 30;
-      String steps = Long.toHexString(time).toUpperCase();
-      if (steps.length() < 16)
-        steps = Strings.repeat("0", 16 - steps.length()) + steps;
-
-      final String fmtTime = String.format("%1$-11s", times[i]);
-      final String utcTime = dateFormat.format(new Date(times[i] * 1000));
-      logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed, steps, 8, Hmac.SHA1) + "| SHA1   |");
-      logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed32, steps, 8, Hmac.SHA256) + "| SHA256 |");
-      logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed64, steps, 8, Hmac.SHA512) + "| SHA512 |");
+    if (logger.isInfoEnabled()) {
       logger.info("+---------------+-----------------------+------------------+--------+--------+");
+      logger.info("|  Time(sec)    |   Time (UTC format)   | Value of T(Hex)  |  TOTP  | Mode   |");
+      logger.info("+---------------+-----------------------+------------------+--------+--------+");
+
+      final long[] times = {59L, 1111111109L, 1111111111L, 1234567890L, 2000000000L, 20000000000L};
+      for (int i = 0, i$ = times.length; i < i$; ++i) { // [A]
+        final long time = times[i] / 30;
+        String steps = Long.toHexString(time).toUpperCase();
+        if (steps.length() < 16)
+          steps = Strings.repeat("0", 16 - steps.length()) + steps;
+
+        final String fmtTime = String.format("%1$-11s", times[i]);
+        final String utcTime = dateFormat.format(new Date(times[i] * 1000));
+        logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed, steps, 8, Hmac.SHA1) + "| SHA1   |");
+        logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed32, steps, 8, Hmac.SHA256) + "| SHA256 |");
+        logger.info("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |" + TOTP.generateTOTP(seed64, steps, 8, Hmac.SHA512) + "| SHA512 |");
+        logger.info("+---------------+-----------------------+------------------+--------+--------+");
+      }
     }
   }
 }

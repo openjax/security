@@ -449,21 +449,16 @@ public final class X509Certificates {
       // Build and verify the certification chain (revocation status excluded)
       final CertPathBuilder certPathBuilder = CertPathBuilder.getInstance("PKIX");
       final CertPath certPath = certPathBuilder.build(pkixBuilderParameters).getCertPath();
-      if (logger.isDebugEnabled())
-        logger.debug("Certification path built with " + certPath.getCertificates().size() + " X.509 Certificates");
+      if (logger.isDebugEnabled()) logger.debug("Certification path built with " + certPath.getCertificates().size() + " X.509 Certificates");
 
       final X509Certificate[] certificateChain = convertCertPathToX509CertArray(certPath.getCertificates(), 0, 0);
 
-      if (logger.isDebugEnabled())
-        logger.debug("Client certificate (valid): SubjectDN=[" + clientCert.getSubjectDN() + "] SerialNumber=[" + clientCert.getSerialNumber() + "]");
-
+      if (logger.isDebugEnabled()) logger.debug("Client certificate (valid): SubjectDN=[" + clientCert.getSubjectDN() + "] SerialNumber=[" + clientCert.getSerialNumber() + "]");
       return certificateChain;
     }
     catch (final CertPathBuilderException e) {
       if ("unable to find valid certification path to requested target".equals(e.getMessage())) {
-        if (logger.isDebugEnabled())
-          logger.debug("Client certificate (invalid): SubjectDN=[" + clientCert.getSubjectDN() + "] SerialNumber=[" + clientCert.getSerialNumber() + "]");
-
+        if (logger.isDebugEnabled()) logger.debug("Client certificate (invalid): SubjectDN=[" + clientCert.getSubjectDN() + "] SerialNumber=[" + clientCert.getSerialNumber() + "]");
         return null;
       }
 
