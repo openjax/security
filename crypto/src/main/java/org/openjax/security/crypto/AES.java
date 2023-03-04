@@ -17,7 +17,6 @@
 package org.openjax.security.crypto;
 
 import static java.nio.charset.StandardCharsets.*;
-import static org.libj.lang.Assertions.*;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -44,9 +43,6 @@ public enum AES {
 
     @Override
     public byte[] encrypt(final byte[] data, final String password, final byte[] salt) {
-      assertNotNull(data);
-      assertNotNull(password);
-      assertNotNull(salt);
       if (salt.length != 8)
         throw new IllegalArgumentException("salt.length (" + salt.length + ") must be equal to 8");
 
@@ -92,8 +88,6 @@ public enum AES {
 
     @Override
     public byte[] decrypt(final byte[] encrypted, final String password) {
-      assertNotNull(encrypted);
-      assertNotNull(password);
       for (int i = 0, i$ = MAGIC.length; i < i$; ++i) // [A]
         if (MAGIC[i] != encrypted[i])
           throw new IllegalArgumentException("Bad magic number");
@@ -147,7 +141,7 @@ public enum AES {
    * @param data The data to be encrypted.
    * @param password The password to be used for encryption.
    * @return The encrypted data.
-   * @throws IllegalArgumentException If {@code data} or {@code password} is null.
+   * @throws NullPointerException If {@code data} or {@code password} is null.
    */
   public abstract byte[] encrypt(byte[] data, String password);
 
@@ -159,7 +153,8 @@ public enum AES {
    * @param password The password to be used for encryption.
    * @param salt The SALT (length must equal 8).
    * @return The encrypted data.
-   * @throws IllegalArgumentException If {@code data}, {@code password} or {@code salt} is null, or if {@code salt.length != 8}.
+   * @throws NullPointerException If {@code data}, {@code password} or {@code salt} is null.
+   * @throws IllegalArgumentException If {@code salt.length != 8}.
    */
   public abstract byte[] encrypt(byte[] data, String password, byte[] salt);
 
@@ -170,7 +165,7 @@ public enum AES {
    * @param encryptedBase64 The Base-64 encoded data to be decrypted.
    * @param password The password to be used for decryption.
    * @return The decrypted data.
-   * @throws IllegalArgumentException If {@code encryptedBase64} or {@code password} is null.
+   * @throws NullPointerException If {@code encryptedBase64} or {@code password} is null.
    */
   public abstract String decryptToString(String encryptedBase64, String password);
 
@@ -181,7 +176,7 @@ public enum AES {
    * @param encrypted The data to be decrypted.
    * @param password The password to be used for decryption.
    * @return The decrypted data.
-   * @throws IllegalArgumentException If {@code encrypted} or {@code password} is null.
+   * @throws NullPointerException If {@code encrypted} or {@code password} is null.
    */
   public abstract String decryptToString(byte[] encrypted, String password);
 
@@ -192,7 +187,7 @@ public enum AES {
    * @param encryptedBase64 The Base-64 encoded data to be decrypted.
    * @param password The password to be used for decryption.
    * @return The decrypted data.
-   * @throws IllegalArgumentException If {@code encryptedBase64} or {@code password} is null.
+   * @throws NullPointerException If {@code encryptedBase64} or {@code password} is null.
    */
   public abstract byte[] decrypt(String encryptedBase64, String password);
 
@@ -203,8 +198,8 @@ public enum AES {
    * @param encrypted The data to be decrypted.
    * @param password The password to be used for decryption.
    * @return The decrypted data.
-   * @throws IllegalArgumentException If {@code encrypted} or {@code password} is null, or if the magic number in the provided data
-   *           is not equal to {@code "Salted__"}.
+   * @throws NullPointerException If {@code encrypted} or {@code password} is null.
+   * @throws IllegalArgumentException If the magic number in the provided data is not equal to {@code "Salted__"}.
    */
   public abstract byte[] decrypt(byte[] encrypted, String password);
 }

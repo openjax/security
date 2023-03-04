@@ -16,8 +16,6 @@
 
 package org.openjax.security.crypto;
 
-import static org.libj.lang.Assertions.*;
-
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -279,7 +277,7 @@ public enum Hash {
    *           information about the overall magnitude of the hash value as well as return a result with the opposite sign.
    * @param bytes The byte array.
    * @return The product of applying this hash function to the provided byte array returned as an {@code int}.
-   * @throws IllegalArgumentException If the provided byte array is null.
+   * @throws NullPointerException If the provided byte array is null.
    */
   public int encodeAsInt(final byte[] bytes) {
     return new BigInteger(encode(bytes)).intValue();
@@ -292,7 +290,7 @@ public enum Hash {
    *           information about the overall magnitude of the hash value as well as return a result with the opposite sign.
    * @param bytes The byte array.
    * @return The product of applying this hash function to the provided byte array returned as an {@code long}.
-   * @throws IllegalArgumentException If the provided byte array is null.
+   * @throws NullPointerException If the provided byte array is null.
    */
   public long encodeAsLong(final byte[] bytes) {
     return new BigInteger(encode(bytes)).longValue();
@@ -303,10 +301,9 @@ public enum Hash {
    *
    * @param bytes The byte array.
    * @return The product of applying this hash function to the provided byte array.
-   * @throws IllegalArgumentException If the provided byte array is null.
+   * @throws NullPointerException If the provided byte array is null.
    */
   public byte[] encode(final byte[] bytes) {
-    assertNotNull(bytes);
     messageDigest.get().update(bytes);
     return messageDigest.get().digest();
   }
@@ -316,9 +313,9 @@ public enum Hash {
    *
    * @param string The string.
    * @return The product of applying this hash function to the provided string.
-   * @throws IllegalArgumentException If the provided string is null.
+   * @throws NullPointerException If the provided string is null.
    */
   public final byte[] encode(final String string) {
-    return encode(assertNotNull(string).getBytes());
+    return encode(string.getBytes());
   }
 }

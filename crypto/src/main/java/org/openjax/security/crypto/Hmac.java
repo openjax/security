@@ -16,10 +16,9 @@
 
 package org.openjax.security.crypto;
 
-import static org.libj.lang.Assertions.*;
-
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
@@ -59,9 +58,8 @@ public enum Hmac {
 
   /**
    * Generates a secret key with this Hmac algorithm.
-   * <p>
-   * This method uses JCE to provide the crypto algorithm.
    *
+   * @implNote This method uses JCE to provide the crypto algorithm.
    * @return A new secret key.
    */
   public SecretKey generateKey() {
@@ -70,17 +68,16 @@ public enum Hmac {
 
   /**
    * Generate the Hashed Message Authentication Code for the given {@code key} and {@code data}.
-   * <p>
-   * This method uses JCE to provide the crypto algorithm.
    *
    * @param key The HMAC key.
    * @param data The text to be authenticated.
    * @return The Hashed Message Authentication Code.
-   * @throws IllegalArgumentException If {@code key} or {@code data} is null, or if {@code key} is not appropriate for this HMAC.
+   * @throws NullPointerException If {@code key} or {@code data} is null.
+   * @throws IllegalArgumentException If {@code key} is not appropriate for this HMAC.
+   * @implNote This method uses JCE to provide the crypto algorithm.
    */
   public byte[] generateCode(final byte[] key, final byte[] data) {
-    assertNotNull(key);
-    assertNotNull(data);
+    Objects.requireNonNull(data);
     try {
       final SecretKeySpec secretKey = new SecretKeySpec(key, "RAW");
       final Mac mac = this.mac.get();
