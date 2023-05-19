@@ -374,15 +374,16 @@ public final class X509Certificates {
     return assertNotNull(cert).getSubjectX500Principal().equals(cert.getIssuerX500Principal());
   }
 
-  private static X509Certificate[] convertCertPathToX509CertArray(final List<? extends Certificate> certs, final int index, final int depth) {
-    if (index == certs.size())
+  private static X509Certificate[] convertCertPathToX509CertArray(final List<? extends Certificate> certs, final int length, final int index, final int depth) {
+    if (index == length)
       return depth == 0 ? null : new X509Certificate[depth];
 
     final Certificate cert = certs.get(index);
-    final X509Certificate[] x509Certificates = convertCertPathToX509CertArray(certs, index + 1, cert instanceof X509Certificate ? depth + 1 : depth);
-    if (cert instanceof X509Certificate)
-      x509Certificates[depth] = (X509Certificate)cert;
+    if (!(cert instanceof X509Certificate))
+      return convertCertPathToX509CertArray(certs, length, index + 1, depth);
 
+    final X509Certificate[] x509Certificates = convertCertPathToX509CertArray(certs, length, index + 1, depth + 1);
+    x509Certificates[depth] = (X509Certificate)cert;
     return x509Certificates;
   }
 
@@ -449,9 +450,11 @@ public final class X509Certificates {
       // Build and verify the certification chain (revocation status excluded)
       final CertPathBuilder certPathBuilder = CertPathBuilder.getInstance("PKIX");
       final CertPath certPath = certPathBuilder.build(pkixBuilderParameters).getCertPath();
-      if (logger.isDebugEnabled()) logger.debug("Certification path built with " + certPath.getCertificates().size() + " X.509 Certificates");
 
-      final X509Certificate[] certificateChain = convertCertPathToX509CertArray(certPath.getCertificates(), 0, 0);
+      final List<? extends Certificate> certificates = certPath.getCertificates();
+      final int noCertificates = certificates.size();
+      if (logger.isDebugEnabled()) logger.debug("Certification path built with " + noCertificates + " X.509 Certificates");
+      final X509Certificate[] certificateChain = convertCertPathToX509CertArray(certificates, noCertificates, 0, 0);
 
       if (logger.isDebugEnabled()) logger.debug("Client certificate (valid): SubjectDN=[" + clientCert.getSubjectDN() + "] SerialNumber=[" + clientCert.getSerialNumber() + "]");
       return certificateChain;
