@@ -153,7 +153,7 @@ public enum AES {
    * @param password The password to be used for encryption.
    * @param salt The SALT (length must equal 8).
    * @return The encrypted data.
-   * @throws NullPointerException If {@code data}, {@code password} or {@code salt} is null.
+   * @throws NullPointerException If {@code data}, {@code password}, or {@code salt} is null.
    * @throws IllegalArgumentException If {@code salt.length != 8}.
    */
   public abstract byte[] encrypt(byte[] data, String password, byte[] salt);
