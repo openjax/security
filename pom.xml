@@ -22,11 +22,11 @@
   <parent>
     <groupId>org.openjax</groupId>
     <artifactId>openjax</artifactId>
-    <version>2.5.6-SNAPSHOT</version>
+    <version>2.5.6</version>
   </parent>
   <groupId>org.openjax.security</groupId>
   <artifactId>security</artifactId>
-  <version>0.3.4-SNAPSHOT</version>
+  <version>0.3.4</version>
   <packaging>pom</packaging>
   <name>OpenJAX Security</name>
   <description>
@@ -61,7 +61,7 @@
     <dependency>
       <groupId>org.libj</groupId>
       <artifactId>test</artifactId>
-      <version>0.7.2-SNAPSHOT</version>
+      <version>0.7.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

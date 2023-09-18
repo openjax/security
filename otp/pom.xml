@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.openjax.security</groupId>
     <artifactId>security</artifactId>
-    <version>0.3.4-SNAPSHOT</version>
+    <version>0.3.4</version>
   </parent>
   <artifactId>otp</artifactId>
   <name>OpenJAX Security OTP</name>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>org.libj</groupId>
       <artifactId>util</artifactId>
-      <version>0.9.0-SNAPSHOT</version>
+      <version>0.9.0</version>
     </dependency>
     <dependency>
       <groupId>org.openjax.security</groupId>
@@ -51,7 +51,7 @@
     <dependency>
       <groupId>org.libj</groupId>
       <artifactId>math</artifactId>
-      <version>0.6.7-SNAPSHOT</version>
+      <version>0.6.7</version>
     </dependency>
   </dependencies>
 </project>
