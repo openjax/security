@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.openjax.security</groupId>
     <artifactId>security</artifactId>
-    <version>0.3.4</version>
+    <version>0.3.5-SNAPSHOT</version>
   </parent>
   <artifactId>crypto</artifactId>
   <name>OpenJAX Security Crypto</name>
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.libj</groupId>
       <artifactId>lang</artifactId>
-      <version>0.8.0</version>
+      <version>0.8.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
