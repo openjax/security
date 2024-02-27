@@ -65,8 +65,7 @@ public abstract class Nacl {
   public static final Nacl TweetFast = new NaclTweetFast();
 
   /*
-   * Port of Andrew Moon's Poly1305-donna-16. Public domain.
-   * https://github.com/floodyberry/poly1305-donna
+   * Port of Andrew Moon's Poly1305-donna-16. Public domain. https://github.com/floodyberry/poly1305-donna
    */
   static void cryptoOneTimeAuth(final byte[] out, final int outpos, final byte[] m, final int mpos, final int n, final byte[] k) {
     final Poly1305 s = new Poly1305(k);
@@ -162,13 +161,11 @@ public abstract class Nacl {
   }
 
   /*
-   * public static byte[] randombytes(byte [] x, int len) { int ret = len % 8;
-   * long rnd; for (int i = 0; i < len-ret; i += 8) { rnd = jrandom.nextLong(); // [A]
-   * x[i+0] = (byte) (rnd >>> 0); x[i+1] = (byte) (rnd >>> 8); x[i+2] = (byte)
-   * (rnd >>> 16); x[i+3] = (byte) (rnd >>> 24); x[i+4] = (byte) (rnd >>> 32);
-   * x[i+5] = (byte) (rnd >>> 40); x[i+6] = (byte) (rnd >>> 48); x[i+7] = (byte)
-   * (rnd >>> 56); } if (ret > 0) { rnd = jrandom.nextLong(); for (int i = // [A]
-   * len-ret; i < len; i ++) x[i] = (byte) (rnd >>> 8*i); } return x; }
+   * public static byte[] randombytes(byte [] x, int len) { int ret = len % 8; long rnd; for (int i = 0; i < len-ret; i += 8) { rnd =
+   * jrandom.nextLong(); // [A] x[i+0] = (byte) (rnd >>> 0); x[i+1] = (byte) (rnd >>> 8); x[i+2] = (byte) (rnd >>> 16); x[i+3] =
+   * (byte) (rnd >>> 24); x[i+4] = (byte) (rnd >>> 32); x[i+5] = (byte) (rnd >>> 40); x[i+6] = (byte) (rnd >>> 48); x[i+7] = (byte)
+   * (rnd >>> 56); } if (ret > 0) { rnd = jrandom.nextLong(); for (int i = // [A] len-ret; i < len; i ++) x[i] = (byte) (rnd >>> 8*i);
+   * } return x; }
    */
 
   private static byte[] randombytes(final byte[] x) {
@@ -235,11 +232,11 @@ public abstract class Nacl {
     }
 
     public final long getNonce() {
-      return this.nonce.get();
+      return nonce.get();
     }
 
     public final long incrNonce() {
-      return this.nonce.incrementAndGet();
+      return nonce.incrementAndGet();
     }
 
     final byte[] generateNonce() {
@@ -302,12 +299,12 @@ public abstract class Nacl {
      * @return A precomputed shared key which can be used in nacl.box.after and nacl.box.open.after.
      */
     public final byte[] before() {
-      if (this.sharedKey == null) {
-        this.sharedKey = new byte[sharedKeyLength];
-        nacl.cryptoBoxBeforeNm(this.sharedKey, this.theirPublicKey, this.mySecretKey);
+      if (sharedKey == null) {
+        sharedKey = new byte[sharedKeyLength];
+        nacl.cryptoBoxBeforeNm(sharedKey, theirPublicKey, mySecretKey);
       }
 
-      return this.sharedKey;
+      return sharedKey;
     }
   }
 
@@ -324,7 +321,6 @@ public abstract class Nacl {
 
     SecretBox(final byte[] key, final long nonce) {
       this.key = key;
-
       this.nonce = new AtomicLong(nonce);
     }
 
@@ -333,11 +329,11 @@ public abstract class Nacl {
     }
 
     public final long getNonce() {
-      return this.nonce.get();
+      return nonce.get();
     }
 
     public final long incNonce() {
-      return this.nonce.incrementAndGet();
+      return nonce.incrementAndGet();
     }
 
     final byte[] generateNonce() {
@@ -359,8 +355,8 @@ public abstract class Nacl {
     }
 
     /**
-     * Encrypt and authenticates message using the key and the nonce. The nonce must be unique for each distinct message for this
-     * key. // [A]
+     * Encrypt and authenticates message using the key and the nonce. The nonce must be unique for each distinct message for this key.
+     * // [A]
      *
      * @param message The message.
      * @return An encrypted and authenticated message, which is nacl.secretbox.overheadLength longer than the original message.
@@ -431,7 +427,7 @@ public abstract class Nacl {
      * @return The signature.
      */
     public final byte[] detached(final byte[] message) {
-      final byte[] signedMsg = this.sign(message);
+      final byte[] signedMsg = sign(message);
       final byte[] sig = new byte[signatureLength];
       System.arraycopy(signedMsg, 0, sig, 0, sig.length);
 
@@ -588,12 +584,9 @@ public abstract class Nacl {
     cryptoScalarMult(s, x, y);
 
     /*
-     * String dbgt = ""; for (int dbg = 0; dbg < s.length; dbg ++) dbgt +=
-     * " "+s[dbg]; Log.d(TAG, "crypto_box_beforenm -> "+dbgt); dbgt = ""; for
-     * (int dbg = 0; dbg < x.length; dbg ++) dbgt += " "+x[dbg]; Log.d(TAG,
-     * "crypto_box_beforenm, x -> "+dbgt); dbgt = ""; for (int dbg = 0; dbg <
-     * y.length; dbg ++) dbgt += " "+y[dbg]; Log.d(TAG,
-     * "crypto_box_beforenm, y -> "+dbgt);
+     * String dbgt = ""; for (int dbg = 0; dbg < s.length; dbg ++) dbgt += " "+s[dbg]; Log.d(TAG, "crypto_box_beforenm -> "+dbgt); dbgt
+     * = ""; for (int dbg = 0; dbg < x.length; dbg ++) dbgt += " "+x[dbg]; Log.d(TAG, "crypto_box_beforenm, x -> "+dbgt); dbgt = ""; for
+     * (int dbg = 0; dbg < y.length; dbg ++) dbgt += " "+y[dbg]; Log.d(TAG, "crypto_box_beforenm, y -> "+dbgt);
      */
 
     cryptoCoreHsalsa20(k, _0, s, sigma);

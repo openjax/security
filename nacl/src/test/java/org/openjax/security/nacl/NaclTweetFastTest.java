@@ -299,24 +299,24 @@ public class NaclTweetFastTest {
       logger.debug(TAG, "\n\n\tstreess/" + (mb0.length / 1000.0) + "kB: " + t + " times");
 
       /*
-       * String mb0t = "mb0/"+mb0.length + ": "; for (int i = 0, i$ = mb0.length; i < i$;
-       * i ++) mb0t += " "+mb0[i]; logger.debug(TAG, mb0t);
+       * String mb0t = "mb0/"+mb0.length + ": "; for (int i = 0, i$ = mb0.length; i < i$; i ++) mb0t += " "+mb0[i]; logger.debug(TAG,
+       * mb0t);
        */
       logger.debug(TAG, "secret box ...@" + System.currentTimeMillis());
       final byte[] cab = pab.box(mb0);
       logger.debug(TAG, "... secret box@" + System.currentTimeMillis());
 
       /*
-       * String cabt = "cab/"+cab.length + ": "; for (int i = 0, i$ = cab.length; i < i$;
-       * i ++) cabt += " "+cab[i]; logger.debug(TAG, cabt);
+       * String cabt = "cab/"+cab.length + ": "; for (int i = 0, i$ = cab.length; i < i$; i ++) cabt += " "+cab[i]; logger.debug(TAG,
+       * cabt);
        */
       logger.debug(TAG, "\nsecret box open ...@" + System.currentTimeMillis());
       final byte[] mba = pba.open(cab);
       logger.debug(TAG, "... secret box open@" + System.currentTimeMillis());
 
       /*
-       * String mbat = "mba/"+mba.length + ": "; for (int i = 0, i$ = mba.length; i < i$;
-       * i ++) mbat += " "+mba[i]; logger.debug(TAG, mbat);
+       * String mbat = "mba/"+mba.length + ": "; for (int i = 0, i$ = mba.length; i < i$; i ++) mbat += " "+mba[i]; logger.debug(TAG,
+       * mbat);
        */
 
       final String nm0 = new String(mba, StandardCharsets.UTF_8);
@@ -357,24 +357,24 @@ public class NaclTweetFastTest {
       logger.debug(TAG, "\n\n\tstress/" + (mb0.length / 1000.0) + "kB: " + t + " times");
 
       /*
-       * String mb0t = "mb0/"+mb0.length + ": "; for (int i = 0, i$ = mb0.length; i < i$;
-       * i ++) mb0t += " "+mb0[i]; logger.debug(TAG, mb0t);
+       * String mb0t = "mb0/"+mb0.length + ": "; for (int i = 0, i$ = mb0.length; i < i$; i ++) mb0t += " "+mb0[i]; logger.debug(TAG,
+       * mb0t);
        */
       logger.debug(TAG, "secret box ...@" + System.currentTimeMillis());
       final byte[] cab = pab.box(mb0, theNonce);
       logger.debug(TAG, "... secret box@" + System.currentTimeMillis());
 
       /*
-       * String cabt = "cab/"+cab.length + ": "; for (int i = 0, i$ = cab.length; i < i$;
-       * i ++) cabt += " "+cab[i]; logger.debug(TAG, cabt);
+       * String cabt = "cab/"+cab.length + ": "; for (int i = 0, i$ = cab.length; i < i$; i ++) cabt += " "+cab[i]; logger.debug(TAG,
+       * cabt);
        */
       logger.debug(TAG, "\nsecret box open ...@" + System.currentTimeMillis());
       final byte[] mba = pba.open(cab, theNonce);
       logger.debug(TAG, "... secret box open@" + System.currentTimeMillis());
 
       /*
-       * String mbat = "mba/"+mba.length + ": "; for (int i = 0, i$ = mba.length; i < i$;
-       * i ++) mbat += " "+mba[i]; logger.debug(TAG, mbat);
+       * String mbat = "mba/"+mba.length + ": "; for (int i = 0, i$ = mba.length; i < i$; i ++) mbat += " "+mba[i]; logger.debug(TAG,
+       * mbat);
        */
 
       final String nm0 = new String(mba, StandardCharsets.UTF_8);

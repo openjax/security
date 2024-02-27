@@ -28,7 +28,7 @@ public class GAuthTest {
   private static void test(final String account, final String issuer) {
     final String secretKey = GAuth.generateRandomSecretKey();
     final String barCode = GAuth.getBarCode(secretKey, account, issuer);
-    if (logger.isInfoEnabled()) logger.info("open \"https://codepen.io/davidshimjs/pen/NdBYrg\"\n" + barCode);
+    if (logger.isInfoEnabled()) { logger.info("open \"https://codepen.io/davidshimjs/pen/NdBYrg\"\n" + barCode); }
 
     // FIXME: This test can break, because the TOTP code changes every 30
     // FIXME: seconds, and the test can by chance happen to cross this moment.

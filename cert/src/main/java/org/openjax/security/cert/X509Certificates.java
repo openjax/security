@@ -287,12 +287,12 @@ public final class X509Certificates {
   }
 
   /**
-   * Returns a collection of {@link X509Certificate}s from the specified {@link InputStream} that provides a DER-formatted
-   * certificate chain.
+   * Returns a collection of {@link X509Certificate}s from the specified {@link InputStream} that provides a DER-formatted certificate
+   * chain.
    *
    * @param in An {@link InputStream} providing a DER-formatted certificate.
-   * @return A collection of {@link X509Certificate}s from the specified {@link InputStream} that provides a DER-formatted
-   *         certificate chain.
+   * @return A collection of {@link X509Certificate}s from the specified {@link InputStream} that provides a DER-formatted certificate
+   *         chain.
    * @throws CertificateException If an exception occurs parsing the DER-formatted certificate chain from the provided
    *           {@link InputStream}.
    * @throws NullPointerException If {@code in} is null.
@@ -316,8 +316,7 @@ public final class X509Certificates {
    *
    * @param der A {@code byte[]} DER-formatted certificate.
    * @return A {@link X509Certificate} from the specified {@code byte[]} DER-formatted certificate.
-   * @throws CertificateException If an exception occurs parsing the DER-formatted certificate from the provided
-   *           {@link InputStream}.
+   * @throws CertificateException If an exception occurs parsing the DER-formatted certificate from the provided {@link InputStream}.
    * @throws NullPointerException If {@code der} is null.
    */
   public static X509Certificate decodeCertificate(final byte[] der) throws CertificateException {
@@ -329,8 +328,7 @@ public final class X509Certificates {
    *
    * @param der A {@code byte[]} DER-formatted certificate.
    * @return A collection of {@link X509Certificate}s from the specified {@code byte[]} DER-formatted certificate chain.
-   * @throws CertificateException If an exception occurs parsing the DER-formatted certificate from the provided
-   *           {@link InputStream}.
+   * @throws CertificateException If an exception occurs parsing the DER-formatted certificate from the provided {@link InputStream}.
    * @throws NullPointerException If {@code der} is null.
    */
   public static Collection<X509Certificate> decodeCertificateChain(final byte[] der) throws CertificateException {
@@ -338,15 +336,15 @@ public final class X509Certificates {
   }
 
   /**
-   * Returns a new {@link KeyStore} instance that is loaded and initialized from the provided {@link InputStream}, and unlocked if
-   * the provided {@code storePassword} is not null. The type of the new {@link KeyStore} is the default keystore type as specified
-   * by the {@code keystore.type} {@linkplain java.security.Security#getProperty security property}, or the string "jks" (acronym
-   * for "Java keystore") if no such property exists.
+   * Returns a new {@link KeyStore} instance that is loaded and initialized from the provided {@link InputStream}, and unlocked if the
+   * provided {@code storePassword} is not null. The type of the new {@link KeyStore} is the default keystore type as specified by the
+   * {@code keystore.type} {@linkplain java.security.Security#getProperty security property}, or the string "jks" (acronym for "Java
+   * keystore") if no such property exists.
    *
    * @param url
    * @param storePassword
-   * @return A new {@link KeyStore} instance that is loaded and initialized from the provided {@link InputStream}, and unlocked if
-   *         the provided {@code storePassword} is not null.
+   * @return A new {@link KeyStore} instance that is loaded and initialized from the provided {@link InputStream}, and unlocked if the
+   *         provided {@code storePassword} is not null.
    * @throws CertificateException If any of the certificates in the keystore could not be loaded.
    * @throws IOException If an I/O error has occurred.
    * @throws KeyStoreException If no {@link java.security.Provider} supports a {@link java.security.KeyStoreSpi} implementation for
@@ -395,8 +393,8 @@ public final class X509Certificates {
    * @param trustedRootCerts The root certificates of the {@linkplain KeyStore Trust Store} specifying the certificate chain.
    * @return A <b>valid</b> certificate path rebuilt from the provided {@code clientCert} and the given {@code trustedRootCerts}, or
    *         {@code null} if no valid path exists.
-   * @throws NullPointerException If {@code clientCert}, or {@code trustedRootCerts} or any member of {@code trustedRootCerts}
-   *           is null.
+   * @throws NullPointerException If {@code clientCert}, or {@code trustedRootCerts} or any member of {@code trustedRootCerts} is
+   *           null.
    */
   public static X509Certificate[] getCertificatePath(final X509Certificate clientCert, final Set<X509Certificate> trustedRootCerts) {
     return getCertificatePath(clientCert, trustedRootCerts, null);
@@ -408,12 +406,11 @@ public final class X509Certificates {
    *
    * @param clientCert The client {@link X509Certificate}.
    * @param trustedRootCerts The root certificates of the {@linkplain KeyStore Trust Store} specifying the certificate chain.
-   * @param intermediateCerts The intermediate certificates of the {@linkplain KeyStore Trust Store} specifying the certificate
-   *          chain.
+   * @param intermediateCerts The intermediate certificates of the {@linkplain KeyStore Trust Store} specifying the certificate chain.
    * @return A <b>valid</b> certificate path from the provided {@code clientCert} and the given {@code trustedRootCerts} and
    *         {@code intermediateCerts}, or {@code null} if no valid path exists.
-   * @throws NullPointerException If {@code clientCert}, or {@code trustedRootCerts} or any member of {@code trustedRootCerts}
-   *           is null.
+   * @throws NullPointerException If {@code clientCert}, or {@code trustedRootCerts} or any member of {@code trustedRootCerts} is
+   *           null.
    */
   public static X509Certificate[] getCertificatePath(final X509Certificate clientCert, final Set<X509Certificate> trustedRootCerts, Set<X509Certificate> intermediateCerts) {
     intermediateCerts = intermediateCerts != null ? new HashSet<>(intermediateCerts) : new HashSet<>();
@@ -453,15 +450,18 @@ public final class X509Certificates {
 
       final List<? extends Certificate> certificates = certPath.getCertificates();
       final int noCertificates = certificates.size();
-      if (logger.isDebugEnabled()) logger.debug("Certification path built with " + noCertificates + " X.509 Certificates");
+      if (logger.isDebugEnabled())
+        logger.debug("Certification path built with " + noCertificates + " X.509 Certificates");
       final X509Certificate[] certificateChain = convertCertPathToX509CertArray(certificates, noCertificates, 0, 0);
 
-      if (logger.isDebugEnabled()) logger.debug("Client certificate (valid): SubjectDN=[" + clientCert.getSubjectDN() + "] SerialNumber=[" + clientCert.getSerialNumber() + "]");
+      if (logger.isDebugEnabled())
+        logger.debug("Client certificate (valid): SubjectDN=[" + clientCert.getSubjectDN() + "] SerialNumber=[" + clientCert.getSerialNumber() + "]");
       return certificateChain;
     }
     catch (final CertPathBuilderException e) {
       if ("unable to find valid certification path to requested target".equals(e.getMessage())) {
-        if (logger.isDebugEnabled()) logger.debug("Client certificate (invalid): SubjectDN=[" + clientCert.getSubjectDN() + "] SerialNumber=[" + clientCert.getSerialNumber() + "]");
+        if (logger.isDebugEnabled())
+          logger.debug("Client certificate (invalid): SubjectDN=[" + clientCert.getSubjectDN() + "] SerialNumber=[" + clientCert.getSerialNumber() + "]");
         return null;
       }
 

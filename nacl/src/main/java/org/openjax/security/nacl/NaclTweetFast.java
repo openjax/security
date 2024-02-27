@@ -666,8 +666,7 @@ public final class NaclTweetFast extends Nacl {
     o[63] = (byte)(x15 >>> 24 & 0xff);
 
     /*
-     * String dbgt = ""; for (int dbg = 0; dbg < o.length; dbg ++) dbgt +=
-     * " "+o[dbg]; Log.d(TAG, "core_salsa20 -> "+dbgt);
+     * String dbgt = ""; for (int dbg = 0; dbg < o.length; dbg ++) dbgt += " "+o[dbg]; Log.d(TAG, "core_salsa20 -> "+dbgt);
      */
   }
 
@@ -806,8 +805,7 @@ public final class NaclTweetFast extends Nacl {
     o[31] = (byte)(x9 >>> 24 & 0xff);
 
     /*
-     * String dbgt = ""; for (int dbg = 0; dbg < o.length; dbg ++) dbgt +=
-     * " "+o[dbg]; Log.d(TAG, "core_hsalsa20 -> "+dbgt);
+     * String dbgt = ""; for (int dbg = 0; dbg < o.length; dbg ++) dbgt += " "+o[dbg]; Log.d(TAG, "core_hsalsa20 -> "+dbgt);
      */
   }
 
@@ -906,7 +904,7 @@ public final class NaclTweetFast extends Nacl {
     cryptoStreamSalsa20Xor(c, cpos, m, mpos, d, sn, s);
   }
 
-  private static int cryptoOneTimeAuthVerify(final byte[] h, final int hoff, final byte[] m, final int moff, final int /*long*/ n, final byte[] k) {
+  private static int cryptoOneTimeAuthVerify(final byte[] h, final int hoff, final byte[] m, final int moff, final int /* long */ n, final byte[] k) {
     final byte[] x = new byte[16];
     cryptoOneTimeAuth(x, 0, m, moff, n, k);
     return cryptoVerify16(h, hoff, x, 0);
@@ -1706,7 +1704,7 @@ public final class NaclTweetFast extends Nacl {
   }
 
   // TBD... 64bits of n
-  private void cryptoSign(final byte[] sm, final long dummy /*smlen not used*/, final byte[] m, final int moff, final int/*long*/ n, final byte[] sk) {
+  private void cryptoSign(final byte[] sm, final long dummy /* smlen not used */, final byte[] m, final int moff, final int/* long */ n, final byte[] sk) {
     final byte[] d = new byte[64];
     final byte[] h = new byte[64];
     final byte[] r = new byte[64];
@@ -1802,7 +1800,7 @@ public final class NaclTweetFast extends Nacl {
 
   // TBD 64bits of mlen
   @Override
-  int cryptoSignOpen(final byte[] m, final long dummy /*mlen not used*/, final byte[] sm, final int smoff, int/*long*/ n, final byte[] pk) {
+  int cryptoSignOpen(final byte[] m, final long dummy /* mlen not used */, final byte[] sm, final int smoff, int/* long */ n, final byte[] pk) {
     final byte[] t = new byte[32];
     final byte[] h = new byte[64];
 
