@@ -38,7 +38,7 @@ public final class GAuth {
   public static String generateRandomSecretKey() {
     final byte[] bytes = new byte[20];
     random.nextBytes(bytes);
-    return Base32.encode(bytes);
+    return Base32.encode(bytes, false, true);
   }
 
   /**
@@ -74,7 +74,7 @@ public final class GAuth {
    */
   public static String getTOTPCode(final String key) {
     final String normalizedKey = key.replace(" ", "").toUpperCase();
-    final byte[] bytes = Base32.decode(normalizedKey);
+    final byte[] bytes = Base32.decode(normalizedKey, false);
     final long time = System.currentTimeMillis() / 1000 / 30;
     final String hexTime = Long.toHexString(time);
     return TOTP.generateTOTP(Hexadecimal.encode(bytes), hexTime, 6, Hmac.SHA1);
