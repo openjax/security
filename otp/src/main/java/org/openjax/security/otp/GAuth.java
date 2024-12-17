@@ -75,8 +75,8 @@ public final class GAuth {
   public static String getTOTPCode(final String key) {
     final String normalizedKey = key.replace(" ", "").toUpperCase();
     final byte[] bytes = Base32.decode(normalizedKey, false);
-    final long time = System.currentTimeMillis() / 1000 / 30;
-    final String hexTime = Long.toHexString(time);
+    final long time30Se = System.currentTimeMillis() / 1000 / 30;
+    final String hexTime = Long.toHexString(time30Se);
     return TOTP.generateTOTP(Hexadecimal.encode(bytes), hexTime, 6, Hmac.SHA1);
   }
 
