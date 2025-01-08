@@ -16,21 +16,91 @@
 
 package org.openjax.security.crypto;
 
+import static org.junit.Assert.*;
+
 import java.math.BigInteger;
+import java.util.zip.CRC32;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.libj.lang.Strings;
+import org.libj.util.zip.CRC64;
 
 public class HashTest {
   private static void assertEquals(final Hash hash, final byte[] data, final String expected) {
     final byte[] bytes = hash.encode(data);
-    Assert.assertEquals(expected.toUpperCase(), new BigInteger(1, bytes).toString(16).toUpperCase());
+    Assert.assertEquals(expected, expected.toUpperCase(), new BigInteger(1, bytes).toString(16).toUpperCase());
 
     final int asInt = hash.encodeAsInt(data);
-    Assert.assertEquals(expected.substring(Math.max(0, expected.length() - 8)).replaceAll("^0+", ""), Integer.toHexString(asInt).toUpperCase());
+    Assert.assertEquals(expected, expected.substring(Math.max(0, expected.length() - 8)).replaceAll("^0+", ""), Integer.toHexString(asInt).toUpperCase().replaceAll("^0+", ""));
 
     final long asLong = hash.encodeAsLong(data);
-    Assert.assertEquals(expected.substring(Math.max(0, expected.length() - 16)).replaceAll("^0+", ""), Long.toHexString(asLong).toUpperCase());
+    Assert.assertEquals(expected, expected.substring(Math.max(0, expected.length() - 16)).replaceAll("^0+", ""), Long.toHexString(asLong).toUpperCase().replaceAll("^0+", ""));
+  }
+
+  private static final int numtests = 10_000;
+
+  @Test
+  public void testCRC32() {
+    for (int i = 0; i < numtests; ++i) {
+      final byte[] data = Strings.getRandomAlphaNumeric(i % 256).getBytes();
+      final CRC32 crc = new CRC32();
+      crc.update(data);
+      final String str = Long.toHexString(crc.getValue()).toUpperCase();
+      assertEquals(Hash.CRC32, data, str);
+    }
+
+    byte i = -128;
+    do {
+      final byte[] h0 = Hash.CRC32.encode(i);
+      final byte[] h1 = Hash.CRC32.encode(new byte[] {i++});
+      assertArrayEquals(h0, h1);
+    }
+    while (i != -128);
+  }
+
+  @Test
+  @Ignore("With -Xcomp, java wins. Without -Xcomp, java loses.")
+  public void testCRC64Performance() {
+    long t0 = System.currentTimeMillis();
+    for (int i = 0; i < numtests; ++i) {
+      final byte[] data = String.valueOf(i).getBytes();
+      final CRC64 crc = new CRC64();
+      crc.update(data);
+      crc.getValue();
+    }
+
+    final long java = System.currentTimeMillis() - t0;
+
+    t0 = System.currentTimeMillis();
+    for (int i = 0; i < numtests; ++i) {
+      final byte[] data = String.valueOf(i).getBytes();
+      Hash.CRC64.encodeAsLong(data);
+    }
+
+    final long custom = System.currentTimeMillis() - t0;
+    System.err.println(java);
+    System.err.println(custom);
+  }
+
+  @Test
+  public void testCRC64() {
+    for (int i = 0; i < numtests; ++i) {
+      final byte[] data = String.valueOf(i).getBytes();
+      final CRC64 crc = new CRC64();
+      crc.update(data);
+      final String str = Long.toHexString(crc.getValue()).toUpperCase();
+      assertEquals(Hash.CRC64, data, str);
+    }
+
+    byte i = -128;
+    do {
+      final byte[] h0 = Hash.CRC64.encode(i);
+      final byte[] h1 = Hash.CRC64.encode(new byte[] {i++});
+      assertArrayEquals(h0, h1);
+    }
+    while (i != -128);
   }
 
   @Test
