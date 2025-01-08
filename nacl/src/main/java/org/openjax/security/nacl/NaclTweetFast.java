@@ -1853,6 +1853,49 @@ public final class NaclTweetFast extends Nacl {
     return x;
   }
 
+  // Check that a pubkey is on the curve.
+  @Override
+  public int isOnCurve(final byte[] p) {
+    final long[] r[] = {new long[16], new long[16], new long[16], new long[16]};
+
+    final long[] t = new long[16];
+    final long[] chk = new long[16];
+    final long[] num = new long[16];
+    final long[] den = new long[16];
+    final long[] den2 = new long[16];
+    final long[] den4 = new long[16];
+    final long[] den6 = new long[16];
+
+    set25519(r[2], gf1);
+    unpack25519(r[1], p);
+    S(num, r[1]);
+    M(den, num, D);
+    Z(num, num, r[2]);
+    A(den, r[2], den);
+
+    S(den2, den);
+    S(den4, den2);
+    M(den6, den4, den2);
+    M(t, den6, num);
+    M(t, t, den);
+
+    pow2523(t, t);
+    M(t, t, num);
+    M(t, t, den);
+    M(t, t, den);
+    M(r[0], t, den);
+
+    S(chk, r[0]);
+    M(chk, chk, den);
+    if (neq25519(chk, num) != 0)
+      M(r[0], r[0], I);
+
+    S(chk, r[0]);
+    M(chk, chk, den);
+
+    return neq25519(chk, num) != 0 ? 0 : 1;
+  }
+
   NaclTweetFast() {
   }
 }

@@ -972,6 +972,11 @@ public final class NaclTweet extends Nacl {
     return x;
   }
 
+  @Override
+  public int isOnCurve(final byte[] p) {
+    throw new UnsupportedOperationException();
+  }
+
   NaclTweet() {
   }
 }

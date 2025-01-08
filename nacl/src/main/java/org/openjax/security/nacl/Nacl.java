@@ -548,11 +548,10 @@ public abstract class Nacl {
     final byte[] sk = kp.getSecretKey();
 
     // copy sk
-    System.arraycopy(secretKey, 0, sk, 0, kp.getSecretKey().length);
+    System.arraycopy(secretKey, 0, sk, 0, sk.length);
 
     // copy pk from sk
-    // hard-copy
-    System.arraycopy(secretKey, 32, pk, 0, kp.getPublicKey().length);
+    System.arraycopy(secretKey, 32, pk, 0, pk.length);
 
     return kp;
   }
@@ -636,6 +635,7 @@ public abstract class Nacl {
   public abstract void cryptoCoreHsalsa20(byte[] out, byte[] in, byte[] k, byte[] c);
   public abstract void cryptoSignKeyPair(byte[] pk, byte[] sk, boolean seeded);
   public abstract void cryptoCoreSalsa20(byte[] out, byte[] in, byte[] k, byte[] c);
+  public abstract int isOnCurve(byte[] p);
 
   public byte[] decrypt(final byte[] publicKey, final byte[] privateKey, final byte[] ciphertextWithNonce) {
     final byte[] nonce = new byte[NaclTweetFast.nonceLength];
