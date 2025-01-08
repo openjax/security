@@ -67,22 +67,22 @@ public enum Hmac {
   }
 
   /**
-   * Generate the Hashed Message Authentication Code for the given {@code key} and {@code data}.
+   * Generate the Hashed Message Authentication Code for the given {@code key} and {@code seed}.
    *
    * @param key The HMAC key.
-   * @param data The text to be authenticated.
+   * @param seed The seed to be used.
    * @return The Hashed Message Authentication Code.
-   * @throws NullPointerException If {@code key} or {@code data} is null.
+   * @throws NullPointerException If {@code key} or {@code seed} is null.
    * @throws IllegalArgumentException If {@code key} is not appropriate for this HMAC.
    * @implNote This method uses JCE to provide the crypto algorithm.
    */
-  public byte[] generateCode(final byte[] key, final byte[] data) {
-    Objects.requireNonNull(data);
+  public byte[] generateCode(final byte[] key, final byte[] seed) {
+    Objects.requireNonNull(seed);
     try {
       final SecretKeySpec secretKey = new SecretKeySpec(key, "RAW");
       final Mac mac = this.mac.get();
       mac.init(secretKey);
-      return mac.doFinal(data);
+      return mac.doFinal(seed);
     }
     catch (final InvalidKeyException e) {
       throw new IllegalArgumentException(e);
