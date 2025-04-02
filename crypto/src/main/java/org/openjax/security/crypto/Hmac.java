@@ -79,9 +79,9 @@ public enum Hmac {
   public byte[] generateCode(final byte[] key, final byte[] seed) {
     Objects.requireNonNull(seed);
     try {
-      final SecretKeySpec secretKey = new SecretKeySpec(key, "RAW");
+      final SecretKeySpec secretKeySpec = new SecretKeySpec(key, "RAW");
       final Mac mac = this.mac.get();
-      mac.init(secretKey);
+      mac.init(secretKeySpec);
       return mac.doFinal(seed);
     }
     catch (final InvalidKeyException e) {
